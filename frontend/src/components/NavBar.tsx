@@ -2,7 +2,9 @@ import React from 'react'
 
 const NavBar = () => {
   return (
-    <div>NavBar</div>
+    <div className='h-16 bg-blue-200'>
+      NavBar
+    </div>
   )
 }
 
