@@ -1,5 +1,6 @@
 import React from 'react'
 import ListSideBar from '../components/ListSideBar'
+import ListTable from '../components/ListTable'
 
 const List = () => {
   return (
@@ -8,7 +9,7 @@ const List = () => {
         <ListSideBar/>
       </div>
       <div className='page-content'>
-        Content
+        <ListTable/>
       </div>
     </div>
   )
