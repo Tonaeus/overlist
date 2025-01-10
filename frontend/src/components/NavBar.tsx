@@ -2,8 +2,12 @@ import React from 'react'
 
 const NavBar = () => {
   return (
-    <div className='h-16 bg-blue-200'>
-      NavBar
+    <div className='flex flex-row h-16'>
+      <div className='flex-1'></div>
+      <div className='flex-1 flex justify-center items-center'>
+        <h1 className='text-4xl font-bold text-gray-800'>Overlist</h1>
+      </div>
+      <div className='flex-1'></div>
     </div>
   )
 }

@@ -1,12 +1,11 @@
 import React from 'react'
-import SideBar from '../components/SideBar'
-import HomeSideBar from '../components/HomeSideBar'
+import ListSideBar from '../components/ListSideBar'
 
-const Home = () => {
+const List = () => {
   return (
     <div className='page'>
       <div className='page-side-bar'>
-        <HomeSideBar/>
+        <ListSideBar/>
       </div>
       <div className='page-content'>
         Content
@@ -15,4 +14,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default List

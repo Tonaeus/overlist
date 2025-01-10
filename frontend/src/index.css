@@ -1,3 +1,20 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .page {
+        @apply h-full flex flex-row
+    }
+    .page-side-bar {
+        @apply w-52 p-6;
+        width: clamp(13rem, 15vw, 20rem);
+    }    
+    .page-content {
+        @apply flex-1 rounded-tl-3xl p-6 bg-section border border-line
+    }
+
+    .side-bar-button {
+        @apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white mb-3 hover:bg-blue-800 transition-all
+    }
+}
