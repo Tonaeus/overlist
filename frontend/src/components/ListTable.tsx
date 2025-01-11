@@ -1,40 +1,181 @@
-import React from "react";
-import { CompactTable } from '@table-library/react-table-library/compact';
+import React, { useState, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid";
+
+import { CompactTable } from "@table-library/react-table-library/compact";
+import { useTheme } from "@table-library/react-table-library/theme";
+import { getTheme } from "@table-library/react-table-library/baseline";
+import { useRowSelect } from "@table-library/react-table-library/select";
 
 const ListTable = () => {
-  let nodes = [
-    {
-      id: "0",
-      name: "Shopping List",
-      deadline: new Date(2020, 1, 15),
-      type: "TASK",
-      isComplete: true,
-      nodes: 3,
-    },
-  ];
+  const theme = useTheme(getTheme());
 
-  let columns = [
-    { label: "Task", renderCell: (item) => item.name },
-    {
-      label: "Deadline",
-      renderCell: (item) =>
-        item.deadline.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-        }),
-    },
-    { label: "Type", renderCell: (item) => item.type },
-    {
-      label: "Complete",
-      renderCell: (item) => item.isComplete.toString(),
-    },
-    { label: "Tasks", renderCell: (item) => item.nodes },
-  ];
+	const [rows, setRows] = useState([
+		{
+			id: uuidv4(),
+			"text": "alpha",
+		},
+		{
+			id: uuidv4(),
+			"text": "beta",
+		},
+		{
+			id: uuidv4(),
+			"text": "gamma",
+		},
+	]);
 
-  let data = { nodes };
+  const data = { nodes: rows };
 
-  return <CompactTable columns={columns} data={data} />;
+  // const onSelectChange = (action, state) => {
+  //   // console.log("action: ", action);
+	// 	// console.log("state: ", state);
+	// 	console.log("ids: ", state.ids);
+  // }
+
+  // const select = useRowSelect(data, {
+  //   onChange: onSelectChange,
+  // });
+
+	const [columns, setColumns] = useState([
+    // { 
+		// 	label: "id", 
+		// 	renderCell: (item) => item.id, 
+		// 	select: true 
+		// },
+		{
+			label: "text",
+			renderCell: (item) => (
+				<input
+					type="text"
+					value={item["text"] || ""}
+					onChange={(event) =>
+						handleUpdate(event.target.value, item.id, "text")
+					}
+					className="w-full"
+				/>
+			),
+		},
+	]);
+
+	const handleUpdate = (value, id, property) => {
+		setRows((state) =>
+			state.map((row) => (row.id === id ? { ...row, [property]: value } : row))
+		);
+	};
+
+	const addRow = () => {
+		console.log(uuidv4());
+		const newRow = {
+			id: uuidv4(),
+		};
+
+		columns.forEach((column) => {
+			const columnLabel = column.label;
+			newRow[columnLabel] = "";
+		});
+
+		console.log("newRow: ", newRow);
+
+		setRows((prev) => [...prev, newRow]);
+	};
+
+	const addColumn = () => {
+		const label = prompt("Enter the column label:");
+		if (!label) {
+			alert("Column label is required.");
+			return;
+		}
+
+		const labelExists = columns.some((column) => column.label === label);
+		if (labelExists) {
+			alert(
+				"This column label is already in use. Please choose a different label."
+			);
+			return;
+		}
+
+		const newProperty = `${label}`;
+		const renderCell = (item) => (
+			<input
+				type="text"
+				value={item[newProperty] || ""}
+				onChange={(event) =>
+					handleUpdate(event.target.value, item.id, newProperty)
+				}
+				className="w-full"
+			/>
+		);
+
+		const newColumn = {
+			label,
+			renderCell,
+		};
+
+		setRows((prev) =>
+			prev.map((row) => ({
+				...row,
+				[newProperty]: "",
+			}))
+		);
+
+		setColumns((prev) => [
+			...prev,
+			newColumn,
+		]);
+	};
+
+	const logData = () => {
+		console.log(rows);
+	};
+
+	// const deleteRow = (id) => {
+	// 	setRows((prev) => prev.filter((row) => row.id !== id));
+	// };
+
+	// const duplicateRow = (id) => {
+	// 	const rowToDuplicate = rows.find((row) => row.id === id);
+	// 	const duplicatedRow = { ...rowToDuplicate, id: uuidv4() };
+	// 	setRows((prev) => [...prev, duplicatedRow]);
+	// };
+
+	// const resetRow = (id) => {
+	// 	setRows((state) =>
+	// 		state.map((row) =>
+	// 			row.id === id
+	// 				? Object.keys(row).reduce((acc, key) => {
+	// 						if (key !== "id") {
+	// 							acc[key] = "";
+	// 						} else {
+	// 							acc[key] = row[key];
+	// 						}
+	// 						return acc;
+	// 				  }, {})
+	// 				: row
+	// 		)
+	// 	);
+	// };
+
+	return (
+		<div>
+			<div className="m-1">
+				<button className="bg-red-500 m-1" onClick={addRow}>
+					Add Row
+				</button>
+				<button className="bg-green-500 m-1" onClick={addColumn}>
+					Add Column
+				</button>
+				<button className="bg-blue-500 m-1" onClick={logData}>
+					Log Data
+				</button>
+			</div>
+			<CompactTable 
+        columns={columns} 
+        data={ data }
+        theme={theme} 
+        // select={select} 
+      />
+		</div>
+	);
 };
 
 export default ListTable;
