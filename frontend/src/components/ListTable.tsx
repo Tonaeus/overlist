@@ -37,11 +37,11 @@ const ListTable = () => {
   // });
 
 	const [columns, setColumns] = useState([
-    // { 
-		// 	label: "id", 
-		// 	renderCell: (item) => item.id, 
-		// 	select: true 
-		// },
+    { 
+			label: "id", 
+			renderCell: (item) => item.id, 
+			select: true 
+		},
 		{
 			label: "text",
 			renderCell: (item) => (
@@ -64,17 +64,14 @@ const ListTable = () => {
 	};
 
 	const addRow = () => {
-		console.log(uuidv4());
 		const newRow = {
 			id: uuidv4(),
 		};
 
-		columns.forEach((column) => {
+		columns.slice(1).forEach((column) => {
 			const columnLabel = column.label;
 			newRow[columnLabel] = "";
 		});
-
-		console.log("newRow: ", newRow);
 
 		setRows((prev) => [...prev, newRow]);
 	};
