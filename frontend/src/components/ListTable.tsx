@@ -4,43 +4,76 @@ import { v4 as uuidv4 } from "uuid";
 import { CompactTable } from "@table-library/react-table-library/compact";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
-import { useRowSelect } from "@table-library/react-table-library/select";
+
+import {
+	Table,
+	Header,
+	HeaderRow,
+	Body,
+	Row,
+	HeaderCell,
+	Cell,
+} from "@table-library/react-table-library/table";
+
+import {
+	HeaderCellSelect,
+	CellSelect,
+	SelectClickTypes,
+	SelectTypes,
+	useRowSelect,
+} from "@table-library/react-table-library/select";
 
 const ListTable = () => {
-  const theme = useTheme(getTheme());
+	const theme = useTheme(getTheme());
+	// const theme = useTheme([
+	// 	getTheme(),
+	// 	// {
+	// 	// 	Row: `
+	// 	// 		&.foo {
+	// 	// 			background-color: pink;
+	// 	// 		}
+	// 	// 	`
+	// 	// },
+	// ]);
 
 	const [rows, setRows] = useState([
 		{
 			id: uuidv4(),
-			"text": "alpha",
+			text: "alpha",
 		},
 		{
 			id: uuidv4(),
-			"text": "beta",
+			text: "beta",
 		},
 		{
 			id: uuidv4(),
-			"text": "gamma",
+			text: "gamma",
 		},
 	]);
 
-  const data = { nodes: rows };
+	const data = { nodes: rows };
 
-  // const onSelectChange = (action, state) => {
-  //   // console.log("action: ", action);
-	// 	// console.log("state: ", state);
-	// 	console.log("ids: ", state.ids);
-  // }
+	const onSelectChange = (action, state) => {
+		// console.log("action: ", action);
+		// console.log("state: ", state);
+		console.log("ids: ", state.ids);
+	};
 
-  // const select = useRowSelect(data, {
-  //   onChange: onSelectChange,
-  // });
+	const select = useRowSelect(
+		data,
+		{
+			onChange: onSelectChange,
+		},
+		{
+			clickType: SelectClickTypes.ButtonClick,
+		}
+	);
 
 	const [columns, setColumns] = useState([
-    { 
-			label: "id", 
-			renderCell: (item) => item.id, 
-			select: true 
+		{
+			label: "id",
+			renderCell: (item) => item.id,
+			select: true,
 		},
 		{
 			label: "text",
@@ -115,10 +148,7 @@ const ListTable = () => {
 			}))
 		);
 
-		setColumns((prev) => [
-			...prev,
-			newColumn,
-		]);
+		setColumns((prev) => [...prev, newColumn]);
 	};
 
 	const logData = () => {
@@ -165,12 +195,36 @@ const ListTable = () => {
 					Log Data
 				</button>
 			</div>
-			<CompactTable 
+			{/* <CompactTable 
         columns={columns} 
         data={ data }
         theme={theme} 
-        // select={select} 
-      />
+        select={select} 
+      /> */}
+			<Table data={data} theme={theme} select={select}>
+				{(tableList) => (
+					<>
+						<Header>
+							<HeaderRow>
+								<HeaderCellSelect />
+								{columns.map((column) => (
+									<HeaderCell key={column.label}>{column.label}</HeaderCell>
+								))}
+							</HeaderRow>
+						</Header>
+						<Body>
+							{tableList.map((item) => (
+								<Row item={item} key={item.id}>
+									<CellSelect item={item} />
+									{columns.map((column, index) => (
+										<Cell key={column.label}>{column.renderCell(item)}</Cell>
+									))}
+								</Row>
+							))}
+						</Body>
+					</>
+				)}
+			</Table>
 		</div>
 	);
 };
