@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer components {
+    input {
+        @apply bg-inherit; 
+    }
     .page {
         @apply h-full flex flex-row
     }

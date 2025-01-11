@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-import { CompactTable } from "@table-library/react-table-library/compact";
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 
@@ -24,18 +23,6 @@ import {
 } from "@table-library/react-table-library/select";
 
 const ListTable = () => {
-	const theme = useTheme(getTheme());
-	// const theme = useTheme([
-	// 	getTheme(),
-	// 	// {
-	// 	// 	Row: `
-	// 	// 		&.foo {
-	// 	// 			background-color: pink;
-	// 	// 		}
-	// 	// 	`
-	// 	// },
-	// ]);
-
 	const [rows, setRows] = useState([
 		{
 			id: uuidv4(),
@@ -87,6 +74,43 @@ const ListTable = () => {
 					className="w-full"
 				/>
 			),
+		},
+	]);
+
+	const theme = useTheme([
+		getTheme(),
+		{
+      Table: `
+        --data-table-library_grid-template-columns: 38px repeat(${columns.length}, minmax(0, 1fr));
+      `,
+			Row: `
+				&.row {
+					color: #495365;
+				}
+				&.row:hover {
+					color: #495365;
+					background-color: #F4F5F6;
+				}
+				&.row-select-selected {
+					background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
+					font-weight: normal;
+				}
+			`,
+			Cell: `
+				&.cell {
+					
+				}
+			`,
+			HeaderRow: `
+				&.header-row {
+					color: #495365;
+				}
+			`,
+			HeaderCell: `
+				&.header-cell:hover {
+					background-color: #F4F5F6;
+				}
+			`
 		},
 	]);
 
@@ -195,36 +219,32 @@ const ListTable = () => {
 					Log Data
 				</button>
 			</div>
-			{/* <CompactTable 
-        columns={columns} 
-        data={ data }
-        theme={theme} 
-        select={select} 
-      /> */}
-			<Table data={data} theme={theme} select={select}>
-				{(tableList) => (
-					<>
-						<Header>
-							<HeaderRow>
-								<HeaderCellSelect />
-								{columns.map((column) => (
-									<HeaderCell key={column.label}>{column.label}</HeaderCell>
-								))}
-							</HeaderRow>
-						</Header>
-						<Body>
-							{tableList.map((item) => (
-								<Row item={item} key={item.id}>
-									<CellSelect item={item} />
-									{columns.map((column, index) => (
-										<Cell key={column.label}>{column.renderCell(item)}</Cell>
+			<div className=" bg-white p-1.5 rounded accent-blue-700">
+				<Table data={data} theme={theme} layout={{ custom: true }} select={select}>
+					{(tableList) => (
+						<>
+							<Header>
+								<HeaderRow className="header-row">
+									<HeaderCellSelect className="header-cell"/>
+									{columns.map((column) => (
+										<HeaderCell key={column.label} className="header-cell">{column.label}</HeaderCell>
 									))}
-								</Row>
-							))}
-						</Body>
-					</>
-				)}
-			</Table>
+								</HeaderRow>
+							</Header>
+							<Body>
+								{tableList.map((item) => (
+									<Row item={item} key={item.id} className="row">
+										<CellSelect item={item} />
+										{columns.map((column, index) => (
+											<Cell key={column.label} className="cell">{column.renderCell(item)}</Cell>
+										))}
+									</Row>
+								))}
+							</Body>
+						</>
+					)}
+				</Table>
+			</div>
 		</div>
 	);
 };
