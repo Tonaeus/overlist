@@ -25,16 +25,16 @@ import {
 const ListTable = () => {
 	const [rows, setRows] = useState([
 		{
-			id: uuidv4(),
-			text: "alpha",
+			"id": uuidv4(),
+			"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "alpha",
+		},
+		{
+			"id": uuidv4(),
+			"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "beta",
 		},
 		{
 			id: uuidv4(),
-			text: "beta",
-		},
-		{
-			id: uuidv4(),
-			text: "gamma",
+			"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "gamma",
 		},
 	]);
 
@@ -43,7 +43,7 @@ const ListTable = () => {
 	const onSelectChange = (action, state) => {
 		// console.log("action: ", action);
 		// console.log("state: ", state);
-		console.log("ids: ", state.ids);
+		// console.log("ids: ", state.ids);
 	};
 
 	const select = useRowSelect(
@@ -58,18 +58,14 @@ const ListTable = () => {
 
 	const [columns, setColumns] = useState([
 		{
-			label: "id",
-			renderCell: (item) => item.id,
-			select: true,
-		},
-		{
+			id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
 			label: "text",
 			renderCell: (item) => (
 				<input
 					type="text"
-					value={item["text"] || ""}
+					value={item["4e3b468c-7fa8-47d8-90a8-741bbea731ac"] || ""}
 					onChange={(event) =>
-						handleUpdate(event.target.value, item.id, "text")
+						handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731ac")
 					}
 					className="w-full"
 				/>
@@ -80,7 +76,7 @@ const ListTable = () => {
 	const theme = useTheme([
 		getTheme(),
 		{
-      Table: `
+			Table: `
         --data-table-library_grid-template-columns: 38px repeat(${columns.length}, minmax(0, 1fr));
       `,
 			Row: `
@@ -110,7 +106,7 @@ const ListTable = () => {
 				&.header-cell:hover {
 					background-color: #F4F5F6;
 				}
-			`
+			`,
 		},
 	]);
 
@@ -140,35 +136,28 @@ const ListTable = () => {
 			return;
 		}
 
-		const labelExists = columns.some((column) => column.label === label);
-		if (labelExists) {
-			alert(
-				"This column label is already in use. Please choose a different label."
-			);
-			return;
-		}
-
-		const newProperty = `${label}`;
+		const id = uuidv4(); 
 		const renderCell = (item) => (
 			<input
 				type="text"
-				value={item[newProperty] || ""}
+				value={item[id] || ""}
 				onChange={(event) =>
-					handleUpdate(event.target.value, item.id, newProperty)
+					handleUpdate(event.target.value, item.id, id)
 				}
 				className="w-full"
 			/>
 		);
 
 		const newColumn = {
-			label,
+			id: id,
+			label, 
 			renderCell,
 		};
 
 		setRows((prev) =>
 			prev.map((row) => ({
 				...row,
-				[newProperty]: "",
+				[id]: "",
 			}))
 		);
 
@@ -220,14 +209,21 @@ const ListTable = () => {
 				</button>
 			</div>
 			<div className=" bg-white p-1.5 rounded accent-blue-700">
-				<Table data={data} theme={theme} layout={{ custom: true }} select={select}>
+				<Table
+					data={data}
+					theme={theme}
+					layout={{ custom: true }}
+					select={select}
+				>
 					{(tableList) => (
 						<>
 							<Header>
 								<HeaderRow className="header-row">
-									<HeaderCellSelect className="header-cell"/>
+									<HeaderCellSelect className="header-cell" />
 									{columns.map((column) => (
-										<HeaderCell key={column.label} className="header-cell">{column.label}</HeaderCell>
+										<HeaderCell key={column.id} className="header-cell">
+											{column.label}
+										</HeaderCell>
 									))}
 								</HeaderRow>
 							</Header>
@@ -236,7 +232,9 @@ const ListTable = () => {
 									<Row item={item} key={item.id} className="row">
 										<CellSelect item={item} />
 										{columns.map((column, index) => (
-											<Cell key={column.label} className="cell">{column.renderCell(item)}</Cell>
+											<Cell key={column.id} className="cell">
+												{column.renderCell(item)}
+											</Cell>
 										))}
 									</Row>
 								))}
