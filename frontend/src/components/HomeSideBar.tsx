@@ -4,7 +4,7 @@ const HomeSideBar = () => {
   return (
     <div>
       <div className='side-bar-button'>
-        New Directory
+        Add Directory
       </div>
     </div>
   )

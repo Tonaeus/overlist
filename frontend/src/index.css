@@ -14,7 +14,7 @@
         width: clamp(13rem, 15vw, 20rem);
     }    
     .page-content {
-        @apply flex-1 rounded-tl-3xl p-6 bg-section border border-line
+        @apply flex-1 rounded-tl-3xl p-6 bg-section border border-line overflow-x-hidden
     }
 
     .side-bar-button {

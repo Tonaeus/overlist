@@ -24,18 +24,27 @@ import {
 
 const ListTable = () => {
 	const [rows, setRows] = useState([
-		{
-			"id": uuidv4(),
-			"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "alpha",
-		},
-		{
-			"id": uuidv4(),
-			"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "beta",
-		},
-		{
-			id: uuidv4(),
-			"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "gamma",
-		},
+		// {
+		// 	"id": uuidv4(),
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "alpha",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731a1": "alpha",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73112": "alpha",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73123": "alpha",
+		// },
+		// {
+		// 	"id": uuidv4(),
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "beta",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731a1": "beta",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73112": "beta",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73123": "beta",
+		// },
+		// {
+		// 	id: uuidv4(),
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "gamma",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731a1": "gamma",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73112": "gamma",
+		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73123": "gamma",
+		// },
 	]);
 
 	const data = { nodes: rows };
@@ -57,28 +66,86 @@ const ListTable = () => {
 	);
 
 	const [columns, setColumns] = useState([
-		{
-			id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
-			label: "text",
-			renderCell: (item) => (
-				<input
-					type="text"
-					value={item["4e3b468c-7fa8-47d8-90a8-741bbea731ac"] || ""}
-					onChange={(event) =>
-						handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731ac")
-					}
-					className="w-full"
-				/>
-			),
-		},
+		// {
+		// 	id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
+		// 	label: "text",
+		// 	renderCell: (item) => (
+		// 		<input
+		// 			type="text"
+		// 			value={item["4e3b468c-7fa8-47d8-90a8-741bbea731ac"] || ""}
+		// 			onChange={(event) =>
+		// 				handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731ac")
+		// 			}
+		// 			className="w-full"
+		// 		/>
+		// 	),
+		// },
+		// {
+		// 	id: "4e3b468c-7fa8-47d8-90a8-741bbea731a1",
+		// 	label: "text",
+		// 	renderCell: (item) => (
+		// 		<input
+		// 			type="text"
+		// 			value={item["4e3b468c-7fa8-47d8-90a8-741bbea731a1"] || ""}
+		// 			onChange={(event) =>
+		// 				handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731a1")
+		// 			}
+		// 			className="w-full"
+		// 		/>
+		// 	),
+		// },
+		// {
+		// 	id: "4e3b468c-7fa8-47d8-90a8-741bbea73112",
+		// 	label: "text",
+		// 	renderCell: (item) => (
+		// 		<input
+		// 			type="text"
+		// 			value={item["4e3b468c-7fa8-47d8-90a8-741bbea73112"] || ""}
+		// 			onChange={(event) =>
+		// 				handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea73112")
+		// 			}
+		// 			className="w-full"
+		// 		/>
+		// 	),
+		// },
+		// {
+		// 	id: "4e3b468c-7fa8-47d8-90a8-741bbea73123",
+		// 	label: "text",
+		// 	renderCell: (item) => (
+		// 		<input
+		// 			type="text"
+		// 			value={item["4e3b468c-7fa8-47d8-90a8-741bbea73123"] || ""}
+		// 			onChange={(event) =>
+		// 				handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea73123")
+		// 			}
+		// 			className="w-full"
+		// 		/>
+		// 	),
+		// },
 	]);
 
 	const theme = useTheme([
 		getTheme(),
 		{
 			Table: `
-        --data-table-library_grid-template-columns: 38px repeat(${columns.length}, minmax(0, 1fr));
+			--data-table-library_grid-template-columns: 38px repeat(${columns.length}, minmax(150px, 1fr));
+			&.table {
+				min-width: calc(38px + 150px * ${columns.length});
+			}
       `,
+			HeaderRow: `
+				&.header-row {
+					color: #495365;
+				}
+			`,
+			HeaderCell: `
+				&.header-cell:hover {
+					background-color: #F4F5F6;
+				}
+				&:nth-of-type(1) {
+					width: 38px;
+        }
+			`,
 			Row: `
 				&.row {
 					color: #495365;
@@ -94,18 +161,10 @@ const ListTable = () => {
 			`,
 			Cell: `
 				&.cell {
-					
 				}
-			`,
-			HeaderRow: `
-				&.header-row {
-					color: #495365;
-				}
-			`,
-			HeaderCell: `
-				&.header-cell:hover {
-					background-color: #F4F5F6;
-				}
+				&:nth-of-type(1) {
+					width: 38px;
+        }
 			`,
 		},
 	]);
@@ -136,21 +195,19 @@ const ListTable = () => {
 			return;
 		}
 
-		const id = uuidv4(); 
+		const id = uuidv4();
 		const renderCell = (item) => (
 			<input
 				type="text"
 				value={item[id] || ""}
-				onChange={(event) =>
-					handleUpdate(event.target.value, item.id, id)
-				}
+				onChange={(event) => handleUpdate(event.target.value, item.id, id)}
 				className="w-full"
 			/>
 		);
 
 		const newColumn = {
 			id: id,
-			label, 
+			label,
 			renderCell,
 		};
 
@@ -165,7 +222,8 @@ const ListTable = () => {
 	};
 
 	const logData = () => {
-		console.log(rows);
+		console.log("rows:", rows);
+		console.log("columns.length: ", columns.length);
 	};
 
 	// const deleteRow = (id) => {
@@ -208,40 +266,46 @@ const ListTable = () => {
 					Log Data
 				</button>
 			</div>
-			<div className=" bg-white p-1.5 rounded accent-blue-700">
-				<Table
-					data={data}
-					theme={theme}
-					layout={{ custom: true }}
-					select={select}
-				>
-					{(tableList) => (
-						<>
-							<Header>
-								<HeaderRow className="header-row">
-									<HeaderCellSelect className="header-cell" />
-									{columns.map((column) => (
-										<HeaderCell key={column.id} className="header-cell">
-											{column.label}
-										</HeaderCell>
-									))}
-								</HeaderRow>
-							</Header>
-							<Body>
-								{tableList.map((item) => (
-									<Row item={item} key={item.id} className="row">
-										<CellSelect item={item} />
-										{columns.map((column, index) => (
-											<Cell key={column.id} className="cell">
-												{column.renderCell(item)}
-											</Cell>
+			<div
+				className="bg-white p-1.5 rounded accent-blue-700"
+				style={{ visibility: columns.length > 0 ? "visible" : "hidden" }}
+			>
+				<div className="overflow-x-auto">
+					<Table
+						data={data}
+						theme={theme}
+						layout={{ custom: true }}
+						select={select}
+						className="table"
+					>
+						{(tableList) => (
+							<>
+								<Header>
+									<HeaderRow className="header-row">
+										<HeaderCellSelect className="header-cell" />
+										{columns.map((column) => (
+											<HeaderCell key={column.id} className="header-cell">
+												{column.label}
+											</HeaderCell>
 										))}
-									</Row>
-								))}
-							</Body>
-						</>
-					)}
-				</Table>
+									</HeaderRow>
+								</Header>
+								<Body>
+									{tableList.map((item) => (
+										<Row item={item} key={item.id} className="row">
+											<CellSelect item={item} />
+											{columns.map((column, index) => (
+												<Cell key={column.id} className="cell">
+													{column.renderCell(item)}
+												</Cell>
+											))}
+										</Row>
+									))}
+								</Body>
+							</>
+						)}
+					</Table>
+				</div>
 			</div>
 		</div>
 	);

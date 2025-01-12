@@ -4,7 +4,7 @@ const ListSideBar = () => {
   return (
     <div>
       <div className='side-bar-button'>
-        New Column
+        Add Column
       </div>
     </div>
   )
