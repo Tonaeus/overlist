@@ -1,6 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
-// import directoryRoutes from "./routes/directories.js"
+import directoryRoutes from "./routes/directories.js"
+
+const MONGO_URI = 'mongodb://root_user:root_password@localhost:27017/'; 
+const PORT = 3000;
 
 // Express app
 const app = express();
@@ -14,10 +17,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-// app.use('/api/directories', directoryRoutes);
-
-const MONGO_URI = 'mongodb://root_user:root_password@localhost:27017/'; 
-const PORT = 3000;
+app.use('/api/directories', directoryRoutes);
 
 // Connect to db
 mongoose.connect(MONGO_URI)

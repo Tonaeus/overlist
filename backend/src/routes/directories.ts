@@ -5,16 +5,16 @@ import {
   getDirectory,
   createDirectory,
   deleteDirectory,
-  updateDirectory
+  updateDirectory,
 } from "../controllers/directoryController.js";
 
 const router = express.Router();
 
-router.get('/', getWorkouts);
+router.get('/', getDirectories);
 
-router.get('/:id', getWorkout);
+router.get('/:id', getDirectory);
 
-router.post('/', createWorkout);
+router.post('/', createDirectory);
 
 router.delete('/:id', deleteDirectory);
 
