@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import directoryRoutes from "./routes/directories.js"
 
-const MONGO_URI = 'mongodb://root_user:root_password@localhost:27017/'; 
+const MONGO_URI = 'mongodb://root_username:root_password@localhost:27017/'; 
 const PORT = 3000;
 
 // Express app
