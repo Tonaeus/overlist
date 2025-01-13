@@ -29,7 +29,8 @@
 		"dev": "nodemon --exec node --loader ts-node/esm src/server.ts"
 	},
 	"dependencies": {
-		"express": "^4.21.2"
+		"express": "^4.21.2",
+		"mongoose": "^8.9.4"
 	},
 	"devDependencies": {
 		"@types/express": "^5.0.0",

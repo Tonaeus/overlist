@@ -1,10 +1,27 @@
 {
   "compilerOptions": {
+    /* Basic Settings */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "target": "es2024",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+
+    /* Strict Settings */
+    "strict": true,
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    
+    /* Output Settings */
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
-    "target": "ES2024",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
   },
   "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

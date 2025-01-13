@@ -1,13 +1,32 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import mongoose from "mongoose";
+// import directoryRoutes from "./routes/directories.js"
 
+// Express app
 const app = express();
-const PORT = 1234;
 
-app.get("/", (req: Request, res: Response) => {
-    const headers = req.headers;
-    res.status(200).send("Hello world!");
+// Middleware
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log(req.path, req.method);
+  next();
 });
 
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-});
+// Routes
+// app.use('/api/directories', directoryRoutes);
+
+const MONGO_URI = 'mongodb://root_user:root_password@localhost:27017/'; 
+const PORT = 3000;
+
+// Connect to db
+mongoose.connect(MONGO_URI)
+  .then(() => {
+    // Listen for requests
+    app.listen(PORT, () => {
+      console.log('Connected to db and listening on port', PORT)
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
