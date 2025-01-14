@@ -3,7 +3,7 @@
     /* Basic Settings */
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "target": "es2024",
+    "target": "es2022",
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
@@ -12,16 +12,13 @@
 
     /* Strict Settings */
     "strict": true,
-    "noImplicitAny": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     
     /* Output Settings */
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "sourceMap": true,
     "outDir": "dist",
+    "sourceMap": true,
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
 }
