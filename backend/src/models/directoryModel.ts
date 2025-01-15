@@ -1,12 +1,16 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const Schema = mongoose.Schema;
+interface IDirectory {
+  label: string
+}
 
-const directorySchema = new Schema({
+const directorySchema = new Schema<IDirectory>({
   label: {
     type: String,
     required: true
   }
 }, { timestamps: true });
 
-export default mongoose.model("Directory", directorySchema);
+const Directory = model<IDirectory>("Directory", directorySchema);
+
+export default Directory;
