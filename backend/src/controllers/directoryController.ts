@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import Directory from "../models/directoryModel.js";
 import mongoose from "mongoose";
+import Directory from "../models/directoryModel.js";
 
 const getDirectories = async (req: Request, res: Response) => {
   try {

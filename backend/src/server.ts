@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import directoryRoutes from "./routes/directories.js"
+import directoryRoutes from "./routes/directories.js";
+import listRoutes from "./routes/lists.js";
 
 const MONGO_URI = 'mongodb://root_username:root_password@localhost:27017/database?authSource=admin'; 
 const PORT = 3000;
@@ -18,6 +19,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/directories', directoryRoutes);
+app.use("/api/lists", listRoutes);
 
 // Connect to db
 mongoose.connect(MONGO_URI)
