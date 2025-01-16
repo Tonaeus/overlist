@@ -11,6 +11,6 @@ const directorySchema = new Schema<IDirectory>({
   }
 }, { timestamps: true });
 
-const Directory = model<IDirectory>("Directory", directorySchema);
+const Directory = model<IDirectory>("Directory", directorySchema, "directories");
 
 export default Directory;
