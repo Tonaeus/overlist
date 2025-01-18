@@ -7,14 +7,14 @@
         @apply bg-inherit; 
     }
     .page {
-        @apply h-full flex flex-row
+        @apply h-full flex flex-row overflow-hidden
     }
     .page-side-bar {
         @apply w-52 p-6;
         width: clamp(13rem, 15vw, 20rem);
     }    
     .page-content {
-        @apply flex-1 rounded-tl-3xl p-6 bg-section border border-line overflow-x-hidden
+        @apply flex flex-col flex-1 rounded-tl-3xl bg-section border-l border-t border-line overflow-x-hidden
     }
 
     .side-bar-button {
