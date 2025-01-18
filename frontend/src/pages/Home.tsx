@@ -10,7 +10,7 @@ const Home = () => {
       </div>
       <div className='page-content'>
         <div className='flex flex-col min-h-screen'>
-          <div className='p-6 bg-purple-500'>
+          <div className='p-6'>
             <HomeTable/>
           </div>
           <div className='mt-auto bg-blue-500'>

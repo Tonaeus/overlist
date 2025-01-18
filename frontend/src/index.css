@@ -17,7 +17,7 @@
         @apply flex flex-col flex-1 rounded-tl-3xl bg-section border-l border-t border-line overflow-x-hidden
     }
 
-    .side-bar-button {
-        @apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white mb-3 hover:bg-blue-800 transition-all
+    .button {
+        @apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white hover:bg-blue-800 transition-all
     }
 }

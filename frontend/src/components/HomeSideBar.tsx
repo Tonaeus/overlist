@@ -1,9 +1,9 @@
 const HomeSideBar = () => {
   return (
     <div>
-      <div className='side-bar-button'>
+      <button className='button w-full'>
         Add Directory
-      </div>
+      </button>
     </div>
   )
 }

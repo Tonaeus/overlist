@@ -20,6 +20,8 @@ import {
 	useRowSelect,
 } from "@table-library/react-table-library/select";
 
+import { Add, Remove, ContentCopy, SwapHoriz, ArrowDownward, Search } from "@mui/icons-material";
+
 interface Column {
 	label: string;
 	renderCell: (row: Row) => string;
@@ -62,14 +64,14 @@ const HomeTable = () => {
 			modified: "01/15/2025",
 		},
 		{
-			id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
+			id: "4e3b468c-7fa8-47d8-90a8-741bbea731a1",
 			label: "alpha",
 			directory: "None",
 			created: "01/15/2025",
 			modified: "01/15/2025",
 		},
 		{
-			id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
+			id: "4e3b468c-7fa8-47d8-90a8-741bbea731a2",
 			label: "beta",
 			directory: "None",
 			created: "01/15/2025",
@@ -152,20 +154,42 @@ const HomeTable = () => {
 
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-row h-9 mb-6 bg-yellow-500">
-				<label htmlFor="search" className="w-1/2 flex justify-center items-center accent-red-700 bg-green-500">
+			<div className="flex flex-row h-9 mb-6">
+				<label
+					htmlFor="search"
+					className="w-1/2 p-1.5 rounded-full flex flex-row bg-white border border-line"
+				>
+					<div className="flex justify-center items-center w-[38px]">
+						<Search/>
+					</div>
 					<input
 						id="search"
 						type="text"
 						value={search}
 						onChange={handleSearch}
-            className="w-full"
+						className="w-full h-full focus:outline-none px-3"
 					/>
 				</label>
+				<div className="w-1/2 flex flex-row justify-end">
+          <button className="button aspect-[1/1] mr-1.5">
+						<Add/>
+					</button>
+          <button className="button aspect-[1/1] mx-1.5">
+						<Remove/>
+					</button>
+					<button className="button aspect-[1/1] mx-1.5">
+						<ContentCopy/>
+					</button>
+					<button className="button aspect-[1/1] mx-1.5">
+						<SwapHoriz/>
+					</button>
+          <button className="button aspect-[1/1] ml-1.5">
+						<ArrowDownward/>
+					</button>
+				</div>
 			</div>
 			<div
-				className="bg-white p-1.5 rounded accent-blue-700"
-				style={{ visibility: columns.length > 0 ? "visible" : "hidden" }}
+				className="bg-white p-1.5 rounded accent-blue-700 border border-line"
 			>
 				<div className="overflow-x-auto">
 					<Table
