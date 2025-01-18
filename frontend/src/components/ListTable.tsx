@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { useTheme } from "@table-library/react-table-library/theme";
@@ -18,110 +18,43 @@ import {
 	HeaderCellSelect,
 	CellSelect,
 	SelectClickTypes,
-	SelectTypes,
 	useRowSelect,
 } from "@table-library/react-table-library/select";
 
+interface Column {
+	id: string;
+	label: string;
+	renderCell: (row: Row) => JSX.Element;
+}
+
+interface Row {
+	id: string;
+	[key: string]: string;
+}
+
 const ListTable = () => {
-	const [rows, setRows] = useState([
-		// {
-		// 	"id": uuidv4(),
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "alpha",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731a1": "alpha",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73112": "alpha",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73123": "alpha",
-		// },
-		// {
-		// 	"id": uuidv4(),
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "beta",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731a1": "beta",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73112": "beta",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73123": "beta",
-		// },
-		// {
-		// 	id: uuidv4(),
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "gamma",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea731a1": "gamma",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73112": "gamma",
-		// 	"4e3b468c-7fa8-47d8-90a8-741bbea73123": "gamma",
-		// },
+	const [columns, setColumns] = useState<Column[]>([
+		{
+			id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
+			label: "text",
+			renderCell: (item: Row) => (
+				<input
+					type="text"
+					value={item["4e3b468c-7fa8-47d8-90a8-741bbea731ac"] || ""}
+					onChange={(event) =>
+						handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731ac")
+					}
+					className="w-full"
+				/>
+			),
+		},
 	]);
 
-	const data = { nodes: rows };
-
-	const onSelectChange = (action, state) => {
-		// console.log("action: ", action);
-		// console.log("state: ", state);
-		// console.log("ids: ", state.ids);
-	};
-
-	const select = useRowSelect(
-		data,
+	const [rows, setRows] = useState<Row[]>([
 		{
-			onChange: onSelectChange,
+			"id": uuidv4(),
+			"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "alpha",
 		},
-		{
-			clickType: SelectClickTypes.ButtonClick,
-		}
-	);
-
-	const [columns, setColumns] = useState([
-		// {
-		// 	id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
-		// 	label: "text",
-		// 	renderCell: (item) => (
-		// 		<input
-		// 			type="text"
-		// 			value={item["4e3b468c-7fa8-47d8-90a8-741bbea731ac"] || ""}
-		// 			onChange={(event) =>
-		// 				handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731ac")
-		// 			}
-		// 			className="w-full"
-		// 		/>
-		// 	),
-		// },
-		// {
-		// 	id: "4e3b468c-7fa8-47d8-90a8-741bbea731a1",
-		// 	label: "text",
-		// 	renderCell: (item) => (
-		// 		<input
-		// 			type="text"
-		// 			value={item["4e3b468c-7fa8-47d8-90a8-741bbea731a1"] || ""}
-		// 			onChange={(event) =>
-		// 				handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731a1")
-		// 			}
-		// 			className="w-full"
-		// 		/>
-		// 	),
-		// },
-		// {
-		// 	id: "4e3b468c-7fa8-47d8-90a8-741bbea73112",
-		// 	label: "text",
-		// 	renderCell: (item) => (
-		// 		<input
-		// 			type="text"
-		// 			value={item["4e3b468c-7fa8-47d8-90a8-741bbea73112"] || ""}
-		// 			onChange={(event) =>
-		// 				handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea73112")
-		// 			}
-		// 			className="w-full"
-		// 		/>
-		// 	),
-		// },
-		// {
-		// 	id: "4e3b468c-7fa8-47d8-90a8-741bbea73123",
-		// 	label: "text",
-		// 	renderCell: (item) => (
-		// 		<input
-		// 			type="text"
-		// 			value={item["4e3b468c-7fa8-47d8-90a8-741bbea73123"] || ""}
-		// 			onChange={(event) =>
-		// 				handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea73123")
-		// 			}
-		// 			className="w-full"
-		// 		/>
-		// 	),
-		// },
 	]);
 
 	const theme = useTheme([
@@ -169,89 +102,79 @@ const ListTable = () => {
 		},
 	]);
 
-	const handleUpdate = (value, id, property) => {
-		setRows((state) =>
-			state.map((row) => (row.id === id ? { ...row, [property]: value } : row))
+	const data = { nodes: rows };
+	
+	const onSelectChange = (selectAction: any, selectState: any) => {
+		console.log("action: ", selectAction);
+		console.log("state: ", selectState);
+		// console.log("ids: ", state.ids);
+	};
+
+	const select = useRowSelect(
+		data,
+		{
+			onChange: onSelectChange,
+		},
+		{
+			clickType: SelectClickTypes.ButtonClick,
+		}
+	);
+
+	const handleUpdate = (value: string, id: string, property: string) => {
+		setRows((rows: Row[]) =>
+			rows.map((row: Row) => (row.id === id ? { ...row, [property]: value } : row))
 		);
 	};
 
 	const addRow = () => {
-		const newRow = {
+		const newRow: Row = {
 			id: uuidv4(),
 		};
 
-		columns.slice(1).forEach((column) => {
-			const columnLabel = column.label;
-			newRow[columnLabel] = "";
+		columns.slice(1).forEach((column: Column) => {
+			newRow[column.label] = "";
 		});
 
-		setRows((prev) => [...prev, newRow]);
+		setRows((prevRows: Row[]) => [...prevRows, newRow]);
 	};
 
 	const addColumn = () => {
-		const label = prompt("Enter the column label:");
+		const label: string | null = prompt("Enter the column label:");
 		if (!label) {
 			alert("Column label is required.");
 			return;
 		}
 
-		const id = uuidv4();
-		const renderCell = (item) => (
+		const id: string = uuidv4();
+		const renderCell = (row: Row) => (
 			<input
 				type="text"
-				value={item[id] || ""}
-				onChange={(event) => handleUpdate(event.target.value, item.id, id)}
+				value={row[id] || ""}
+				onChange={(event) => handleUpdate(event.target.value, row.id, id)}
 				className="w-full"
 			/>
 		);
 
-		const newColumn = {
+		const newColumn: Column = {
 			id: id,
 			label,
 			renderCell,
 		};
 
-		setRows((prev) =>
-			prev.map((row) => ({
+		setRows((prevRows: Row[]) =>
+			prevRows.map((row: Row) => ({
 				...row,
 				[id]: "",
 			}))
 		);
 
-		setColumns((prev) => [...prev, newColumn]);
+		setColumns((prevCols: Column[]) => [...prevCols, newColumn]);
 	};
 
 	const logData = () => {
 		console.log("rows:", rows);
 		console.log("columns.length: ", columns.length);
 	};
-
-	// const deleteRow = (id) => {
-	// 	setRows((prev) => prev.filter((row) => row.id !== id));
-	// };
-
-	// const duplicateRow = (id) => {
-	// 	const rowToDuplicate = rows.find((row) => row.id === id);
-	// 	const duplicatedRow = { ...rowToDuplicate, id: uuidv4() };
-	// 	setRows((prev) => [...prev, duplicatedRow]);
-	// };
-
-	// const resetRow = (id) => {
-	// 	setRows((state) =>
-	// 		state.map((row) =>
-	// 			row.id === id
-	// 				? Object.keys(row).reduce((acc, key) => {
-	// 						if (key !== "id") {
-	// 							acc[key] = "";
-	// 						} else {
-	// 							acc[key] = row[key];
-	// 						}
-	// 						return acc;
-	// 				  }, {})
-	// 				: row
-	// 		)
-	// 	);
-	// };
 
 	return (
 		<div>
@@ -278,12 +201,12 @@ const ListTable = () => {
 						select={select}
 						className="table"
 					>
-						{(tableList) => (
+						{(tableList: any) => (
 							<>
 								<Header>
 									<HeaderRow className="header-row">
 										<HeaderCellSelect className="header-cell" />
-										{columns.map((column) => (
+										{columns.map((column: Column) => (
 											<HeaderCell key={column.id} className="header-cell">
 												{column.label}
 											</HeaderCell>
@@ -291,12 +214,12 @@ const ListTable = () => {
 									</HeaderRow>
 								</Header>
 								<Body>
-									{tableList.map((item) => (
-										<Row item={item} key={item.id} className="row">
-											<CellSelect item={item} />
-											{columns.map((column, index) => (
+									{tableList.map((row: Row) => (
+										<Row item={row} key={row.id} className="row">
+											<CellSelect item={row} />
+											{columns.map((column: Column) => (
 												<Cell key={column.id} className="cell">
-													{column.renderCell(item)}
+													{column.renderCell(row)}
 												</Cell>
 											))}
 										</Row>

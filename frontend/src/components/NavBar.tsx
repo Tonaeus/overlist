@@ -1,5 +1,3 @@
-import React from 'react'
-
 const NavBar = () => {
   return (
     <div className='flex flex-row h-16'>

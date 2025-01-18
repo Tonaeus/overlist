@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import NavBar from "./components/NavBar";
@@ -12,9 +11,8 @@ const App = () => {
 				<NavBar/>
 				<div className="flex-1">
           <Routes>
-            {/* <Route path="/" element={<Home/>}/>
-						<Route path="/list" element={<List/>}/> */}
-						<Route path="/" element={<List/>}/>
+            <Route path="/" element={<Home/>}/>
+						<Route path="/list" element={<List/>}/>
           </Routes>
         </div>
 			</BrowserRouter>

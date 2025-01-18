@@ -1,4 +1,3 @@
-import React from 'react'
 import ListSideBar from '../components/ListSideBar'
 import ListTable from '../components/ListTable'
 
