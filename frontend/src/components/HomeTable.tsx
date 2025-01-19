@@ -123,7 +123,7 @@ const HomeTable = () => {
 					background-color: #F4F5F6;
 				}
 				&.row-select-selected {
-					background-color: rgb(239 246 255 / var(--tw-bg-opacity, 1));
+					background-color: #EFF6FF;
 					font-weight: normal;
 				}
 			`,
