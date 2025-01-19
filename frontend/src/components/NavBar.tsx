@@ -3,7 +3,7 @@ const NavBar = () => {
     <div className='flex flex-row h-16'>
       <div className='flex-1'></div>
       <div className='flex-1 flex justify-center items-center'>
-        <h1 className='text-4xl font-bold text-gray-800'>Overlist</h1>
+        <h1 className='text-4xl font-bold'>Overlist</h1>
       </div>
       <div className='flex-1'></div>
     </div>
