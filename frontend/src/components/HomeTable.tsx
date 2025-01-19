@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Tooltip } from "react-tooltip";
 
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
@@ -183,21 +184,36 @@ const HomeTable = () => {
 					/>
 				</label>
 				<div className="w-1/2 flex flex-row justify-end">
-					<button className="button aspect-[1/1] mr-1.5">
+					<a className="add-button button aspect-[1/1] mr-1.5">
 						<Add />
-					</button>
-					<button className="button aspect-[1/1] mx-1.5">
+					</a>
+					<Tooltip anchorSelect=".add-button" place="top">
+						Add
+					</Tooltip>
+					<a className="remove-button button aspect-[1/1] mx-1.5">
 						<Remove />
-					</button>
-					<button className="button aspect-[1/1] mx-1.5">
+					</a>
+					<Tooltip anchorSelect=".remove-button" place="top">
+						Delete
+					</Tooltip>
+					<a className="copy-button button aspect-[1/1] mx-1.5">
 						<ContentCopy />
-					</button>
-					<button className="button aspect-[1/1] mx-1.5">
+					</a>
+					<Tooltip anchorSelect=".copy-button" place="top">
+						Copy
+					</Tooltip>
+					<a className="swap-button button aspect-[1/1] mx-1.5">
 						<SwapHoriz />
-					</button>
-					<button className="button aspect-[1/1] ml-1.5">
+					</a>
+					<Tooltip anchorSelect=".swap-button" place="top">
+						Move
+					</Tooltip>
+					<a className="down-button button aspect-[1/1] ml-1.5">
 						<ArrowDownward />
-					</button>
+					</a>
+					<Tooltip anchorSelect=".down-button" place="top">
+						Export
+					</Tooltip>
 				</div>
 			</div>
 			<div className="bg-white p-1.5 rounded accent-blue-700 border border-line">
