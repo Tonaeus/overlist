@@ -20,9 +20,17 @@ import {
 	useRowSelect,
 } from "@table-library/react-table-library/select";
 
-import { Add, Remove, ContentCopy, SwapHoriz, ArrowDownward, Search } from "@mui/icons-material";
+import {
+	Add,
+	Remove,
+	ContentCopy,
+	SwapHoriz,
+	ArrowDownward,
+	Search,
+} from "@mui/icons-material";
 
 interface Column {
+	id: number;
 	label: string;
 	renderCell: (row: Row) => string;
 }
@@ -38,18 +46,22 @@ interface Row {
 const HomeTable = () => {
 	const [columns] = useState<Column[]>([
 		{
+			id: 0,
 			label: "Name",
 			renderCell: (row: Row) => row.label,
 		},
 		{
+			id: 1,
 			label: "Directory",
 			renderCell: (row: Row) => row.directory,
 		},
 		{
+			id: 2,
 			label: "Created",
 			renderCell: (row: Row) => row.created,
 		},
 		{
+			id: 3,
 			label: "Modified",
 			renderCell: (row: Row) => row.modified,
 		},
@@ -160,37 +172,35 @@ const HomeTable = () => {
 					className="w-1/2 p-1.5 rounded-full flex flex-row bg-white border border-line"
 				>
 					<div className="flex justify-center items-center w-[38px]">
-						<Search/>
+						<Search />
 					</div>
 					<input
 						id="search"
 						type="text"
 						value={search}
 						onChange={handleSearch}
-						className="w-full h-full focus:outline-none px-3"
+						className="h-full w-[calc(100%-38px)] focus:outline-none px-3"
 					/>
 				</label>
 				<div className="w-1/2 flex flex-row justify-end">
-          <button className="button aspect-[1/1] mr-1.5">
-						<Add/>
-					</button>
-          <button className="button aspect-[1/1] mx-1.5">
-						<Remove/>
+					<button className="button aspect-[1/1] mr-1.5">
+						<Add />
 					</button>
 					<button className="button aspect-[1/1] mx-1.5">
-						<ContentCopy/>
+						<Remove />
 					</button>
 					<button className="button aspect-[1/1] mx-1.5">
-						<SwapHoriz/>
+						<ContentCopy />
 					</button>
-          <button className="button aspect-[1/1] ml-1.5">
-						<ArrowDownward/>
+					<button className="button aspect-[1/1] mx-1.5">
+						<SwapHoriz />
+					</button>
+					<button className="button aspect-[1/1] ml-1.5">
+						<ArrowDownward />
 					</button>
 				</div>
 			</div>
-			<div
-				className="bg-white p-1.5 rounded accent-blue-700 border border-line"
-			>
+			<div className="bg-white p-1.5 rounded accent-blue-700 border border-line">
 				<div className="overflow-x-auto">
 					<Table
 						data={data}
@@ -205,7 +215,7 @@ const HomeTable = () => {
 									<HeaderRow className="header-row">
 										<HeaderCellSelect className="header-cell" />
 										{columns.map((column: Column) => (
-											<HeaderCell key={column.label} className="header-cell">
+											<HeaderCell key={column.id} className="header-cell">
 												{column.label}
 											</HeaderCell>
 										))}
@@ -216,7 +226,7 @@ const HomeTable = () => {
 										<Row item={row} key={row.id} className="row">
 											<CellSelect item={row} />
 											{columns.map((column: Column) => (
-												<Cell key={column.label} className="cell">
+												<Cell key={column.id} className="cell">
 													{column.renderCell(row)}
 												</Cell>
 											))}
@@ -226,6 +236,11 @@ const HomeTable = () => {
 							</>
 						)}
 					</Table>
+					{data.nodes.length === 0 ? (
+						<div className="flex justify-center items-center h-9">
+							<p>No lists</p>
+						</div>
+					) : null}
 				</div>
 			</div>
 		</div>
