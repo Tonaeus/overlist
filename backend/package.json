@@ -25,16 +25,21 @@
 	"contributors": [],
 	"scripts": {
 		"clean": "rm -rf dist",
-		"build": "npm run clean && npx tsc",
-		"dev": "nodemon --exec node --loader ts-node/esm src/server.ts"
+		"build": "cross-env NODE_ENV=production npm run clean && npx tsc",
+		"dev": "cross-env NODE_ENV=development nodemon --exec node --loader ts-node/esm src/server.ts",
+		"preview": "cross-env NODE_ENV=production npx http-server dist"
 	},
 	"dependencies": {
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.7",
 		"express": "^4.21.2",
 		"mongoose": "^8.9.4"
 	},
 	"devDependencies": {
+		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
 		"@types/node": "^22.10.5",
+		"cross-env": "^7.0.3",
 		"nodemon": "^3.1.9",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.7.2"
