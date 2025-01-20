@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { Delete, Edit } from "@mui/icons-material";
@@ -10,33 +10,20 @@ interface Directory {
 }
 
 const HomeSideBar = () => {
-	const [directories, setDirectories] = useState<Directory[]>([
-		{ id: "1", label: "Documents" },
-		{ id: "2", label: "Pictures" },
-		{ id: "3", label: "Music" },
-		{ id: "4", label: "Downloads" },
-		{ id: "5", label: "Videos" },
-		{ id: "6", label: "Documents" },
-		{ id: "7", label: "Pictures" },
-		{ id: "8", label: "Music" },
-		{ id: "9", label: "Downloads" },
-		{ id: "10", label: "Videos" },
-		{ id: "11", label: "Documents" },
-		{ id: "12", label: "Pictures" },
-		{ id: "13", label: "Music" },
-		{ id: "14", label: "Downloads" },
-		// { id: "15", label: "Videos" },
-		// { id: "16", label: "Documents" },
-		// { id: "17", label: "Pictures" },
-		// { id: "18", label: "Music" },
-		// { id: "19", label: "Downloads" },
-		// { id: "20", label: "Videos" },
-		// { id: "21", label: "Documents" },
-		// { id: "22", label: "Pictures" },
-		// { id: "23", label: "Music" },
-		// { id: "24", label: "Downloads" },
-		// { id: "25", label: "Videos" },
-	]);
+  const [directories, setDirectories] = useState<Directory[]>([]);
+
+  useEffect(() => {
+    const fetchDirectories = async () => {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/directories/`);
+      const json = await response.json();
+
+      if (response.ok) {
+        setDirectories(json);
+      }
+    }
+
+    fetchDirectories();
+  }, []);
 
 	const { id } = useParams();
 

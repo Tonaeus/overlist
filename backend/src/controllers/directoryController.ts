@@ -5,7 +5,13 @@ import Directory from "../models/directoryModel.js";
 const getDirectories = async (req: Request, res: Response) => {
   try {
     const directories = await Directory.find({}).sort({ label: 1 });
-    res.status(200).json(directories);
+
+    const processedDirectories = directories.map(dir => ({
+      id: dir._id,
+      label: dir.label,
+    }));
+
+    res.status(200).json(processedDirectories);
     return;
   } 
   catch (error) {
