@@ -121,8 +121,8 @@ const ListTable = () => {
 	);
 
 	const handleUpdate = (value: string, id: string, property: string) => {
-		setRows((rows: Row[]) =>
-			rows.map((row: Row) => (row.id === id ? { ...row, [property]: value } : row))
+		setRows((prevRows: Row[]) =>
+			prevRows.map((row: Row) => (row.id === id ? { ...row, [property]: value } : row))
 		);
 	};
 

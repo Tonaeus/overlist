@@ -3,25 +3,32 @@
 @tailwind utilities;
 
 @layer components {
-    body {
-        @apply text-text; 
-      }
-    input {
-        @apply bg-inherit; 
-    }
-    .page {
-        @apply h-full flex flex-row overflow-hidden;
-    }
-    .page-side-bar {
-        @apply w-52 p-6;
-        /* width: clamp(13rem, 15vw, 20rem); */
-        width: clamp(15rem, 15vw, 20rem);
-    }    
-    .page-content {
-        @apply flex flex-col flex-1 rounded-tl-3xl bg-section border-l border-t border-line overflow-x-hidden;
-    }
+	body {
+		@apply text-text;
+	}
+    
+	input {
+		@apply bg-inherit;
+	}
 
-    .button {
-        @apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white hover:bg-blue-800 transition-all duration-300 ease-in-out;
-    }
+	.page {
+		@apply h-full flex flex-row overflow-hidden;
+	}
+
+	.page-side-bar {
+		@apply w-52 p-6;
+		/* width: clamp(13rem, 15vw, 20rem); */
+		width: clamp(15rem, 15vw, 20rem);
+	}
+	.page-content {
+		@apply flex flex-col flex-1 rounded-tl-3xl bg-section border-l border-t border-line overflow-x-hidden;
+	}
+
+	.button {
+		@apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white hover:bg-blue-800 transition-all duration-300 ease-in-out;
+	}
+
+	.button-secondary {
+		@apply h-9 flex justify-center items-center rounded-full border border-line hover:bg-section transition-all duration-300 ease-in-out;
+	}
 }
