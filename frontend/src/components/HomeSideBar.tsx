@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { Close, Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
+
+import Modal from "./Modal";
 
 interface Directory {
 	id: string;
@@ -29,10 +31,58 @@ const HomeSideBar = () => {
 
 	const { id } = useParams();
 
-	const [showModal, setShowModal] = useState<boolean>(false);
+	const [modalConfig, setModalConfig] = useState<{
+		show: boolean;
+		title: string;
+		content: React.ReactNode;
+		action: string;
+		onAction: () => void;
+		onCancel: () => void;
+	}>({
+		show: false,
+		title: "",
+		content: <></>,
+		action: "",
+		onAction: () => {},
+		onCancel: () => {},
+	});
+
+	// useEffect(() => {
+	//   console.log("modalConfig:", modalConfig);
+	// }, [modalConfig]);
 
 	const handleAdd = () => {
-		setShowModal(true);
+		let inputValue: string = "";
+		setModalConfig({
+			show: true,
+			title: "Add Directory",
+			content: (
+				<input
+					type="text"
+					placeholder="Enter directory name"
+					className="h-9 w-full border border-line p-1.5 rounded focus:outline-none"
+					onChange={(e) => {
+						inputValue = e.target.value;
+					}}
+				/>
+			),
+			action: "Add",
+			onAction: () => {
+				const directoryName = inputValue.trim();
+				if (directoryName) {
+					setDirectories((prev) => [
+						...prev,
+						{ id: `${Date.now()}`, label: directoryName },
+					]);
+					setModalConfig((prev) => ({ ...prev, show: false }));
+				} else {
+					alert("Directory name cannot be empty.");
+				}
+			},
+			onCancel: () => {
+				setModalConfig((prev) => ({ ...prev, show: false }));
+			},
+		});
 	};
 
 	const handleEdit = (directoryId: string) => {
@@ -109,43 +159,14 @@ const HomeSideBar = () => {
 				</div>
 			</div>
 
-			<div
-				className={`fixed inset-0 flex items-center justify-center z-50 bg-gray-700 bg-opacity-50 ${showModal ? '' : 'hidden'}`} 
-			>
-				<div className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-sm">
-					<div className="flex flex-row justify-between items-center mb-6">
-						<h2 className="text-xl font-bold">Modal Title</h2>
-						<button
-							className="hover:scale-110"
-							onClick={(e) => {
-								e.preventDefault();
-								setShowModal(false);
-							}}
-						>
-							<Close/>
-						</button>
-					</div>
-
-					<div className="mb-6">
-							Content
-					</div>
-
-					<div className="flex flex-row justify-end items-center">
-						<button
-							className="button-secondary px-3 py-1.5 mr-1.5"
-							onClick={(e) => {
-								e.preventDefault();
-								setShowModal(false);}
-							}
-						>
-							Cancel
-						</button>
-						<button className="button px-3 py-1. ml-1.5">
-							Confirm
-						</button>
-					</div>
-				</div>
-			</div>
+			<Modal
+				show={modalConfig.show}
+				title={modalConfig.title}
+				content={modalConfig.content}
+				action={modalConfig.action}
+				onAction={modalConfig.onAction}
+				onCancel={modalConfig.onCancel}
+			/>
 		</>
 	);
 };
