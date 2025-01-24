@@ -11,6 +11,15 @@ interface Directory {
 	label: string;
 }
 
+const defaultModalConfig = {
+	show: false,
+	title: "",
+	content: null,
+	action: "",
+	onAction: () => {},
+	onCancel: () => {},
+};
+
 const HomeSideBar = () => {
 	const [directories, setDirectories] = useState<Directory[]>([]);
 
@@ -38,34 +47,35 @@ const HomeSideBar = () => {
 		action: string;
 		onAction: () => void;
 		onCancel: () => void;
-	}>({
-		show: false,
-		title: "",
-		content: <></>,
-		action: "",
-		onAction: () => {},
-		onCancel: () => {},
-	});
-
-	// useEffect(() => {
-	//   console.log("modalConfig:", modalConfig);
-	// }, [modalConfig]);
+	}>(defaultModalConfig);
 
 	const handleAdd = () => {
-		let inputValue: string = "";
-		setModalConfig({
-			show: true,
-			title: "Add Directory",
-			content: (
+		let inputValue = "";
+
+		const InputContent = (errorMessage = "") => (
+			<>
 				<input
 					type="text"
 					placeholder="Enter directory name"
-					className="h-9 w-full border border-line p-1.5 rounded focus:outline-none"
+					className={`h-9 w-full border border-line rounded p-1.5 focus:outline-none ${
+						errorMessage ? "mb-1.5" : ""
+					}`}
 					onChange={(e) => {
 						inputValue = e.target.value;
 					}}
 				/>
-			),
+				{errorMessage && (
+					<div className="h-9 w-full border border-red-500 rounded p-1.5 bg-red-100 text-red-500">
+						{errorMessage}
+					</div>
+				)}
+			</>
+		);
+
+		setModalConfig({
+			show: true,
+			title: "Add Directory",
+			content: InputContent(),
 			action: "Add",
 			onAction: () => {
 				const directoryName = inputValue.trim();
@@ -74,16 +84,24 @@ const HomeSideBar = () => {
 						...prev,
 						{ id: `${Date.now()}`, label: directoryName },
 					]);
-					setModalConfig((prev) => ({ ...prev, show: false }));
-				} else {
-					alert("Directory name cannot be empty.");
+					setModalConfig(defaultModalConfig);
+				} 
+				else {
+					setModalConfig((prev) => ({
+						...prev,
+						content: InputContent("Directory name cannot be empty."),
+					}));
 				}
 			},
 			onCancel: () => {
-				setModalConfig((prev) => ({ ...prev, show: false }));
+				setModalConfig(defaultModalConfig);
 			},
 		});
 	};
+
+	// useEffect(() => {
+	//   console.log("modalConfig:", modalConfig);
+	// }, [modalConfig]);
 
 	const handleEdit = (directoryId: string) => {
 		const newLabel = prompt("Edit directory name:", "");
