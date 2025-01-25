@@ -1,15 +1,8 @@
+import type { ModalConfig } from '../types/ModalConfig';
+
 import { Close } from "@mui/icons-material";
 
-interface ModalProps {
-	show: boolean;
-	title: string;
-	content: React.ReactNode;
-  action: string;
-	onAction: () => void;
-	onCancel: () => void;
-}
-
-const Modal = ({ show, title, content, action, onAction, onCancel }: ModalProps) => {
+const Modal = ({ show, title, content, action, onAction, onCancel }: ModalConfig) => {
 	if (!show) return null;
 
 	return (

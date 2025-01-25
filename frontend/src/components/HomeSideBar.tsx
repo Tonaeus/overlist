@@ -1,26 +1,22 @@
-import { useEffect, useState } from "react";
+import type { ModalConfig } from "../types/ModalConfig";
+import modalConfigDefault from "../configs/modalConfigDefault";
+import ModalContentInput from "./ModalContentInput";
+import Modal from "./Modal";
+
+import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { Delete, Edit } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
-
-import Modal from "./Modal";
 
 interface Directory {
 	id: string;
 	label: string;
 }
 
-const defaultModalConfig = {
-	show: false,
-	title: "",
-	content: null,
-	action: "",
-	onAction: () => {},
-	onCancel: () => {},
-};
-
 const HomeSideBar = () => {
+	const { id } = useParams();
+
 	const [directories, setDirectories] = useState<Directory[]>([]);
 
 	useEffect(() => {
@@ -38,70 +34,50 @@ const HomeSideBar = () => {
 		fetchDirectories();
 	}, []);
 
-	const { id } = useParams();
+	const labelRef = useRef<string>("");
 
-	const [modalConfig, setModalConfig] = useState<{
-		show: boolean;
-		title: string;
-		content: React.ReactNode;
-		action: string;
-		onAction: () => void;
-		onCancel: () => void;
-	}>(defaultModalConfig);
+	const [modalConfig, setModalConfig] = useState<ModalConfig>(modalConfigDefault);
 
 	const handleAdd = () => {
-		let inputValue = "";
-
-		const InputContent = (errorMessage = "") => (
-			<>
-				<input
-					type="text"
-					placeholder="Enter directory name"
-					className={`h-9 w-full border border-line rounded p-1.5 focus:outline-none ${
-						errorMessage ? "mb-1.5" : ""
-					}`}
-					onChange={(e) => {
-						inputValue = e.target.value;
-					}}
-				/>
-				{errorMessage && (
-					<div className="h-9 w-full border border-red-500 rounded p-1.5 bg-red-100 text-red-500">
-						{errorMessage}
-					</div>
-				)}
-			</>
-		);
-
 		setModalConfig({
 			show: true,
 			title: "Add Directory",
-			content: InputContent(),
+			content: (
+				<ModalContentInput
+					placeholder="Enter directory label"
+					onChange={(e) => (labelRef.current = e.target.value)}
+				/>
+			),
 			action: "Add",
 			onAction: () => {
-				const directoryName = inputValue.trim();
-				if (directoryName) {
+				const directoryLabel = labelRef.current.trim();
+				if (directoryLabel) {
 					setDirectories((prev) => [
 						...prev,
-						{ id: `${Date.now()}`, label: directoryName },
+						{ id: `${Date.now()}`, label: directoryLabel },
 					]);
-					setModalConfig(defaultModalConfig);
+					setModalConfig(modalConfigDefault);
+					labelRef.current = ""; 
 				} 
 				else {
 					setModalConfig((prev) => ({
 						...prev,
-						content: InputContent("Directory name cannot be empty."),
+						content: (
+							<ModalContentInput
+								placeholder="Enter directory label"
+								error="Directory label cannot be empty."
+								onChange={(e) => (labelRef.current = e.target.value)}
+							/>
+						),
 					}));
 				}
 			},
 			onCancel: () => {
-				setModalConfig(defaultModalConfig);
+				setModalConfig(modalConfigDefault);
+				labelRef.current = ""; 
 			},
 		});
 	};
-
-	// useEffect(() => {
-	//   console.log("modalConfig:", modalConfig);
-	// }, [modalConfig]);
 
 	const handleEdit = (directoryId: string) => {
 		const newLabel = prompt("Edit directory name:", "");
