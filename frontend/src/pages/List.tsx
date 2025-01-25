@@ -1,4 +1,4 @@
-import Footer from '../components/Footer'
+import Footer from '../layouts/Footer'
 import ListSideBar from '../components/ListSideBar'
 import ListTable from '../components/ListTable'
 
@@ -13,7 +13,7 @@ const List = () => {
           <div className='px-6 pb-6 bg-purple-500'>
             <ListTable/>
           </div>
-          <div className='mt-auto bg-blue-500'>
+          <div className='mt-auto mx-6 border-t border-line'>
             <Footer/>
           </div>
         </div>

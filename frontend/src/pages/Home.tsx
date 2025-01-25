@@ -1,4 +1,4 @@
-import Footer from "../components/Footer"
+import Footer from "../layouts/Footer"
 import HomeSideBar from "../components/HomeSideBar"
 import HomeTable from "../components/HomeTable"
 
@@ -13,7 +13,7 @@ const Home = () => {
           <div className='p-6'>
             <HomeTable/>
           </div>
-          <div className='mt-auto bg-blue-500'>
+          <div className='mt-auto mx-6 border-t border-line'>
             <Footer/>
           </div>
         </div>
