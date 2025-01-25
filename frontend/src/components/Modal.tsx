@@ -1,8 +1,8 @@
-import type { ModalConfig } from '../types/ModalConfig';
+import type { ModalProps } from '../types/ModalProps';
 
 import { Close } from "@mui/icons-material";
 
-const Modal = ({ show, title, content, action, onAction, onCancel }: ModalConfig) => {
+const Modal = ({ show, title, content, action, onAction, onCancel }: ModalProps) => {
 	if (!show) return null;
 
 	return (

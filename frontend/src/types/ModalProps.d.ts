@@ -1,4 +1,4 @@
-interface ModalConfig {
+interface ModalProps {
 	show: boolean;
 	title: string;
 	content: React.ReactNode;
@@ -7,4 +7,4 @@ interface ModalConfig {
 	onCancel: () => void;
 }
 
-export type { ModalConfig };
+export type { ModalProps };

@@ -1,5 +1,5 @@
-import type { ModalConfig } from "../types/ModalConfig";
-import modalConfigDefault from "../configs/modalConfigDefault";
+import type { ModalProps } from "../types/ModalProps";
+import modalPropsDefault from "../configs/modalPropsDefault";
 import ModalContentInput from "./ModalContentInput";
 import Modal from "./Modal";
 
@@ -36,10 +36,10 @@ const HomeSideBar = () => {
 
 	const labelRef = useRef<string>("");
 
-	const [modalConfig, setModalConfig] = useState<ModalConfig>(modalConfigDefault);
+	const [modalProps, setModalProps] = useState<ModalProps>(modalPropsDefault);
 
 	const handleAdd = () => {
-		setModalConfig({
+		setModalProps({
 			show: true,
 			title: "Add Directory",
 			content: (
@@ -56,11 +56,11 @@ const HomeSideBar = () => {
 						...prev,
 						{ id: `${Date.now()}`, label: directoryLabel },
 					]);
-					setModalConfig(modalConfigDefault);
+					setModalProps(modalPropsDefault);
 					labelRef.current = ""; 
 				} 
 				else {
-					setModalConfig((prev) => ({
+					setModalProps((prev) => ({
 						...prev,
 						content: (
 							<ModalContentInput
@@ -73,7 +73,7 @@ const HomeSideBar = () => {
 				}
 			},
 			onCancel: () => {
-				setModalConfig(modalConfigDefault);
+				setModalProps(modalPropsDefault);
 				labelRef.current = ""; 
 			},
 		});
@@ -154,12 +154,12 @@ const HomeSideBar = () => {
 			</div>
 
 			<Modal
-				show={modalConfig.show}
-				title={modalConfig.title}
-				content={modalConfig.content}
-				action={modalConfig.action}
-				onAction={modalConfig.onAction}
-				onCancel={modalConfig.onCancel}
+				show={modalProps.show}
+				title={modalProps.title}
+				content={modalProps.content}
+				action={modalProps.action}
+				onAction={modalProps.onAction}
+				onCancel={modalProps.onCancel}
 			/>
 		</>
 	);
