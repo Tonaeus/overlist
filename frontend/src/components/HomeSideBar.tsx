@@ -39,7 +39,9 @@ const HomeSideBar = () => {
 
 	const [modalProps, setModalProps] = useState<ModalProps>(modalPropsDefault);
 
-	const handleAdd = () => {
+	const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+
 		setModalProps({
 			show: true,
 			title: "Add Directory",
@@ -50,23 +52,37 @@ const HomeSideBar = () => {
 				/>
 			),
 			action: "Add",
-			onAction: () => {
-				const directoryLabel = labelRef.current.trim();
-				if (directoryLabel) {
+			onAction: async () => {
+				const newDirectory = { label: labelRef.current };
+
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/directories/`,
+					{
+						method: "POST",
+						body: JSON.stringify(newDirectory),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
 					setDirectories((prev) => [
 						...prev,
-						{ id: `${Date.now()}`, label: directoryLabel },
+						{ id: json.id, label: json.label },
 					]);
+
 					setModalProps(modalPropsDefault);
 					labelRef.current = "";
-				} 
-				else {
+				} else {
 					setModalProps((prev) => ({
 						...prev,
 						content: (
 							<ModalContentInput
 								placeholder="Enter directory label"
-								error="Directory label cannot be empty."
+								error={json.error}
 								onChange={(e) => (labelRef.current = e.target.value)}
 							/>
 						),
@@ -83,7 +99,7 @@ const HomeSideBar = () => {
 	const handleEdit = (directoryId: string) => {
 		const directory = directories.find((dir) => dir.id === directoryId);
 		if (!directory) return;
-	
+
 		setModalProps({
 			show: true,
 			title: "Edit Directory",
@@ -104,8 +120,7 @@ const HomeSideBar = () => {
 					);
 					setModalProps(modalPropsDefault);
 					labelRef.current = "";
-				} 
-				else {
+				} else {
 					setModalProps((prev) => ({
 						...prev,
 						content: (
@@ -154,8 +169,7 @@ const HomeSideBar = () => {
 				<button
 					className="button w-full mb-6"
 					onClick={(e) => {
-						e.preventDefault();
-						handleAdd();
+						handleAdd(e);
 					}}
 				>
 					Add Directory

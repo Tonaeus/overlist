@@ -15,7 +15,7 @@ const getDirectories = async (req: Request, res: Response) => {
     return;
   } 
   catch (error) {
-    res.status(500).json({ error: "Failed to fetch directories" });
+    res.status(500).json({ error: "Failed to fetch directories." });
     return;
   }
 };
@@ -46,26 +46,27 @@ const getDirectory = async (req: Request, res: Response) => {
 };
 
 const createDirectory = async (req: Request, res: Response) => {
-  const { label } = req.body;
-
-  let emptyFields = [];
+  let { label } = req.body;
+  label = label?.trim();
 
   if (!label) {
-    emptyFields.push('label');
-  }
-
-  if (emptyFields.length > 0) {
-    res.status(400).json({ error: "Please fill in all the fields", emptyFields });
+    res.status(400).json({ error: "Directory label cannot be empty." });
     return;
   }
 
   try {
     const directory = await Directory.create({ label });
-    res.status(200).json(directory);
+
+    const processedDirectory = {
+      id: directory._id,
+      label: directory.label,
+    };
+
+    res.status(200).json(processedDirectory);
     return;
   } 
   catch (error) {
-    res.status(500).json({ error: "Failed to create directory" });
+    res.status(500).json({ error: "Failed to create directory." });
     return;
   }
 };
