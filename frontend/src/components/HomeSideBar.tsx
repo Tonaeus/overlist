@@ -1,6 +1,7 @@
 import type { ModalProps } from "../types/ModalProps";
 import modalPropsDefault from "../configs/modalPropsDefault";
 import ModalContentInput from "./ModalContentInput";
+import ModalContentText from "./ModalContentText";
 import Modal from "./Modal";
 
 import { useEffect, useRef, useState } from "react";
@@ -57,7 +58,7 @@ const HomeSideBar = () => {
 						{ id: `${Date.now()}`, label: directoryLabel },
 					]);
 					setModalProps(modalPropsDefault);
-					labelRef.current = ""; 
+					labelRef.current = "";
 				} 
 				else {
 					setModalProps((prev) => ({
@@ -74,7 +75,7 @@ const HomeSideBar = () => {
 			},
 			onCancel: () => {
 				setModalProps(modalPropsDefault);
-				labelRef.current = ""; 
+				labelRef.current = "";
 			},
 		});
 	};
@@ -91,9 +92,28 @@ const HomeSideBar = () => {
 	};
 
 	const handleDelete = (directoryId: string) => {
-		if (confirm("Are you sure you want to delete this directory?")) {
-			setDirectories((prev) => prev.filter((dir) => dir.id !== directoryId));
+		const directory = directories.find((dir) => dir.id === directoryId);
+		if (!directory) {
+			return;
 		}
+
+		setModalProps({
+			show: true,
+			title: "Delete Directory",
+			content: (
+				<ModalContentText
+					message={`Are you sure you want to delete the directory ${directory.label}?`}
+				/>
+			),
+			action: "Delete",
+			onAction: () => {
+				setDirectories((prev) => prev.filter((dir) => dir.id !== directoryId));
+				setModalProps(modalPropsDefault);
+			},
+			onCancel: () => {
+				setModalProps(modalPropsDefault);
+			},
+		});
 	};
 
 	return (
