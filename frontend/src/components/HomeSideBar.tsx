@@ -81,28 +81,60 @@ const HomeSideBar = () => {
 	};
 
 	const handleEdit = (directoryId: string) => {
-		const newLabel = prompt("Edit directory name:", "");
-		if (newLabel) {
-			setDirectories((prev) =>
-				prev.map((dir) =>
-					dir.id === directoryId ? { ...dir, label: newLabel } : dir
-				)
-			);
-		}
+		const directory = directories.find((dir) => dir.id === directoryId);
+		if (!directory) return;
+	
+		setModalProps({
+			show: true,
+			title: "Edit Directory",
+			content: (
+				<ModalContentInput
+					placeholder="Enter directory label"
+					onChange={(e) => (labelRef.current = e.target.value)}
+				/>
+			),
+			action: "Edit",
+			onAction: () => {
+				const directoryLabel = labelRef.current.trim();
+				if (directoryLabel) {
+					setDirectories((prev) =>
+						prev.map((dir) =>
+							dir.id === directoryId ? { ...dir, label: directoryLabel } : dir
+						)
+					);
+					setModalProps(modalPropsDefault);
+					labelRef.current = "";
+				} 
+				else {
+					setModalProps((prev) => ({
+						...prev,
+						content: (
+							<ModalContentInput
+								placeholder="Enter directory label"
+								error="Directory label cannot be empty."
+								onChange={(e) => (labelRef.current = e.target.value)}
+							/>
+						),
+					}));
+				}
+			},
+			onCancel: () => {
+				setModalProps(modalPropsDefault);
+				labelRef.current = "";
+			},
+		});
 	};
 
 	const handleDelete = (directoryId: string) => {
 		const directory = directories.find((dir) => dir.id === directoryId);
-		if (!directory) {
-			return;
-		}
+		if (!directory) return;
 
 		setModalProps({
 			show: true,
 			title: "Delete Directory",
 			content: (
 				<ModalContentText
-					message={`Are you sure you want to delete the directory ${directory.label}?`}
+					message={`Are you sure you want to delete the directory "${directory.label}"?`}
 				/>
 			),
 			action: "Delete",
