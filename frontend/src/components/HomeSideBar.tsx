@@ -96,9 +96,11 @@ const HomeSideBar = () => {
 		});
 	};
 
-	const handleEdit = (directoryId: string) => {
-		const directory = directories.find((dir) => dir.id === directoryId);
-		if (!directory) return;
+	const handleEdit = (
+		e: React.MouseEvent<HTMLButtonElement>,
+		directory: Directory
+	) => {
+		e.preventDefault();
 
 		setModalProps({
 			show: true,
@@ -110,12 +112,26 @@ const HomeSideBar = () => {
 				/>
 			),
 			action: "Edit",
-			onAction: () => {
-				const directoryLabel = labelRef.current.trim();
-				if (directoryLabel) {
+			onAction: async () => {
+				const updatedDirectory = { label: labelRef.current };
+
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/directories/${directory.id}`,
+					{
+						method: "PATCH",
+						body: JSON.stringify(updatedDirectory),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
 					setDirectories((prev) =>
 						prev.map((dir) =>
-							dir.id === directoryId ? { ...dir, label: directoryLabel } : dir
+							dir.id === json.id ? { ...dir, label: json.label } : dir
 						)
 					);
 					setModalProps(modalPropsDefault);
@@ -126,7 +142,7 @@ const HomeSideBar = () => {
 						content: (
 							<ModalContentInput
 								placeholder="Enter directory label"
-								error="Directory label cannot be empty."
+								error={json.error}
 								onChange={(e) => (labelRef.current = e.target.value)}
 							/>
 						),
@@ -215,8 +231,7 @@ const HomeSideBar = () => {
 								<button
 									className="edit-button hover:scale-110"
 									onClick={(e) => {
-										e.preventDefault();
-										handleEdit(directory.id);
+										handleEdit(e, directory);
 									}}
 								>
 									<Edit />
