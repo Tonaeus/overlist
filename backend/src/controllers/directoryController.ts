@@ -75,7 +75,7 @@ const deleteDirectory = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: 'No such directory' });
+    res.status(404).json({ error: 'No such directory.' });
     return;
   }
 
@@ -83,15 +83,20 @@ const deleteDirectory = async (req: Request, res: Response) => {
     const directory = await Directory.findOneAndDelete({ _id: id });
     
     if (!directory) {
-      res.status(404).json({ error: 'No such directory' });
+      res.status(404).json({ error: 'No such directory.' });
       return;
     }
 
-    res.status(200).json(directory);
+    const processedDirectory = {
+      id: directory._id,
+      label: directory.label,
+    };
+
+    res.status(200).json(processedDirectory);
     return;
   } 
   catch (error) {
-    res.status(500).json({ error: "Failed to delete directory" });
+    res.status(500).json({ error: "Failed to delete directory." });
     return;
   }
 };

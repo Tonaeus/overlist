@@ -53,13 +53,13 @@ const HomeSideBar = () => {
 			),
 			action: "Add",
 			onAction: async () => {
-				const newDirectory = { label: labelRef.current };
+				const directory = { label: labelRef.current };
 
 				const response = await fetch(
 					`${import.meta.env.VITE_BACKEND_URL}/api/directories/`,
 					{
 						method: "POST",
-						body: JSON.stringify(newDirectory),
+						body: JSON.stringify(directory),
 						headers: {
 							"Content-Type": "application/json",
 						},
@@ -140,9 +140,11 @@ const HomeSideBar = () => {
 		});
 	};
 
-	const handleDelete = (directoryId: string) => {
-		const directory = directories.find((dir) => dir.id === directoryId);
-		if (!directory) return;
+	const handleDelete = (
+		e: React.MouseEvent<HTMLButtonElement>,
+		directory: Directory
+	) => {
+		e.preventDefault();
 
 		setModalProps({
 			show: true,
@@ -153,9 +155,30 @@ const HomeSideBar = () => {
 				/>
 			),
 			action: "Delete",
-			onAction: () => {
-				setDirectories((prev) => prev.filter((dir) => dir.id !== directoryId));
-				setModalProps(modalPropsDefault);
+			onAction: async () => {
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/directories/${directory.id}`,
+					{
+						method: "DELETE",
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					setDirectories((prev) => prev.filter((dir) => dir.id !== json.id));
+					setModalProps(modalPropsDefault);
+				} else {
+					setModalProps((prev) => ({
+						...prev,
+						content: (
+							<ModalContentText
+								message={`Are you sure you want to delete the directory "${directory.label}"?`}
+								error={json.error}
+							/>
+						),
+					}));
+				}
 			},
 			onCancel: () => {
 				setModalProps(modalPropsDefault);
@@ -204,8 +227,7 @@ const HomeSideBar = () => {
 								<button
 									className="delete-button hover:scale-110"
 									onClick={(e) => {
-										e.preventDefault();
-										handleDelete(directory.id);
+										handleDelete(e, directory);
 									}}
 								>
 									<Delete />

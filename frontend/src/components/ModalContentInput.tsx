@@ -19,7 +19,7 @@ const ModalContentInput = ({
 			onChange={onChange}
 		/>
 		{error && (
-			<div className="h-9 w-full border border-red-500 rounded p-1.5 bg-red-100 text-red-500">
+			<div className="w-full min-h-9 border border-red-500 rounded p-1.5 bg-red-100 text-red-500 break-words whitespace-normal">
 				{error}
 			</div>
 		)}
