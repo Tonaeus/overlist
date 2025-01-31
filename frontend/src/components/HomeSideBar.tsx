@@ -4,6 +4,8 @@ import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
 import Modal from "./Modal";
 
+import { sortObjectsByProp } from "../utils/sortUtils";
+
 import { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
@@ -69,10 +71,11 @@ const HomeSideBar = () => {
 				const json = await response.json();
 
 				if (response.ok) {
-					setDirectories((prev) => [
-						...prev,
-						{ id: json.id, label: json.label },
-					]);
+					setDirectories((prev) =>
+						[...prev, { id: json.id, label: json.label }].sort(
+							sortObjectsByProp("label")
+						)
+					);
 
 					setModalProps(modalPropsDefault);
 					labelRef.current = "";
@@ -130,9 +133,11 @@ const HomeSideBar = () => {
 
 				if (response.ok) {
 					setDirectories((prev) =>
-						prev.map((dir) =>
-							dir.id === json.id ? { ...dir, label: json.label } : dir
-						)
+						[
+							...prev.map((dir) =>
+								dir.id === json.id ? { ...dir, label: json.label } : dir
+							),
+						].sort(sortObjectsByProp("label"))
 					);
 					setModalProps(modalPropsDefault);
 					labelRef.current = "";
