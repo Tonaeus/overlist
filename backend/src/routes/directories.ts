@@ -1,22 +1,19 @@
 import express from "express";
 import { 
   getDirectories,
-  getDirectory,
   createDirectory,
-  deleteDirectory,
   updateDirectory,
+  deleteDirectory,
 } from "../controllers/directoryController.js";
 
 const router = express.Router();
 
 router.get('/', getDirectories);
 
-router.get('/:id', getDirectory);
-
 router.post('/', createDirectory);
 
-router.delete('/:id', deleteDirectory);
-
 router.patch('/:id', updateDirectory);
+
+router.delete('/:id', deleteDirectory);
 
 export default router; 
