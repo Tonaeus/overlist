@@ -33,8 +33,8 @@ const getLists = async (req: Request, res: Response) => {
           id: '$_id',
           label: 1,
           directory_label: { $ifNull: ['$directory.label', 'None'] },
-          created: { $dateToString: { format: '%m/%d/%Y', date: '$createdAt' } },
-          modified: { $dateToString: { format: '%m/%d/%Y', date: '$updatedAt' } }
+          created: '$createdAt',
+          modified: '$updatedAt'
         }
       }
     ]);
@@ -67,8 +67,17 @@ const createList = async (req: Request, res: Response) => {
       return;
     }
 
-    const list = await List.create({ label });
-    res.status(200).json(list);
+    const newList = await List.create({ label });
+
+    const formattedList = {
+      id: newList._id,
+      label: newList.label,
+      directory_label: "None",
+      created: newList.createdAt,
+      modified: newList.updatedAt,
+    };
+
+    res.status(200).json(formattedList);
     return;
   }
   catch (error) {
