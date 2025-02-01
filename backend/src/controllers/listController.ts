@@ -48,42 +48,12 @@ const getLists = async (req: Request, res: Response) => {
   }
 };
 
-const getList = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: "No such list." });
-    return;
-  }
-
-  try {
-    const list = await List.findById({ _id: id });
-
-    if (!list) {
-      res.status(404).json({ error: "No such list." });
-      return;
-    }
-
-    res.status(200).json(list);
-    return;
-  }
-  catch (error) {
-    res.status(500).json({ error: "Failed to fetch list." });
-    return;
-  }
-};
-
 const createList = async (req: Request, res: Response) => {
-  const { label } = req.body;
-
-  let emptyFields: string[] = [];
+  let { label } = req.body;
+  label = label?.trim();
 
   if (!label) {
-    emptyFields.push("label");
-  }
-
-  if (emptyFields.length > 0) {
-    res.status(400).json({ error: `Missing required fields: [${emptyFields.join(", ")}].` });
+    res.status(400).json({ error: "List label cannot be empty." });
     return;
   }
 
@@ -103,31 +73,6 @@ const createList = async (req: Request, res: Response) => {
   }
   catch (error) {
     res.status(500).json({ error: "Failed to create list." });
-    return;
-  }
-};
-
-const deleteList = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: "No such list" });
-    return;
-  }
-
-  try {
-    const list = await List.findOneAndDelete({ _id: id });
-
-    if (!list) {
-      res.status(404).json({ error: "No such list" });
-      return;
-    }
-
-    res.status(200).json(list);
-    return;
-  }
-  catch (error) {
-    res.status(500).json({ error: "Failed to delete list" });
     return;
   }
 };
@@ -161,10 +106,34 @@ const updateList = async (req: Request, res: Response) => {
   }
 };
 
+const deleteList = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No such list" });
+    return;
+  }
+
+  try {
+    const list = await List.findOneAndDelete({ _id: id });
+
+    if (!list) {
+      res.status(404).json({ error: "No such list" });
+      return;
+    }
+
+    res.status(200).json(list);
+    return;
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to delete list" });
+    return;
+  }
+};
+
 export {
   getLists,
-  getList,
   createList,
+  updateList,
   deleteList,
-  updateList
 };
