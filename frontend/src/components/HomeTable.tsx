@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 
 import { useTheme } from "@table-library/react-table-library/theme";
@@ -39,7 +39,7 @@ interface Column {
 interface Row {
 	id: string;
 	label: string;
-	directory: string;
+	directory_label: string;
 	created: string;
 	modified: string;
 }
@@ -54,7 +54,7 @@ const HomeTable = () => {
 		{
 			id: 1,
 			label: "Directory",
-			renderCell: (row: Row) => row.directory,
+			renderCell: (row: Row) => row.directory_label,
 		},
 		{
 			id: 2,
@@ -68,29 +68,46 @@ const HomeTable = () => {
 		},
 	]);
 
-	const [rows] = useState<Row[]>([
-		{
-			id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
-			label: "Name",
-			directory: "None",
-			created: "01/15/2025",
-			modified: "01/15/2025",
-		},
-		{
-			id: "4e3b468c-7fa8-47d8-90a8-741bbea731a1",
-			label: "alpha",
-			directory: "None",
-			created: "01/15/2025",
-			modified: "01/15/2025",
-		},
-		{
-			id: "4e3b468c-7fa8-47d8-90a8-741bbea731a2",
-			label: "beta",
-			directory: "None",
-			created: "01/15/2025",
-			modified: "01/15/2025",
-		},
-	]);
+	// const [rows] = useState<Row[]>([
+	// 	{
+	// 		id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
+	// 		label: "Name",
+	// 		directory: "None",
+	// 		created: "01/15/2025",
+	// 		modified: "01/15/2025",
+	// 	},
+	// 	{
+	// 		id: "4e3b468c-7fa8-47d8-90a8-741bbea731a1",
+	// 		label: "alpha",
+	// 		directory: "None",
+	// 		created: "01/15/2025",
+	// 		modified: "01/15/2025",
+	// 	},
+	// 	{
+	// 		id: "4e3b468c-7fa8-47d8-90a8-741bbea731a2",
+	// 		label: "beta",
+	// 		directory: "None",
+	// 		created: "01/15/2025",
+	// 		modified: "01/15/2025",
+	// 	},
+	// ]);
+
+	const [rows, setRows] = useState<Row[]>([]);
+
+	useEffect(() => {
+		const fetchLists = async () => {
+			const response = await fetch(
+				`${import.meta.env.VITE_BACKEND_URL}/api/lists/`
+			);
+			const json = await response.json();
+			console.log(json);
+			if (response.ok) {
+				setRows(json);
+			}
+		};
+
+		fetchLists();
+	}, []);
 
 	const theme = useTheme([
 		getTheme(),

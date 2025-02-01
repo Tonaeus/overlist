@@ -3,16 +3,19 @@ import { Schema, model } from "mongoose";
 interface IList {
   label: string,
   directory_id: string
+  createdAt: Date 
+  updatedAt: Date
 }
 
 const listSchema = new Schema<IList>({
   label: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   directory_id: {
     type: String,
-    required: true
+    default: null  
   },
 }, {timestamps: true} )
 

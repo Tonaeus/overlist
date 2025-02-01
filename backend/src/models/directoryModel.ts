@@ -7,7 +7,8 @@ interface IDirectory {
 const directorySchema = new Schema<IDirectory>({
   label: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   }
 }, { timestamps: true });
 
