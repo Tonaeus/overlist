@@ -145,7 +145,7 @@ const HomeTable = () => {
 		},
 	]);
 
-	const [search, setSearch] = useState("");
+	const [search, setSearch] = useState<string>("");
 
 	const handleSearch = (event: any) => {
 		setSearch(event.target.value);
@@ -157,10 +157,10 @@ const HomeTable = () => {
 		),
 	};
 
-	const onSelectChange = (selectAction: any, selectState: any) => {
-		console.log("action: ", selectAction);
-		console.log("state: ", selectState);
-		// console.log("ids: ", state.ids);
+	const [selected, setSelected] = useState<string[]>([]);
+
+	const onSelectChange = (_: any, selectState: any) => {		
+		setSelected(selectState.ids);
 	};
 
 	const select = useRowSelect(
@@ -242,6 +242,11 @@ const HomeTable = () => {
 		});
 	};
 
+	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		console.log(selected);
+	};
+
 	return (
 		<>
 			<div className="flex flex-col">
@@ -273,7 +278,12 @@ const HomeTable = () => {
 						<Tooltip anchorSelect=".add-button" place="top">
 							Add
 						</Tooltip>
-						<button className="remove-button button aspect-[1/1] mx-1.5">
+						<button
+							className="remove-button button aspect-[1/1] mx-1.5"
+							onClick={(e) => {
+								handleDelete(e);
+							}}
+						>
 							<Remove />
 						</button>
 						<Tooltip anchorSelect=".remove-button" place="top">
