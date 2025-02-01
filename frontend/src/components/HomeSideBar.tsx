@@ -232,7 +232,7 @@ const HomeSideBar = () => {
 							<div className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
 								{directory.label}
 							</div>
-							<div className="hidden group-hover:flex group-hover:pl-3">
+							<div className="flex opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:pl-3">
 								<button
 									className="edit-button hover:scale-110"
 									onClick={(e) => {
