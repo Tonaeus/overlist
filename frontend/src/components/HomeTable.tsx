@@ -159,7 +159,7 @@ const HomeTable = () => {
 
 	const [selected, setSelected] = useState<string[]>([]);
 
-	const onSelectChange = (_: any, selectState: any) => {		
+	const onSelectChange = (_: any, selectState: any) => {
 		setSelected(selectState.ids);
 	};
 
@@ -247,6 +247,21 @@ const HomeTable = () => {
 		console.log(selected);
 	};
 
+	const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		console.log("copy");
+	};
+
+	const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		console.log("move");
+	};
+
+	const handleExport = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		console.log("export");
+	};
+
 	return (
 		<>
 			<div className="flex flex-col">
@@ -283,25 +298,44 @@ const HomeTable = () => {
 							onClick={(e) => {
 								handleDelete(e);
 							}}
+							disabled={selected.length == 0 ? true : false}
 						>
 							<Remove />
 						</button>
 						<Tooltip anchorSelect=".remove-button" place="top">
 							Delete
 						</Tooltip>
-						<button className="copy-button button aspect-[1/1] mx-1.5">
+						<button
+							className="copy-button button aspect-[1/1] mx-1.5"
+							onClick={(e) => {
+								handleCopy(e);
+							}}
+							disabled={selected.length == 0 ? true : false}
+						>
 							<ContentCopy />
 						</button>
 						<Tooltip anchorSelect=".copy-button" place="top">
 							Copy
 						</Tooltip>
-						<button className="swap-button button aspect-[1/1] mx-1.5">
+						<button
+							className="swap-button button aspect-[1/1] mx-1.5"
+							onClick={(e) => {
+								handleMove(e);
+							}}
+							disabled={selected.length == 0 ? true : false}
+						>
 							<SwapHoriz />
 						</button>
 						<Tooltip anchorSelect=".swap-button" place="top">
 							Move
 						</Tooltip>
-						<button className="down-button button aspect-[1/1] ml-1.5">
+						<button
+							className="down-button button aspect-[1/1] ml-1.5"
+							onClick={(e) => {
+								handleExport(e);
+							}}
+							disabled={selected.length == 0 ? true : false}
+						>
 							<ArrowDownward />
 						</button>
 						<Tooltip anchorSelect=".down-button" place="top">

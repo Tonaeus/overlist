@@ -26,6 +26,10 @@
 
 	.button {
 		@apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white hover:bg-blue-800 transition-all duration-300 ease-in-out;
+	
+		&:disabled {
+			@apply opacity-50;
+		}
 	}
 
 	.button-secondary {
