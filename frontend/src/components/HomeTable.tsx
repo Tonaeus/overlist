@@ -1,7 +1,7 @@
 import type { ModalProps } from "../types/ModalProps";
 import modalPropsDefault from "../configs/modalPropsDefault";
 import ModalContentInput from "./ModalContentInput";
-// import ModalContentText from "./ModalContentText";
+import ModalContentText from "./ModalContentText";
 import Modal from "./Modal";
 
 import { sortObjectsByProp } from "../utils/sortUtils";
@@ -57,7 +57,7 @@ const HomeTable = () => {
 	const [columns] = useState<Column[]>([
 		{
 			id: 0,
-			label: "Name",
+			label: "Label",
 			renderCell: (row: Row) => row.label,
 		},
 		{
@@ -157,16 +157,10 @@ const HomeTable = () => {
 		),
 	};
 
-	const [selected, setSelected] = useState<string[]>([]);
-
-	const onSelectChange = (_: any, selectState: any) => {
-		setSelected(selectState.ids);
-	};
-
 	const select = useRowSelect(
 		data,
 		{
-			onChange: onSelectChange,
+			onChange: undefined,
 		},
 		{
 			clickType: SelectClickTypes.ButtonClick,
@@ -244,7 +238,59 @@ const HomeTable = () => {
 
 	const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		console.log(selected);
+
+		const selectedLabels = rows
+			.map((row) => {
+				const labelIndex = select.state.ids.indexOf(row.id);
+				return labelIndex !== -1 ? row.label : null;
+			})
+			.filter((label) => label !== null);
+
+		let message: string;
+		if (selectedLabels.length === 1) {
+			message = `Are you sure you want to delete the list "${selectedLabels[0]}"?`;
+		} else if (selectedLabels.length === 2) {
+			message = `Are you sure you want to delete the following lists: "${selectedLabels[0]}" and "${selectedLabels[1]}"?`;
+		} else {
+			message = `Are you sure you want to delete the following lists: "${selectedLabels
+				.slice(0, -1)
+				.join('", "')}", and "${selectedLabels[selectedLabels.length - 1]}"?`;
+		}
+
+		setModalProps({
+			show: true,
+			title: "Delete List",
+			content: <ModalContentText message={message} />,
+			action: "Delete",
+			onAction: async () => {
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/lists/`,
+					{
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ ids: select.state.ids }),
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					setRows((prev) => prev.filter((row) => !select.state.ids.includes(row.id)));
+					setModalProps(modalPropsDefault);
+					select.fns.onRemoveAll();
+				} else {
+					setModalProps((prev) => ({
+						...prev,
+						content: <ModalContentText message={message} error={json.error} />,
+					}));
+				}
+			},
+			onCancel: () => {
+				setModalProps(modalPropsDefault);
+			},
+		});
 	};
 
 	const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -298,7 +344,7 @@ const HomeTable = () => {
 							onClick={(e) => {
 								handleDelete(e);
 							}}
-							disabled={selected.length == 0 ? true : false}
+							disabled={select.state.ids.length === 0 ? true : false}
 						>
 							<Remove />
 						</button>
@@ -310,7 +356,7 @@ const HomeTable = () => {
 							onClick={(e) => {
 								handleCopy(e);
 							}}
-							disabled={selected.length == 0 ? true : false}
+							disabled={select.state.ids.length === 0 ? true : false}
 						>
 							<ContentCopy />
 						</button>
@@ -322,7 +368,7 @@ const HomeTable = () => {
 							onClick={(e) => {
 								handleMove(e);
 							}}
-							disabled={selected.length == 0 ? true : false}
+							disabled={select.state.ids.length === 0 ? true : false}
 						>
 							<SwapHoriz />
 						</button>
@@ -334,7 +380,7 @@ const HomeTable = () => {
 							onClick={(e) => {
 								handleExport(e);
 							}}
-							disabled={selected.length == 0 ? true : false}
+							disabled={select.state.ids.length === 0 ? true : false}
 						>
 							<ArrowDownward />
 						</button>

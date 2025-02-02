@@ -115,6 +115,43 @@ const updateList = async (req: Request, res: Response) => {
   }
 };
 
+const deleteLists = async (req: Request, res: Response) => {
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
+    res.status(400).json({ error: "No such list(s)." });
+    return;
+  }
+
+  try {
+    const lists = await List.find({
+      _id: { $in: ids }
+    });
+
+    if (ids.length !== lists.length) {
+      res.status(404).json({ error: "No such list(s)." });
+      return;
+    }
+
+    const deletedLists = await List.deleteMany({
+      _id: { $in: ids }
+    });
+
+    if (deletedLists.deletedCount === ids.length) {
+      res.status(200).json(lists);
+      return;
+    }
+    else {
+      res.status(500).json({ error: "Failed to delete some list(s)." });
+      return;
+    }
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to delete list(s)." });
+    return;
+  }
+};
+
 const deleteList = async (req: Request, res: Response) => {
   const { id } = req.params;
 
@@ -144,5 +181,6 @@ export {
   getLists,
   createList,
   updateList,
+  deleteLists,
   deleteList,
 };
