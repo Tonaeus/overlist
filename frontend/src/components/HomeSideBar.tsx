@@ -1,12 +1,4 @@
-import type { ModalProps } from "../types/ModalProps";
-import modalPropsDefault from "../configs/modalPropsDefault";
-import ModalContentInput from "./ModalContentInput";
-import ModalContentText from "./ModalContentText";
-import Modal from "./Modal";
-
-import { sortObjectsByProp } from "../utils/sortUtils";
-
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { Delete, Edit } from "@mui/icons-material";
@@ -16,6 +8,13 @@ interface Directory {
 	id: string;
 	label: string;
 }
+
+import useModal from "../hooks/useModal";
+import Modal from "./Modal";
+import ModalContentInput from "./ModalContentInput";
+import ModalContentText from "./ModalContentText";
+
+import { sortObjectsByProp } from "../utils/sortUtils";
 
 const HomeSideBar = () => {
 	const { id } = useParams();
@@ -37,25 +36,23 @@ const HomeSideBar = () => {
 		fetchDirectories();
 	}, []);
 
-	const labelRef = useRef<string>("");
-
-	const [modalProps, setModalProps] = useState<ModalProps>(modalPropsDefault);
+	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
+		useModal();
 
 	const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		setModalProps({
-			show: true,
+		showModal({
 			title: "Add Directory",
 			content: (
 				<ModalContentInput
 					placeholder="Enter directory label"
-					onChange={(e) => (labelRef.current = e.target.value)}
+					onChange={(e) => setModalValue(e.target.value)}
 				/>
 			),
 			action: "Add",
 			onAction: async () => {
-				const directory = { label: labelRef.current };
+				const directory = { label: getModalValue() };
 
 				const response = await fetch(
 					`${import.meta.env.VITE_BACKEND_URL}/api/directories/`,
@@ -76,25 +73,21 @@ const HomeSideBar = () => {
 							sortObjectsByProp("label")
 						)
 					);
-
-					setModalProps(modalPropsDefault);
-					labelRef.current = "";
+					hideModal();
 				} else {
-					setModalProps((prev) => ({
-						...prev,
+					showModal({
 						content: (
 							<ModalContentInput
 								placeholder="Enter directory label"
 								error={json.error}
-								onChange={(e) => (labelRef.current = e.target.value)}
+								onChange={(e) => setModalValue(e.target.value)}
 							/>
 						),
-					}));
+					});
 				}
 			},
 			onCancel: () => {
-				setModalProps(modalPropsDefault);
-				labelRef.current = "";
+				hideModal();
 			},
 		});
 	};
@@ -105,18 +98,17 @@ const HomeSideBar = () => {
 	) => {
 		e.preventDefault();
 
-		setModalProps({
-			show: true,
+		showModal({
 			title: "Edit Directory",
 			content: (
 				<ModalContentInput
 					placeholder="Enter directory label"
-					onChange={(e) => (labelRef.current = e.target.value)}
+					onChange={(e) => setModalValue(e.target.value)}
 				/>
 			),
 			action: "Edit",
 			onAction: async () => {
-				const updatedDirectory = { label: labelRef.current };
+				const updatedDirectory = { label: getModalValue() };
 
 				const response = await fetch(
 					`${import.meta.env.VITE_BACKEND_URL}/api/directories/${directory.id}`,
@@ -139,24 +131,21 @@ const HomeSideBar = () => {
 							),
 						].sort(sortObjectsByProp("label"))
 					);
-					setModalProps(modalPropsDefault);
-					labelRef.current = "";
+					hideModal();
 				} else {
-					setModalProps((prev) => ({
-						...prev,
+					showModal({
 						content: (
 							<ModalContentInput
 								placeholder="Enter directory label"
 								error={json.error}
-								onChange={(e) => (labelRef.current = e.target.value)}
+								onChange={(e) => setModalValue(e.target.value)}
 							/>
 						),
-					}));
+					});
 				}
 			},
 			onCancel: () => {
-				setModalProps(modalPropsDefault);
-				labelRef.current = "";
+				hideModal();
 			},
 		});
 	};
@@ -167,8 +156,7 @@ const HomeSideBar = () => {
 	) => {
 		e.preventDefault();
 
-		setModalProps({
-			show: true,
+		showModal({
 			title: "Delete Directory",
 			content: (
 				<ModalContentText
@@ -188,21 +176,20 @@ const HomeSideBar = () => {
 
 				if (response.ok) {
 					setDirectories((prev) => prev.filter((dir) => dir.id !== json.id));
-					setModalProps(modalPropsDefault);
+					hideModal();
 				} else {
-					setModalProps((prev) => ({
-						...prev,
+					showModal({
 						content: (
 							<ModalContentText
 								message={`Are you sure you want to delete the directory "${directory.label}"?`}
 								error={json.error}
 							/>
 						),
-					}));
+					});
 				}
 			},
 			onCancel: () => {
-				setModalProps(modalPropsDefault);
+				hideModal();
 			},
 		});
 	};
@@ -261,14 +248,7 @@ const HomeSideBar = () => {
 				</div>
 			</div>
 
-			<Modal
-				show={modalProps.show}
-				title={modalProps.title}
-				content={modalProps.content}
-				action={modalProps.action}
-				onAction={modalProps.onAction}
-				onCancel={modalProps.onCancel}
-			/>
+			<Modal {...modalProps} />
 		</>
 	);
 };
