@@ -86,9 +86,7 @@ const HomeSideBar = () => {
 					});
 				}
 			},
-			onCancel: () => {
-				hideModal();
-			},
+			onCancel: () => hideModal(),
 		});
 	};
 
@@ -144,9 +142,7 @@ const HomeSideBar = () => {
 					});
 				}
 			},
-			onCancel: () => {
-				hideModal();
-			},
+			onCancel: () => hideModal(),
 		});
 	};
 
@@ -188,9 +184,7 @@ const HomeSideBar = () => {
 					});
 				}
 			},
-			onCancel: () => {
-				hideModal();
-			},
+			onCancel: () => hideModal(),
 		});
 	};
 

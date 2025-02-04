@@ -1,14 +1,4 @@
-import type { ModalProps } from "../types/ModalProps";
-import modalPropsDefault from "../configs/modalPropsDefault";
-import ModalContentInput from "./ModalContentInput";
-import ModalContentText from "./ModalContentText";
-import ModalContentSelect from "./ModalContentSelect";
-import Modal from "./Modal";
-
-import { sortObjectsByProp } from "../utils/sortUtils";
-import { formatToLocalDate } from "../utils/dateUtils";
-
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 
 import { useTheme } from "@table-library/react-table-library/theme";
@@ -39,6 +29,15 @@ import {
 	ArrowDownward,
 	Search,
 } from "@mui/icons-material";
+
+import useModal from "../hooks/useModal";
+import Modal from "./Modal";
+import ModalContentInput from "./ModalContentInput";
+import ModalContentText from "./ModalContentText";
+import ModalContentSelect from "./ModalContentSelect";
+
+import { sortObjectsByProp } from "../utils/sortUtils";
+import { formatToLocalDate } from "../utils/dateUtils";
 
 interface Column {
 	id: number;
@@ -168,25 +167,23 @@ const HomeTable = () => {
 		}
 	);
 
-	const labelRef = useRef<string>("");
-
-	const [modalProps, setModalProps] = useState<ModalProps>(modalPropsDefault);
+	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
+		useModal();
 
 	const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		setModalProps({
-			show: true,
+		showModal({
 			title: "Add List",
 			content: (
 				<ModalContentInput
 					placeholder="Enter list label"
-					onChange={(e) => (labelRef.current = e.target.value)}
+					onChange={(e) => setModalValue(e.target.value)}
 				/>
 			),
 			action: "Add",
 			onAction: async () => {
-				const list = { label: labelRef.current };
+				const list = { label: getModalValue() };
 
 				const response = await fetch(
 					`${import.meta.env.VITE_BACKEND_URL}/api/lists/`,
@@ -214,26 +211,20 @@ const HomeTable = () => {
 							},
 						].sort(sortObjectsByProp("label"))
 					);
-
-					setModalProps(modalPropsDefault);
-					labelRef.current = "";
+					hideModal();
 				} else {
-					setModalProps((prev) => ({
-						...prev,
+					showModal({
 						content: (
 							<ModalContentInput
 								placeholder="Enter list label"
 								error={json.error}
-								onChange={(e) => (labelRef.current = e.target.value)}
+								onChange={(e) => setModalValue(e.target.value)}
 							/>
 						),
-					}));
+					});
 				}
 			},
-			onCancel: () => {
-				setModalProps(modalPropsDefault);
-				labelRef.current = "";
-			},
+			onCancel: () => hideModal(),
 		});
 	};
 
@@ -258,8 +249,7 @@ const HomeTable = () => {
 				.join('", "')}", and "${selectedLabels[selectedLabels.length - 1]}"?`;
 		}
 
-		setModalProps({
-			show: true,
+		showModal({
 			title: `Delete ${
 				select.state.ids.length.length === 1 ? "List" : "Lists"
 			}`,
@@ -283,18 +273,15 @@ const HomeTable = () => {
 					setRows((prev) =>
 						prev.filter((row) => !select.state.ids.includes(row.id))
 					);
-					setModalProps(modalPropsDefault);
+					hideModal();
 					select.fns.onRemoveAll();
 				} else {
-					setModalProps((prev) => ({
-						...prev,
+					showModal({
 						content: <ModalContentText message={message} error={json.error} />,
-					}));
+					});
 				}
 			},
-			onCancel: () => {
-				setModalProps(modalPropsDefault);
-			},
+			onCancel: () => hideModal(),
 		});
 	};
 
@@ -317,7 +304,7 @@ const HomeTable = () => {
 			// { value: "8", label: "8"},
 		];
 
-		setModalProps({
+		showModal({
 			show: true,
 			title: `Move ${select.state.ids.length === 1 ? "List" : "Lists"}`,
 			content: (
@@ -330,9 +317,7 @@ const HomeTable = () => {
 			onAction: async () => {
 				console.log("action");
 			},
-			onCancel: () => {
-				setModalProps(modalPropsDefault);
-			},
+			onCancel: () => hideModal(),
 		});
 	};
 
@@ -467,14 +452,7 @@ const HomeTable = () => {
 				</div>
 			</div>
 
-			<Modal
-				show={modalProps.show}
-				title={modalProps.title}
-				content={modalProps.content}
-				action={modalProps.action}
-				onAction={modalProps.onAction}
-				onCancel={modalProps.onCancel}
-			/>
+			<Modal {...modalProps} />
 		</>
 	);
 };
