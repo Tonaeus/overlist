@@ -2,6 +2,7 @@ import type { ModalProps } from "../types/ModalProps";
 import modalPropsDefault from "../configs/modalPropsDefault";
 import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
+import ModalContentSelect from "./ModalContentSelect";
 import Modal from "./Modal";
 
 import { sortObjectsByProp } from "../utils/sortUtils";
@@ -259,7 +260,9 @@ const HomeTable = () => {
 
 		setModalProps({
 			show: true,
-			title: "Delete List",
+			title: `Delete ${
+				select.state.ids.length.length === 1 ? "List" : "Lists"
+			}`,
 			content: <ModalContentText message={message} />,
 			action: "Delete",
 			onAction: async () => {
@@ -277,7 +280,9 @@ const HomeTable = () => {
 				const json = await response.json();
 
 				if (response.ok) {
-					setRows((prev) => prev.filter((row) => !select.state.ids.includes(row.id)));
+					setRows((prev) =>
+						prev.filter((row) => !select.state.ids.includes(row.id))
+					);
 					setModalProps(modalPropsDefault);
 					select.fns.onRemoveAll();
 				} else {
@@ -300,7 +305,35 @@ const HomeTable = () => {
 
 	const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		console.log("move");
+
+		const options = [
+			{ value: "1", label: "1" },
+			{ value: "2", label: "2" },
+			{ value: "3", label: "3" },
+			{ value: "4", label: "4" },
+			{ value: "5", label: "5" },
+			// { value: "6", label: "6"},
+			// { value: "7", label: "7"},
+			// { value: "8", label: "8"},
+		];
+
+		setModalProps({
+			show: true,
+			title: `Move ${select.state.ids.length === 1 ? "List" : "Lists"}`,
+			content: (
+				<ModalContentSelect
+					placeholder="Select a directory"
+					options={options}
+				/>
+			),
+			action: "Edit",
+			onAction: async () => {
+				console.log("action");
+			},
+			onCancel: () => {
+				setModalProps(modalPropsDefault);
+			},
+		});
 	};
 
 	const handleExport = (e: React.MouseEvent<HTMLButtonElement>) => {

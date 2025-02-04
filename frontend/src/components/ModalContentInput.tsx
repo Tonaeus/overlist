@@ -13,7 +13,7 @@ const ModalContentInput = ({
 		<input
 			type="text"
 			placeholder={placeholder}
-			className={`h-9 w-full border border-line rounded p-1.5 focus:outline-none ${
+			className={`h-9 w-full border border-line rounded p-1.5 focus:outline-none truncate placeholder-placeholder ${
 				error ? "mb-1.5" : ""
 			}`}
 			onChange={onChange}

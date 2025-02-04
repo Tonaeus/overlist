@@ -7,7 +7,7 @@ const Modal = ({ show, title, content, action, onAction, onCancel }: ModalProps)
 
 	return (
 		<div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-700 bg-opacity-50">
-			<div className="bg-white rounded-3xl shadow-xl p-6 w-full max-w-sm">
+			<div className="bg-white rounded-3xl shadow-lg p-6 w-full max-w-sm">
 				<div className="flex flex-row justify-between items-center mb-6">
 					<h2 className="text-xl font-bold">{title}</h2>
 					<button className="hover:scale-110" onClick={onCancel}>

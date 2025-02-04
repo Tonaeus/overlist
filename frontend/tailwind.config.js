@@ -11,7 +11,8 @@ export default {
         "line": "#E7E9EE",
         "text": "#495365",
         "hovered": "#F4F5F6",
-        "selected": "#EFF6FF"
+        "selected": "#EFF6FF",
+        "placeholder": "#B5B5B5"
       }
     },
   },
