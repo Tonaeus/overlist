@@ -29,9 +29,9 @@ const HomeSideBar = () => {
 				dispatch({type: 'SET_DIRECTORIES', payload: json});
 			}
 		};
-
+		console.log("test");
 		fetchDirectories();
-	});
+	}, [dispatch]);
 
 	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
 		useModal();
