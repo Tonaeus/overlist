@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
+import type { Directory } from "../types/Directory";
+
+import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+
+import useDirectoriesContext from "../hooks/useDirectoriesContext";
 
 import { Delete, Edit } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
-
-interface Directory {
-	id: string;
-	label: string;
-}
 
 import useModal from "../hooks/useModal";
 import Modal from "./Modal";
 import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
 
-import { sortObjectsByProp } from "../utils/sortUtils";
-
 const HomeSideBar = () => {
 	const { id } = useParams();
 
-	const [directories, setDirectories] = useState<Directory[]>([]);
+	const { state: { directories }, dispatch } = useDirectoriesContext();
 
 	useEffect(() => {
 		const fetchDirectories = async () => {
@@ -29,12 +26,12 @@ const HomeSideBar = () => {
 			const json = await response.json();
 
 			if (response.ok) {
-				setDirectories(json);
+				dispatch({type: 'SET_DIRECTORIES', payload: json});
 			}
 		};
 
 		fetchDirectories();
-	}, []);
+	});
 
 	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
 		useModal();
@@ -68,11 +65,7 @@ const HomeSideBar = () => {
 				const json = await response.json();
 
 				if (response.ok) {
-					setDirectories((prev) =>
-						[...prev, { id: json.id, label: json.label }].sort(
-							sortObjectsByProp("label")
-						)
-					);
+					dispatch({type: 'CREATE_DIRECTORY', payload: json});
 					hideModal();
 				} else {
 					showModal({
@@ -122,13 +115,7 @@ const HomeSideBar = () => {
 				const json = await response.json();
 
 				if (response.ok) {
-					setDirectories((prev) =>
-						[
-							...prev.map((dir) =>
-								dir.id === json.id ? { ...dir, label: json.label } : dir
-							),
-						].sort(sortObjectsByProp("label"))
-					);
+					dispatch({type: 'UPDATE_DIRECTORY', payload: json});
 					hideModal();
 				} else {
 					showModal({
@@ -171,7 +158,7 @@ const HomeSideBar = () => {
 				const json = await response.json();
 
 				if (response.ok) {
-					setDirectories((prev) => prev.filter((dir) => dir.id !== json.id));
+					dispatch({type: 'DELETE_DIRECTORY', payload: json});
 					hideModal();
 				} else {
 					showModal({
