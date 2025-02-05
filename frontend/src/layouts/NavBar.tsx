@@ -5,7 +5,7 @@ const NavBar = () => {
     <div className='flex flex-row h-16'>
       <div className='flex-1'></div>
       <div className='flex-1 flex justify-center items-center'>
-        <Link to="/" className="text-4xl font-bold">
+        <Link to="/directory/" className="text-4xl font-bold">
           Overlist
         </Link>
       </div>

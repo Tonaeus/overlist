@@ -14,7 +14,7 @@ import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
 
 const HomeSideBar = () => {
-	const { id } = useParams();
+	const { label } = useParams();
 
 	const { state: { directories }, dispatch } = useDirectoriesContext();
 
@@ -29,7 +29,7 @@ const HomeSideBar = () => {
 				dispatch({type: 'SET_DIRECTORIES', payload: json});
 			}
 		};
-		console.log("test");
+
 		fetchDirectories();
 	}, [dispatch]);
 
@@ -190,9 +190,9 @@ const HomeSideBar = () => {
 					{directories.map((directory: Directory) => (
 						<Link
 							key={directory.id}
-							to={`/directory/${directory.id}`}
+							to={`/directory/${directory.label}`}
 							className={`h-9 flex justify-start items-center px-3 py-1.5 rounded-full ${
-								directory.id === id
+								directory.label === label
 									? "bg-selected text-blue-700"
 									: "hover:bg-hovered"
 							} group`}
