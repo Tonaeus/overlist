@@ -86,31 +86,44 @@ const createList = async (req: Request, res: Response) => {
   }
 };
 
-const updateList = async (req: Request, res: Response) => {
-  const { id } = req.params;
+const updateLists = async (req: Request, res: Response) => {
+  const { ids, directory_id } = req.body;
 
-  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: "No such list" });
+  if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
+    res.status(400).json({ error: "No such list(s)." });
+    return;
+  }
+
+  if (!directory_id || !mongoose.Types.ObjectId.isValid(directory_id)) {
+    res.status(404).json({ error: "No such directory." });
     return;
   }
 
   try {
-    const list = await List.findOneAndUpdate(
-      { _id: id },
-      { ...req.body },
-      { new: true }
-    );
+    const lists = await List.find({
+      _id: { $in: ids }
+    });
 
-    if (!list) {
-      res.status(404).json({ error: "No such list" });
+    if (ids.length !== lists.length) {
+      res.status(404).json({ error: "No such list(s)." });
       return;
     }
 
-    res.status(200).json(list);
-    return;
+    const updatedLists = await List.updateMany(
+      { _id: { $in: ids } },
+      { $set: { directory_id } }
+    );
+
+    if (updatedLists.modifiedCount === ids.length) {
+      res.status(200).json(lists);
+      return;
+    }
+    else {
+      throw new Error();
+    }
   }
   catch (error) {
-    res.status(500).json({ error: "Failed to update list" });
+    res.status(500).json({ error: "Failed to update list(s)." });
     return;
   }
 };
@@ -142,8 +155,7 @@ const deleteLists = async (req: Request, res: Response) => {
       return;
     }
     else {
-      res.status(500).json({ error: "Failed to delete some list(s)." });
-      return;
+      throw new Error();
     }
   }
   catch (error) {
@@ -152,35 +164,9 @@ const deleteLists = async (req: Request, res: Response) => {
   }
 };
 
-const deleteList = async (req: Request, res: Response) => {
-  const { id } = req.params;
-
-  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: "No such list" });
-    return;
-  }
-
-  try {
-    const list = await List.findOneAndDelete({ _id: id });
-
-    if (!list) {
-      res.status(404).json({ error: "No such list" });
-      return;
-    }
-
-    res.status(200).json(list);
-    return;
-  }
-  catch (error) {
-    res.status(500).json({ error: "Failed to delete list" });
-    return;
-  }
-};
-
 export {
   getLists,
   createList,
-  updateList,
+  updateLists,
   deleteLists,
-  deleteList,
 };

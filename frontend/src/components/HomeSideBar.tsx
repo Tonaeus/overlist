@@ -16,7 +16,10 @@ import ModalContentText from "./ModalContentText";
 const HomeSideBar = () => {
 	const { label } = useParams();
 
-	const { state: { directories }, dispatch } = useDirectoriesContext();
+	const {
+		state: { directories },
+		dispatch,
+	} = useDirectoriesContext();
 
 	useEffect(() => {
 		const fetchDirectories = async () => {
@@ -26,7 +29,7 @@ const HomeSideBar = () => {
 			const json = await response.json();
 
 			if (response.ok) {
-				dispatch({type: 'SET_DIRECTORIES', payload: json});
+				dispatch({ type: "SET_DIRECTORIES", payload: json });
 			}
 		};
 
@@ -65,7 +68,7 @@ const HomeSideBar = () => {
 				const json = await response.json();
 
 				if (response.ok) {
-					dispatch({type: 'CREATE_DIRECTORY', payload: json});
+					dispatch({ type: "CREATE_DIRECTORY", payload: json });
 					hideModal();
 				} else {
 					showModal({
@@ -99,13 +102,11 @@ const HomeSideBar = () => {
 			),
 			action: "Edit",
 			onAction: async () => {
-				const updatedDirectory = { label: getModalValue() };
-
 				const response = await fetch(
 					`${import.meta.env.VITE_BACKEND_URL}/api/directories/${directory.id}`,
 					{
 						method: "PATCH",
-						body: JSON.stringify(updatedDirectory),
+						body: JSON.stringify({ label: getModalValue() }),
 						headers: {
 							"Content-Type": "application/json",
 						},
@@ -115,7 +116,7 @@ const HomeSideBar = () => {
 				const json = await response.json();
 
 				if (response.ok) {
-					dispatch({type: 'UPDATE_DIRECTORY', payload: json});
+					dispatch({ type: "UPDATE_DIRECTORY", payload: json });
 					hideModal();
 				} else {
 					showModal({
@@ -158,7 +159,7 @@ const HomeSideBar = () => {
 				const json = await response.json();
 
 				if (response.ok) {
-					dispatch({type: 'DELETE_DIRECTORY', payload: json});
+					dispatch({ type: "DELETE_DIRECTORY", payload: json });
 					hideModal();
 				} else {
 					showModal({

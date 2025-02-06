@@ -38,6 +38,7 @@ import ModalContentSelect from "./ModalContentSelect";
 
 import { sortObjectsByProp } from "../utils/sortUtils";
 import { formatToLocalDate } from "../utils/dateUtils";
+import useDirectoriesContext from "../hooks/useDirectoriesContext";
 
 interface Column {
 	id: number;
@@ -290,19 +291,17 @@ const HomeTable = () => {
 		console.log("copy");
 	};
 
+	const {
+		state: { directories },
+	} = useDirectoriesContext();
+
 	const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		const options = [
-			{ value: "1", label: "1" },
-			{ value: "2", label: "2" },
-			{ value: "3", label: "3" },
-			{ value: "4", label: "4" },
-			{ value: "5", label: "5" },
-			// { value: "6", label: "6"},
-			// { value: "7", label: "7"},
-			// { value: "8", label: "8"},
-		];
+		const options = directories.map((dir) => ({
+			value: dir.id,
+			label: dir.label,
+		}));
 
 		showModal({
 			show: true,
@@ -311,11 +310,41 @@ const HomeTable = () => {
 				<ModalContentSelect
 					placeholder="Select a directory"
 					options={options}
+					onChange={(value: string) => setModalValue(value)}
 				/>
 			),
-			action: "Edit",
+			action: "Move",
 			onAction: async () => {
-				console.log("action");
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/lists/`,
+					{
+						method: "PATCH",
+						headers: {
+							"Content-type": "application/json"
+						},
+						body: JSON.stringify({
+							ids: select.state.ids,
+							directory_id: getModalValue(),
+						})
+					}
+				)
+
+				const json = await response.json();
+
+				if (response.ok) {
+					console.log(json);
+				} else {
+					showModal({
+						content: (
+							<ModalContentSelect
+								placeholder="Select a directory"
+								options={options}
+								error={json.error}
+								onChange={(value: string) => setModalValue(value)}
+							/>
+						),
+					});
+				}
 			},
 			onCancel: () => hideModal(),
 		});

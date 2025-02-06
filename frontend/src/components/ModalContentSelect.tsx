@@ -5,18 +5,23 @@ interface ModalContentSelectProps {
 	placeholder: string;
 	options: { value: string; label: string }[];
 	error?: string;
+	onChange: (value: string) => void;
 }
 
 const ModalContentSelect = ({
 	placeholder,
 	options,
 	error = "",
+	onChange,
 }: ModalContentSelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
-	const [selectedOption, setSelectedOption] = useState<{
-		value: string;
-		label: string;
-	} | null>(null);
+	const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+	const handleSelect = (value: string) => {
+		setSelectedOption(value);
+		setIsOpen(false);
+		onChange(value);
+	};
 
 	return (
 		<div className="relative w-full">
@@ -29,7 +34,9 @@ const ModalContentSelect = ({
 				<span
 					className={`truncate ${!selectedOption ? "text-placeholder" : ""}`}
 				>
-					{selectedOption ? selectedOption.label : placeholder}
+					{selectedOption
+						? options.find((opt) => opt.value === selectedOption)?.label
+						: placeholder}
 				</span>
 				{!isOpen ? <ArrowDropDown /> : <ArrowDropUp />}
 			</div>
@@ -39,10 +46,7 @@ const ModalContentSelect = ({
 						<div
 							key={option.value}
 							className="h-9 p-1.5 truncate hover:bg-hovered cursor-pointer"
-							onClick={() => {
-								setSelectedOption(option);
-								setIsOpen(false);
-							}}
+							onClick={() => handleSelect(option.value)}
 						>
 							{option.label}
 						</div>
