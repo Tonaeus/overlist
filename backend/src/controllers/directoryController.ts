@@ -26,6 +26,11 @@ const createDirectory = async (req: Request, res: Response) => {
     return;
   }
 
+  if (label.toLowerCase() === "none") {
+    res.status(400).json({ error: `Directory label cannot be "None".` });
+    return;
+  }
+
   try {
     const existingDirectory = await Directory.findOne({
       label: { $regex: `^${label}$`, $options: "i" },
