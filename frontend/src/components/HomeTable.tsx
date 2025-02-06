@@ -204,9 +204,7 @@ const HomeTable = () => {
 						[
 							...prev,
 							{
-								id: json.id,
-								label: json.label,
-								directory_label: json.directory_label,
+								...json,
 								created: formatToLocalDate(json.created),
 								modified: formatToLocalDate(json.modified),
 							},
@@ -320,19 +318,32 @@ const HomeTable = () => {
 					{
 						method: "PATCH",
 						headers: {
-							"Content-type": "application/json"
+							"Content-type": "application/json",
 						},
 						body: JSON.stringify({
 							ids: select.state.ids,
 							directory_id: getModalValue(),
-						})
+						}),
 					}
-				)
+				);
 
 				const json = await response.json();
 
 				if (response.ok) {
-					console.log(json);
+					setRows((prev) =>
+						prev.map((row) => {
+							const item = json.find((item: Row) => item.id === row.id);
+							return item
+								? {
+										...item,
+										created: formatToLocalDate(item.created),
+										modified: formatToLocalDate(item.modified),
+								  }
+								: row;
+						})
+					);
+					hideModal();
+					select.fns.onRemoveAll();
 				} else {
 					showModal({
 						content: (
