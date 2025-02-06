@@ -1,45 +1,14 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import List from "../models/listModel.js";
+import { formatList } from "../utils/listUtils.js";
 
 const getLists = async (req: Request, res: Response) => {
   try {
-    const lists = await List.aggregate([
-      {
-        $addFields: {
-          directory_id: { $toObjectId: '$directory_id' }
-        }
-      },
-      {
-        $lookup: {
-          from: 'directories',
-          localField: 'directory_id',
-          foreignField: '_id',
-          as: 'directory'
-        }
-      },
-      {
-        $unwind: {
-          path: '$directory',
-          preserveNullAndEmptyArrays: true
-        }
-      },
-      {
-        $sort: { label: 1 }
-      },
-      {
-        $project: {
-          _id: 0,
-          id: '$_id',
-          label: 1,
-          directory_label: { $ifNull: ['$directory.label', 'None'] },
-          created: '$createdAt',
-          modified: '$updatedAt'
-        }
-      }
-    ]);
+    const lists = await List.find({}).sort({ label: 1 });
+    const formattedLists = await Promise.all(lists.map(formatList));
 
-    res.status(200).json(lists);
+    res.status(200).json(formattedLists);
     return;
   }
   catch (error) {
@@ -68,14 +37,7 @@ const createList = async (req: Request, res: Response) => {
     }
 
     const newList = await List.create({ label });
-
-    const formattedList = {
-      id: newList._id,
-      label: newList.label,
-      directory_label: "None",
-      created: newList.createdAt,
-      modified: newList.updatedAt,
-    };
+    const formattedList = await formatList(newList);
 
     res.status(200).json(formattedList);
     return;
@@ -109,13 +71,15 @@ const updateLists = async (req: Request, res: Response) => {
       return;
     }
 
-    const updatedLists = await List.updateMany(
+    const updateResult = await List.updateMany(
       { _id: { $in: ids } },
       { $set: { directory_id } }
     );
 
-    if (updatedLists.modifiedCount === ids.length) {
-      res.status(200).json(lists);
+    if (updateResult.modifiedCount === ids.length) {
+      const updatedLists = await List.find({ _id: { $in: ids } });
+      const formattedLists = await Promise.all(updatedLists.map(formatList));
+      res.status(200).json(formattedLists);
       return;
     }
     else {
@@ -146,12 +110,13 @@ const deleteLists = async (req: Request, res: Response) => {
       return;
     }
 
-    const deletedLists = await List.deleteMany({
+    const deleteResult = await List.deleteMany({
       _id: { $in: ids }
     });
 
-    if (deletedLists.deletedCount === ids.length) {
-      res.status(200).json(lists);
+    if (deleteResult.deletedCount === ids.length) {
+      const formattedLists = await Promise.all(lists.map(formatList));
+      res.status(200).json(formattedLists);
       return;
     }
     else {

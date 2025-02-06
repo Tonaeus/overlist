@@ -1,17 +1,14 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import Directory from "../models/directoryModel.js";
+import { formatDirectory } from "../utils/directoryUtils.js";
 
 const getDirectories = async (req: Request, res: Response) => {
   try {
     const directories = await Directory.find({}).sort({ label: 1 });
+    const formattedDirectories = directories.map(formatDirectory);
 
-    const processedDirectories = directories.map(dir => ({
-      id: dir._id,
-      label: dir.label,
-    }));
-
-    res.status(200).json(processedDirectories);
+    res.status(200).json(formattedDirectories);
     return;
   }
   catch (error) {
@@ -40,13 +37,9 @@ const createDirectory = async (req: Request, res: Response) => {
     }
 
     const directory = await Directory.create({ label });
+    const formattedDirectory = formatDirectory(directory);
 
-    const processedDirectory = {
-      id: directory._id,
-      label: directory.label,
-    };
-
-    res.status(200).json(processedDirectory);
+    res.status(200).json(formattedDirectory);
     return;
   }
   catch (error) {
@@ -92,12 +85,9 @@ const updateDirectory = async (req: Request, res: Response) => {
       return;
     }
 
-    const processedDirectory = {
-      id: directory._id,
-      label: directory.label,
-    };
+    const formattedDirectory = formatDirectory(directory);
 
-    res.status(200).json(processedDirectory);
+    res.status(200).json(formattedDirectory);
     return;
   }
   catch (error) {
@@ -122,12 +112,9 @@ const deleteDirectory = async (req: Request, res: Response) => {
       return;
     }
 
-    const processedDirectory = {
-      id: directory._id,
-      label: directory.label,
-    };
+    const formattedDirectory = formatDirectory(directory);
 
-    res.status(200).json(processedDirectory);
+    res.status(200).json(formattedDirectory);
     return;
   }
   catch (error) {
