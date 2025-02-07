@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import Directory from "../models/directoryModel.js";
+import List from "../models/listModel.js";
 import { formatDirectory } from "../utils/directoryUtils.js";
 
 const getDirectories = async (req: Request, res: Response) => {
@@ -115,6 +116,17 @@ const deleteDirectory = async (req: Request, res: Response) => {
     if (!directory) {
       res.status(404).json({ error: 'No such directory.' });
       return;
+    }
+
+    const lists = await List.find({ directory_id: id });
+
+    const updateResult = await List.updateMany(
+      { directory_id: id }, 
+      { $set: { directory_id: null } }
+    );
+
+    if (updateResult.modifiedCount !== lists.length) {
+      throw new Error();
     }
 
     const formattedDirectory = formatDirectory(directory);

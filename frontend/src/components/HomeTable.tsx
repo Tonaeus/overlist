@@ -80,6 +80,10 @@ const HomeTable = () => {
 
 	const [rows, setRows] = useState<Row[]>([]);
 
+	const {
+		state: { directories },
+	} = useDirectoriesContext();
+
 	useEffect(() => {
 		const fetchLists = async () => {
 			const response = await fetch(
@@ -99,7 +103,7 @@ const HomeTable = () => {
 		};
 
 		fetchLists();
-	}, []);
+	}, [directories]);
 
 	const theme = useTheme([
 		getTheme(),
@@ -288,10 +292,6 @@ const HomeTable = () => {
 		e.preventDefault();
 		console.log("copy");
 	};
-
-	const {
-		state: { directories },
-	} = useDirectoriesContext();
 
 	const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
