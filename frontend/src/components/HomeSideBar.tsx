@@ -8,6 +8,8 @@ import useDirectoriesContext from "../hooks/useDirectoriesContext";
 import { Delete, Edit } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
 
+import SideBarButton from "./SideBarButton";
+
 import useModal from "../hooks/useModal";
 import Modal from "./Modal";
 import ModalContentInput from "./ModalContentInput";
@@ -179,14 +181,12 @@ const HomeSideBar = () => {
 	return (
 		<>
 			<div className="flex flex-col h-full">
-				<button
-					className="button w-full mb-6"
+				<SideBarButton
+					label="Add Directory"
 					onClick={(e) => {
 						handleAdd(e);
 					}}
-				>
-					Add Directory
-				</button>
+				/>
 				<div className="flex-1 overflow-y-auto">
 					{directories.map((directory: Directory) => (
 						<Link
