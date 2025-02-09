@@ -253,7 +253,7 @@ const HomeTableControls = ({
 					onClick={(e) => {
 						handleDelete(e);
 					}}
-					disabled={select.state.ids.length === 0 ? true : false}
+					disabled={select.state.ids.length === 0}
 				>
 					<Remove />
 				</button>
@@ -265,7 +265,7 @@ const HomeTableControls = ({
 					onClick={(e) => {
 						handleCopy(e);
 					}}
-					disabled={select.state.ids.length === 0 ? true : false}
+					disabled={select.state.ids.length === 0}
 				>
 					<ContentCopy />
 				</button>
@@ -277,7 +277,7 @@ const HomeTableControls = ({
 					onClick={(e) => {
 						handleMove(e);
 					}}
-					disabled={select.state.ids.length === 0 ? true : false}
+					disabled={select.state.ids.length === 0}
 				>
 					<SwapHoriz />
 				</button>
@@ -289,7 +289,7 @@ const HomeTableControls = ({
 					onClick={(e) => {
 						handleExport(e);
 					}}
-					disabled={select.state.ids.length === 0 ? true : false}
+					disabled={select.state.ids.length === 0}
 				>
 					<ArrowDownward />
 				</button>
