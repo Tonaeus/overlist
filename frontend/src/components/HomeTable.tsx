@@ -1,22 +1,10 @@
 import { useEffect, useState } from "react";
-import { Tooltip } from "react-tooltip";
+import { Link } from "react-router-dom";
 
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 
 import {
-	Table,
-	Header,
-	HeaderRow,
-	Body,
-	Row,
-	HeaderCell,
-	Cell,
-} from "@table-library/react-table-library/table";
-
-import {
-	HeaderCellSelect,
-	CellSelect,
 	SelectClickTypes,
 	useRowSelect,
 } from "@table-library/react-table-library/select";
@@ -29,6 +17,9 @@ import {
 	ArrowDownward,
 	Search,
 } from "@mui/icons-material";
+import { Tooltip } from "react-tooltip";
+
+import TableComponent from "../libs/TableComponent";
 
 import useModal from "../hooks/useModal";
 import Modal from "./Modal";
@@ -38,8 +29,8 @@ import ModalContentSelect from "./ModalContentSelect";
 
 import { sortObjectsByProp } from "../utils/sortUtils";
 import { formatToLocalDate } from "../utils/dateUtils";
+
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
-import { Link } from "react-router-dom";
 
 interface Column {
 	id: number;
@@ -450,49 +441,13 @@ const HomeTable = () => {
 						</Tooltip>
 					</div>
 				</div>
-				<div className="bg-white p-1.5 rounded accent-blue-700 border border-line">
-					<div className="overflow-x-auto">
-						<Table
-							data={data}
-							theme={theme}
-							layout={{ custom: true }}
-							select={select}
-							className="table"
-						>
-							{(tableList: any) => (
-								<>
-									<Header>
-										<HeaderRow className="header-row">
-											<HeaderCellSelect className="header-cell" />
-											{columns.map((column: Column) => (
-												<HeaderCell key={column.id} className="header-cell">
-													{column.label}
-												</HeaderCell>
-											))}
-										</HeaderRow>
-									</Header>
-									<Body>
-										{tableList.map((row: Row) => (
-											<Row item={row} key={row.id} className="row">
-												<CellSelect item={row} />
-												{columns.map((column: Column) => (
-													<Cell key={column.id} className="cell">
-														{column.renderCell(row)}
-													</Cell>
-												))}
-											</Row>
-										))}
-									</Body>
-								</>
-							)}
-						</Table>
-						{data.nodes.length === 0 ? (
-							<div className="flex justify-center items-center h-9">
-								<p>No lists</p>
-							</div>
-						) : null}
-					</div>
-				</div>
+
+				<TableComponent
+					columns={columns}
+					data={data}
+					theme={theme}
+					select={select}
+				/>
 			</div>
 
 			<Modal {...modalProps} />
