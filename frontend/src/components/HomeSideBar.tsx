@@ -1,14 +1,12 @@
 import type { Directory } from "../types/Directory";
 
 import { useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
 
-import { Delete, Edit } from "@mui/icons-material";
-import { Tooltip } from "react-tooltip";
-
 import SideBarButton from "./SideBarButton";
+import SideBarBlock from "./SideBarBlock";
 
 import useModal from "../hooks/useModal";
 import Modal from "./Modal";
@@ -189,43 +187,13 @@ const HomeSideBar = () => {
 				/>
 				<div className="flex-1 overflow-y-auto">
 					{directories.map((directory: Directory) => (
-						<Link
+						<SideBarBlock
 							key={directory.id}
-							to={`/directory/${directory.label}`}
-							className={`h-9 flex justify-start items-center px-3 py-1.5 rounded-full ${
-								directory.label === label
-									? "bg-selected text-blue-700"
-									: "hover:bg-hovered"
-							} group`}
-						>
-							<div className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
-								{directory.label}
-							</div>
-							<div className="flex opacity-0 group-hover:opacity-100 transition-opacity duration-200 group-hover:pl-3">
-								<button
-									className="edit-button hover:scale-110"
-									onClick={(e) => {
-										handleEdit(e, directory);
-									}}
-								>
-									<Edit />
-								</button>
-								<Tooltip anchorSelect=".edit-button" place="top">
-									Edit
-								</Tooltip>
-								<button
-									className="delete-button hover:scale-110"
-									onClick={(e) => {
-										handleDelete(e, directory);
-									}}
-								>
-									<Delete />
-								</button>
-								<Tooltip anchorSelect=".delete-button" place="top">
-									Delete
-								</Tooltip>
-							</div>
-						</Link>
+							object={directory}
+							label={label}
+							handleEdit={handleEdit}
+							handleDelete={handleDelete}
+						/>
 					))}
 				</div>
 			</div>
