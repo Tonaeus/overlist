@@ -39,11 +39,12 @@ import ModalContentSelect from "./ModalContentSelect";
 import { sortObjectsByProp } from "../utils/sortUtils";
 import { formatToLocalDate } from "../utils/dateUtils";
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
+import { Link } from "react-router-dom";
 
 interface Column {
 	id: number;
 	label: string;
-	renderCell: (row: Row) => string;
+	renderCell: (row: Row) => JSX.Element | string;
 }
 
 interface Row {
@@ -59,7 +60,9 @@ const HomeTable = () => {
 		{
 			id: 0,
 			label: "Label",
-			renderCell: (row: Row) => row.label,
+			renderCell: (row: Row) => (
+				<Link to={`/list/${row.label}`}>{row.label}</Link>
+			),
 		},
 		{
 			id: 1,
