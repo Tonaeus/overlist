@@ -191,6 +191,7 @@ const HomeSideBar = () => {
 							key={directory.id}
 							object={directory}
 							label={label}
+							to={`/directory/${directory.label}`}
 							handleEdit={handleEdit}
 							handleDelete={handleDelete}
 						/>
