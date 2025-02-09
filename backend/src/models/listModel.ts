@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-interface IList {
+type IList = {
   label: string,
   directory_id: string
   createdAt: Date 

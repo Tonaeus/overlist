@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 
-interface ModalContentSelectProps {
+type ModalContentSelectProps = {
 	placeholder: string;
 	options: { value: string; label: string }[];
 	error?: string;

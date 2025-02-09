@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-interface IDirectory {
+type IDirectory = {
   label: string
 }
 

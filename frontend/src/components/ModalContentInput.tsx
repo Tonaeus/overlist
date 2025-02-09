@@ -1,4 +1,4 @@
-interface ModalContentInputProps {
+type ModalContentInputProps = {
 	placeholder?: string;
 	error?: string;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

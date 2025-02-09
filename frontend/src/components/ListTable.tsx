@@ -21,13 +21,13 @@ import {
 	useRowSelect,
 } from "@table-library/react-table-library/select";
 
-interface Column {
+type Column = {
 	id: string;
 	label: string;
 	renderCell: (row: Row) => JSX.Element;
 }
 
-interface Row {
+type Row = {
 	id: string;
 	[key: string]: string;
 }

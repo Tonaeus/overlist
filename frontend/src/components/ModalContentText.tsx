@@ -1,4 +1,4 @@
-interface ModalContentTextProps {
+type ModalContentTextProps = {
 	message: string;
 	error?: string;
 }

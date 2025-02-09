@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
 
-interface IRow {
+type IRow = {
   [column_id: string]: string
 }
 
-interface IListBody {
+type IListBody =  {
   rows: IRow[];
   list_id: string;
 }

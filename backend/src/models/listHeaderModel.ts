@@ -1,10 +1,10 @@
 import { Schema, model } from "mongoose";
 
-interface IColumn {
+type IColumn = {
   label: string
 }
 
-interface IListHeader {
+type IListHeader = {
   columns: IColumn[];
   list_id: string;
 }
