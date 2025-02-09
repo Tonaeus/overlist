@@ -21,9 +21,6 @@ const HomeSideBar = () => {
 		dispatch,
 	} = useDirectoriesContext();
 
-	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
-		useModal();
-
 	useEffect(() => {
 		const fetchDirectories = async () => {
 			const response = await fetch(
@@ -38,6 +35,9 @@ const HomeSideBar = () => {
 
 		fetchDirectories();
 	}, [dispatch]);
+
+	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
+		useModal();
 
 	const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
