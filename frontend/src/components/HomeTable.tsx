@@ -15,11 +15,11 @@ import {
 	ContentCopy,
 	SwapHoriz,
 	ArrowDownward,
-	Search,
 } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
 
 import TableComponent from "../libs/TableComponent";
+import TableSearchComponent from "../libs/TableSearchComponent";
 
 import useModal from "../hooks/useModal";
 import Modal from "./Modal";
@@ -145,10 +145,6 @@ const HomeTable = () => {
 	]);
 
 	const [search, setSearch] = useState<string>("");
-
-	const handleSearch = (event: any) => {
-		setSearch(event.target.value);
-	};
 
 	const data = {
 		nodes: rows.filter((item) =>
@@ -364,21 +360,7 @@ const HomeTable = () => {
 		<>
 			<div className="flex flex-col">
 				<div className="flex flex-row h-9 mb-6">
-					<label
-						htmlFor="search"
-						className="w-1/2 p-1.5 rounded-full flex flex-row bg-white border border-line"
-					>
-						<div className="flex justify-center items-center w-[38px]">
-							<Search />
-						</div>
-						<input
-							id="search"
-							type="text"
-							value={search}
-							onChange={handleSearch}
-							className="h-full w-[calc(100%-38px)] focus:outline-none px-3"
-						/>
-					</label>
+					<TableSearchComponent search={search} setSearch={setSearch} />
 					<div className="w-1/2 flex flex-row justify-end">
 						<button
 							className="add-button button aspect-[1/1] mr-1.5"
