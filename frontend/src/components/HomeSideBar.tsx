@@ -52,13 +52,11 @@ const HomeSideBar = () => {
 			),
 			action: "Add",
 			onAction: async () => {
-				const directory = { label: getModalValue() };
-
 				const response = await fetch(
 					`${import.meta.env.VITE_BACKEND_URL}/api/directories/`,
 					{
 						method: "POST",
-						body: JSON.stringify(directory),
+						body: JSON.stringify({ label: getModalValue() }),
 						headers: {
 							"Content-Type": "application/json",
 						},

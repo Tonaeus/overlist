@@ -54,13 +54,11 @@ const HomeTableControls = ({
 			),
 			action: "Add",
 			onAction: async () => {
-				const list = { label: getModalValue() };
-
 				const response = await fetch(
 					`${import.meta.env.VITE_BACKEND_URL}/api/lists/`,
 					{
 						method: "POST",
-						body: JSON.stringify(list),
+						body: JSON.stringify({ label: getModalValue() }),
 						headers: {
 							"Content-Type": "application/json",
 						},
