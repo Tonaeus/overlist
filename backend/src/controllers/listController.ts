@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import List from "../models/listModel.js";
+import ListHeader from "../models/listHeaderModel.js";
+import ListBody from "../models/listBodyModel.js";
 import { formatList } from "../utils/listUtils.js";
 
 const getLists = async (req: Request, res: Response) => {
@@ -37,6 +39,10 @@ const createList = async (req: Request, res: Response) => {
     }
 
     const newList = await List.create({ label });
+
+    await ListHeader.create({ list_id: newList._id });
+    await ListBody.create({ list_id: newList._id });
+
     const formattedList = await formatList(newList);
 
     res.status(200).json(formattedList);
@@ -79,6 +85,7 @@ const updateLists = async (req: Request, res: Response) => {
     if (updateResult.modifiedCount === ids.length) {
       const updatedLists = await List.find({ _id: { $in: ids } });
       const formattedLists = await Promise.all(updatedLists.map(formatList));
+
       res.status(200).json(formattedLists);
       return;
     }

@@ -19,7 +19,7 @@ const columnSchema = new Schema<IColumn>({
 const listHeaderSchema = new Schema<IListHeader>({
   columns: {
     type: [columnSchema],
-    required: true
+    default: []
   },
   list_id: {
     type: String,

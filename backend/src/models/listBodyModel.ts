@@ -14,7 +14,7 @@ const rowSchema = new Schema({}, { strict: false });
 const listBodySchema = new Schema<IListBody>({
   rows: {
     type: [rowSchema],
-    required: true
+    default: []
   },
   list_id: {
     type: String,

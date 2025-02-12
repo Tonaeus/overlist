@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  getListHeaders,
   getListHeader,
   createListHeader,
   deleteListHeader,
@@ -9,11 +8,9 @@ import {
 
 const router = express.Router();
 
-router.get('/', getListHeaders);
+router.get('/:list_id', getListHeader);
 
-router.get('/:id', getListHeader);
-
-router.post('/', createListHeader);
+router.post('/:list_id', createListHeader);
 
 router.delete('/:id', deleteListHeader);
 
