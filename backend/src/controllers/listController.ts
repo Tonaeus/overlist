@@ -121,7 +121,14 @@ const deleteLists = async (req: Request, res: Response) => {
       _id: { $in: ids }
     });
 
-    if (deleteResult.deletedCount === ids.length) {
+    const headerResult = await ListHeader.deleteMany({ list_id: { $in: ids } });
+    const bodyResult = await ListBody.deleteMany({ list_id: { $in: ids } });
+
+    if (
+      deleteResult.deletedCount === ids.length &&
+      headerResult.deletedCount === ids.length && 
+      bodyResult.deletedCount === ids.length
+    ) {
       const formattedLists = await Promise.all(lists.map(formatList));
       res.status(200).json(formattedLists);
       return;
