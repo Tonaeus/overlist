@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./App.tsx";
 
 import { DirectoriesContextProvider } from "./contexts/DirectoriesContext.tsx";
+import { ListColumnsContextProvider } from "./contexts/ListColumnsContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
 		<DirectoriesContextProvider>
-			<App />
+			<ListColumnsContextProvider>
+				<App />
+			</ListColumnsContextProvider>
 		</DirectoriesContextProvider>
 	</StrictMode>
 );
