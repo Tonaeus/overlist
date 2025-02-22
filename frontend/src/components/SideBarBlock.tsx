@@ -77,7 +77,7 @@ const SideBarBlock = ({
 		</Link>
 	) : (
 		<div
-			className={`h-9 flex justify-start items-center px-3 py-1.5 rounded-full group`}
+			className={`h-9 flex justify-start items-center px-3 py-1.5 rounded-full hover:bg-hovered group`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
