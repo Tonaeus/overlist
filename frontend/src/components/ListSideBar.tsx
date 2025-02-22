@@ -11,7 +11,7 @@ import SideBarBlock from "./SideBarBlock";
 import useModal from "../hooks/useModal";
 import Modal from "./Modal";
 import ModalContentInput from "./ModalContentInput";
-// import ModalContentText from "./ModalContentText";
+import ModalContentText from "./ModalContentText";
 
 const ListSideBar = () => {
 	const { label } = useParams();
@@ -141,7 +141,46 @@ const ListSideBar = () => {
 	) => {
 		e.preventDefault();
 
-		console.log(listColumn);
+		showModal({
+			title: "Delete Column",
+			content: (
+				<ModalContentText
+					message={`Are you sure you want to delete the column "${listColumn.label}"?`}
+				/>
+			),
+			action: "Delete",
+			onAction: async () => {
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${label}`,
+					{
+						method: "DELETE",
+						body: JSON.stringify({ 
+							column_id: listColumn.id,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					dispatch({ type: "SET_LIST_COLUMNS", payload: json });
+					hideModal();
+				} else {
+					showModal({
+						content: (
+							<ModalContentText
+								message={`Are you sure you want to delete the column "${listColumn.label}"?`}
+								error={json.error}
+							/>
+						),
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
 	};
 
 	return (
