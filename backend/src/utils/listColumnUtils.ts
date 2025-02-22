@@ -1,3 +1,10 @@
+import List from "../models/listModel.js";
+
+const getIdFromLabel = async (label: string) => {
+  const list = await List.findOne({ label: label });
+  return list ? list._id : null;
+}
+
 const extractColumns = (listHeader: any) =>
   listHeader.columns.map((column: any) => 
     ({ 
@@ -6,5 +13,6 @@ const extractColumns = (listHeader: any) =>
     }));
 
 export {
+  getIdFromLabel,
   extractColumns
 };

@@ -6,8 +6,8 @@ import {
 
 const router = express.Router();
 
-router.get('/:list_id', getListColumns);
+router.get('/:list_label', getListColumns);
 
-router.post('/:list_id', createListColumn);
+router.post('/:list_label', createListColumn);
 
 export default router;

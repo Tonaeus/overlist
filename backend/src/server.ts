@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/directories', directoryRoutes);
 app.use("/api/lists", listRoutes);
-app.use("/api/listColumns", listColumnRoutes);
+app.use("/api/list-columns", listColumnRoutes);
 app.use("/api/listBodies", listBodyRoutes);
 
 // Connect to db

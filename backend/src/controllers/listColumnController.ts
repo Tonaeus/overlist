@@ -1,10 +1,18 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import ListHeader from "../models/listHeaderModel.js";
-import { extractColumns } from "../utils/listColumnUtils.js";
+import { getIdFromLabel, extractColumns } from "../utils/listColumnUtils.js";
 
 const getListColumns = async (req: Request, res: Response) => {
-  const { list_id } = req.params;
+  let { list_label } = req.params;
+  list_label = list_label?.trim();
+
+  if (!list_label) {
+    res.status(400).json({ error: "List label cannot be empty." });
+    return;
+  }
+
+  const list_id = await getIdFromLabel(list_label);
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
     res.status(404).json({ error: 'No such list.' });
@@ -25,7 +33,15 @@ const getListColumns = async (req: Request, res: Response) => {
 };
 
 const createListColumn = async (req: Request, res: Response) => {
-  const { list_id } = req.params;
+  let { list_label } = req.params;
+  list_label = list_label?.trim();
+
+  if (!list_label) {
+    res.status(400).json({ error: "List label cannot be empty." });
+    return;
+  }
+
+  const list_id = await getIdFromLabel(list_label);
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
     res.status(404).json({ error: "No such List." });
