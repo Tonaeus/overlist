@@ -44,14 +44,14 @@ const createListColumn = async (req: Request, res: Response) => {
   const list_id = await getIdFromLabel(list_label);
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
-    res.status(404).json({ error: "No such List." });
+    res.status(404).json({ error: "No such list." });
     return;
   }
 
-  let { label } = req.body;
-  label = label?.trim();
+  let { column_label } = req.body;
+  column_label = column_label?.trim();
 
-  if (!label) {
+  if (!column_label) {
     res.status(400).json({ error: "Column label cannot be empty." });
     return;
   }
@@ -59,7 +59,7 @@ const createListColumn = async (req: Request, res: Response) => {
   try {
     const existingListColumn = await ListHeader.findOne({
       list_id: list_id,
-      columns: { $elemMatch: { label: { $regex: `^${label}$`, $options: "i" } } }
+      columns: { $elemMatch: { label: { $regex: `^${column_label}$`, $options: "i" } } }
     });
 
     if (existingListColumn) {
@@ -67,19 +67,19 @@ const createListColumn = async (req: Request, res: Response) => {
       return;
     }
 
-    const updateResult = await ListHeader.updateOne(
+    const createResult = await ListHeader.updateOne(
       { list_id: list_id },
       {
         $push: {
           columns: {
-            $each: [{ label: label }],
+            $each: [{ label: column_label }],
             $sort: { label: 1 }
           }
         }
       }
     );
 
-    if (updateResult.modifiedCount === 1) {
+    if (createResult.modifiedCount === 1) {
       const listHeader = await ListHeader.findOne({ list_id: list_id });
       const listColumns = extractColumns(listHeader);
 
@@ -96,7 +96,82 @@ const createListColumn = async (req: Request, res: Response) => {
   }
 };
 
+const updateListColumn = async (req: Request, res: Response) => {
+  let { list_label } = req.params;
+  list_label = list_label?.trim();
+
+  if (!list_label) {
+    res.status(400).json({ error: "List label cannot be empty." });
+    return;
+  }
+
+  const list_id = await getIdFromLabel(list_label);
+
+  if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
+    res.status(404).json({ error: "No such list." });
+    return;
+  }
+
+  let { column_id, column_label } = req.body;
+  column_label = column_label?.trim();
+
+  if (!column_label) {
+    res.status(400).json({ error: "Column label cannot be empty." });
+    return;
+  }
+
+  if (!column_id || !mongoose.Types.ObjectId.isValid(column_id)) {
+    res.status(404).json({ error: "No such column." });
+    return;
+  }
+
+  try {
+    const existingListColumn = await ListHeader.findOne({
+      list_id: list_id,
+      columns: { $elemMatch: { label: { $regex: `^${column_label}$`, $options: "i" } } }
+    });
+
+    if (existingListColumn) {
+      res.status(400).json({ error: "Column label already exists." });
+      return;
+    }
+
+    const updateResult = await ListHeader.updateOne(
+      { list_id: list_id, "columns._id": column_id },
+      { $set: { "columns.$.label": column_label } }
+    );
+
+    const sortResult = await ListHeader.updateOne(
+      { list_id: list_id },
+      {
+        $push: {
+          columns: {
+            $each: [],
+            $sort: { label: 1 } 
+          }
+        }
+      }
+    );
+
+    if (updateResult.modifiedCount === 1 && sortResult.modifiedCount === 1) {
+      const listHeader = await ListHeader.findOne({ list_id: list_id });
+      const listColumns = extractColumns(listHeader);
+
+      res.status(200).json(listColumns);
+      return;
+    }
+    else {
+      throw new Error();
+    }
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to update column." });
+    return;
+  }
+};
+
 export {
   getListColumns,
   createListColumn,
+  updateListColumn
 };

@@ -56,7 +56,7 @@ const ListSideBar = () => {
 					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${label}`,
 					{
 						method: "POST",
-						body: JSON.stringify({ label: getModalValue() }),
+						body: JSON.stringify({ column_label: getModalValue() }),
 						headers: {
 							"Content-Type": "application/json",
 						},
@@ -90,7 +90,49 @@ const ListSideBar = () => {
 	) => {
 		e.preventDefault();
 
-		console.log(listColumn);
+		showModal({
+			title: "Edit Column",
+			content: (
+				<ModalContentInput
+					placeholder="Enter column label"
+					onChange={(e) => setModalValue(e.target.value)}
+				/>
+			),
+			action: "Edit",
+			onAction: async () => {
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${label}`,
+					{
+						method: "PATCH",
+						body: JSON.stringify({ 
+							column_id: listColumn.id,
+							column_label: getModalValue() 
+						}),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					dispatch({ type: "SET_LIST_COLUMNS", payload: json });
+					hideModal();
+				} else {
+					showModal({
+						content: (
+							<ModalContentInput
+								placeholder="Enter column label"
+								error={json.error}
+								onChange={(e) => setModalValue(e.target.value)}
+							/>
+						),
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
 	};
 
 	const handleDelete = (
