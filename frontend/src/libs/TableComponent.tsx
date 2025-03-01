@@ -18,6 +18,7 @@ type TableComponentProps = {
 	data: any;
 	theme: any;
 	select: any;
+	emptyMessage: string;
 };
 
 const TableComponent = ({
@@ -25,6 +26,7 @@ const TableComponent = ({
 	data,
 	theme,
 	select,
+	emptyMessage,
 }: TableComponentProps) => {
 	return (
 		<div className="bg-white p-1.5 rounded accent-blue-700 border border-line">
@@ -41,19 +43,19 @@ const TableComponent = ({
 							<Header>
 								<HeaderRow className="header-row">
 									<HeaderCellSelect className="header-cell" />
-									{columns.map((column: any) => (
-										<HeaderCell key={column.id} className="header-cell">
+									{columns.map((column: any, index: number) => (
+										<HeaderCell key={index} className="header-cell">
 											{column.label}
 										</HeaderCell>
 									))}
 								</HeaderRow>
 							</Header>
 							<Body>
-								{tableList.map((row: any) => (
-									<Row item={row} key={row.id} className="row">
+								{tableList.map((row: any, index: number) => (
+									<Row item={row} key={index} className="row">
 										<CellSelect item={row} />
-										{columns.map((column: any) => (
-											<Cell key={column.id} className="cell">
+										{columns.map((column: any, index: number) => (
+											<Cell key={index} className="cell">
 												{column.renderCell(row)}
 											</Cell>
 										))}
@@ -65,7 +67,7 @@ const TableComponent = ({
 				</Table>
 				{data.nodes.length === 0 ? (
 					<div className="flex justify-center items-center h-9">
-						<p>No lists</p>
+						<p>{emptyMessage}</p>
 					</div>
 				) : null}
 			</div>

@@ -10,7 +10,7 @@ const List = () => {
       </div>
       <div className='page-content'>
         <div className='flex flex-col min-h-screen'>
-          <div className='px-6 pb-6 bg-purple-500'>
+          <div className='p-6 bg-purple-500'>
             <ListTable/>
           </div>
           <div className='mt-auto mx-6 border-t border-line'>

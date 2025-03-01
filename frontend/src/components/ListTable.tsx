@@ -1,235 +1,138 @@
+// import type { HomeTableColumn, HomeTableRow } from "../types/HomeTable";
+
 import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+// import { Link } from "react-router-dom";
 
-import { useTheme } from "@table-library/react-table-library/theme";
-import { getTheme } from "@table-library/react-table-library/baseline";
+import TableComponent from "../libs/TableComponent";
 
-import {
-	Table,
-	Header,
-	HeaderRow,
-	Body,
-	Row,
-	HeaderCell,
-	Cell,
-} from "@table-library/react-table-library/table";
+// import { formatToLocalDate } from "../utils/dateUtils";
 
-import {
-	HeaderCellSelect,
-	CellSelect,
-	SelectClickTypes,
-	useRowSelect,
-} from "@table-library/react-table-library/select";
+import useListColumnsContext from "../hooks/useListColumnsContext";
+import useTableComponent from "../hooks/useTableComponent";
 
-type Column = {
-	id: string;
-	label: string;
-	renderCell: (row: Row) => JSX.Element;
-}
+// type Column = {
+// 	id: string;
+// 	label: string;
+// 	renderCell: (row: Row) => JSX.Element;
+// }
 
-type Row = {
-	id: string;
-	[key: string]: string;
-}
+// type Row = {
+// 	id: string;
+// 	[key: string]: string;
+// }
 
 const ListTable = () => {
-	const [columns, setColumns] = useState<Column[]>([
-		{
-			id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
-			label: "text",
-			renderCell: (item: Row) => (
-				<input
-					type="text"
-					value={item["4e3b468c-7fa8-47d8-90a8-741bbea731ac"] || ""}
-					onChange={(event) =>
-						handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731ac")
-					}
-					className="w-full"
-				/>
-			),
-		},
-	]);
+	// const [columns, setColumns] = useState<Column[]>([
+	// 	{
+	// 		id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
+	// 		label: "text",
+	// 		renderCell: (item: Row) => (
+	// 			<input
+	// 				type="text"
+	// 				value={item["4e3b468c-7fa8-47d8-90a8-741bbea731ac"] || ""}
+	// 				onChange={(event) =>
+	// 					handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731ac")
+	// 				}
+	// 				className="w-full"
+	// 			/>
+	// 		),
+	// 	},
+	// ]);
 
-	const [rows, setRows] = useState<Row[]>([
-		{
-			"id": uuidv4(),
-			"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "alpha",
-		},
-	]);
+	// const [rows, setRows] = useState<Row[]>([
+	// 	{
+	// 		"id": uuidv4(),
+	// 		"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "alpha",
+	// 	},
+	// ]);
 
-	const theme = useTheme([
-		getTheme(),
-		{
-			Table: `
-			--data-table-library_grid-template-columns: 38px repeat(${columns.length}, minmax(150px, 1fr));
-			&.table {
-				min-width: calc(38px + 150px * ${columns.length});
-			}
-      `,
-			HeaderRow: `
-				&.header-row {
-					color: #495365;
-				}
-			`,
-			HeaderCell: `
-				&.header-cell:hover {
-					background-color: #F4F5F6;
-				}
-				&:nth-of-type(1) {
-					width: 38px;
-        }
-			`,
-			Row: `
-				&.row {
-					color: #495365;
-				}
-				&.row:hover {
-					color: #495365;
-					background-color: #F4F5F6;
-				}
-				&.row-select-selected {
-					background-color: #EFF6FF;
-					font-weight: normal;
-				}
-			`,
-			Cell: `
-				&.cell {
-				}
-				&:nth-of-type(1) {
-					width: 38px;
-        }
-			`,
-		},
-	]);
-
-	const data = { nodes: rows };
+	const {
+		state: { listColumns: columns },
+	} = useListColumnsContext();
 	
-	const onSelectChange = (selectAction: any, selectState: any) => {
-		console.log("action: ", selectAction);
-		console.log("state: ", selectState);
-		// console.log("ids: ", state.ids);
-	};
+	// const [columns, setColumns] = useState([]);
+	const [rows] = useState([]);
 
-	const select = useRowSelect(
-		data,
-		{
-			onChange: onSelectChange,
-		},
-		{
-			clickType: SelectClickTypes.ButtonClick,
-		}
-	);
+	const { data, theme, select } = useTableComponent({
+		rows,
+		tableStyles: `
+			--data-table-library_grid-template-columns: 
+				38px repeat(${columns.length > 0 ? columns.length : 1}, minmax(125px, 1fr));
 
-	const handleUpdate = (value: string, id: string, property: string) => {
-		setRows((prevRows: Row[]) =>
-			prevRows.map((row: Row) => (row.id === id ? { ...row, [property]: value } : row))
-		);
-	};
+			&.table {
+				min-width: calc(38px + 125px * ${columns.length > 0 ? columns.length : 1});
+			}
+		`,
+	});
 
-	const addRow = () => {
-		const newRow: Row = {
-			id: uuidv4(),
-		};
+	// useEffect(() => {
+	// 	// console.log("columns.length", columns.length);
+	// }, [listColumns]); 
 
-		columns.slice(1).forEach((column: Column) => {
-			newRow[column.label] = "";
-		});
+	// const handleUpdate = (value: string, id: string, property: string) => {
+	// 	setRows((prevRows: Row[]) =>
+	// 		prevRows.map((row: Row) => (row.id === id ? { ...row, [property]: value } : row))
+	// 	);
+	// };
 
-		setRows((prevRows: Row[]) => [...prevRows, newRow]);
-	};
+	// const addRow = () => {
+	// 	const newRow: Row = {
+	// 		id: uuidv4(),
+	// 	};
 
-	const addColumn = () => {
-		const label: string | null = prompt("Enter the column label:");
-		if (!label) {
-			alert("Column label is required.");
-			return;
-		}
+	// 	columns.slice(1).forEach((column: Column) => {
+	// 		newRow[column.label] = "";
+	// 	});
 
-		const id: string = uuidv4();
-		const renderCell = (row: Row) => (
-			<input
-				type="text"
-				value={row[id] || ""}
-				onChange={(event) => handleUpdate(event.target.value, row.id, id)}
-				className="w-full"
-			/>
-		);
+	// 	setRows((prevRows: Row[]) => [...prevRows, newRow]);
+	// };
 
-		const newColumn: Column = {
-			id: id,
-			label,
-			renderCell,
-		};
+	// const addColumn = () => {
+	// 	const label: string | null = prompt("Enter the column label:");
+	// 	if (!label) {
+	// 		alert("Column label is required.");
+	// 		return;
+	// 	}
 
-		setRows((prevRows: Row[]) =>
-			prevRows.map((row: Row) => ({
-				...row,
-				[id]: "",
-			}))
-		);
+	// 	const id: string = uuidv4();
+	// 	const renderCell = (row: Row) => (
+	// 		<input
+	// 			type="text"
+	// 			value={row[id] || ""}
+	// 			onChange={(event) => handleUpdate(event.target.value, row.id, id)}
+	// 			className="w-full"
+	// 		/>
+	// 	);
 
-		setColumns((prevCols: Column[]) => [...prevCols, newColumn]);
-	};
+	// 	const newColumn: Column = {
+	// 		id: id,
+	// 		label,
+	// 		renderCell,
+	// 	};
 
-	const logData = () => {
-		console.log("rows:", rows);
-		console.log("columns.length: ", columns.length);
-	};
+	// 	setRows((prevRows: Row[]) =>
+	// 		prevRows.map((row: Row) => ({
+	// 			...row,
+	// 			[id]: "",
+	// 		}))
+	// 	);
+
+	// 	setColumns((prevCols: Column[]) => [...prevCols, newColumn]);
+	// };
 
 	return (
-		<div>
-			<div className="m-1">
-				<button className="bg-red-500 m-1" onClick={addRow}>
-					Add Row
-				</button>
-				<button className="bg-green-500 m-1" onClick={addColumn}>
-					Add Column
-				</button>
-				<button className="bg-blue-500 m-1" onClick={logData}>
-					Log Data
-				</button>
+		<div className="flex flex-col">
+			<div className="flex flex-row h-9 mb-6 bg-red-500">
+				
 			</div>
-			<div
-				className="bg-white p-1.5 rounded accent-blue-700"
-				style={{ visibility: columns.length > 0 ? "visible" : "hidden" }}
-			>
-				<div className="overflow-x-auto">
-					<Table
-						data={data}
-						theme={theme}
-						layout={{ custom: true }}
-						select={select}
-						className="table"
-					>
-						{(tableList: any) => (
-							<>
-								<Header>
-									<HeaderRow className="header-row">
-										<HeaderCellSelect className="header-cell" />
-										{columns.map((column: Column) => (
-											<HeaderCell key={column.id} className="header-cell">
-												{column.label}
-											</HeaderCell>
-										))}
-									</HeaderRow>
-								</Header>
-								<Body>
-									{tableList.map((row: Row) => (
-										<Row item={row} key={row.id} className="row">
-											<CellSelect item={row} />
-											{columns.map((column: Column) => (
-												<Cell key={column.id} className="cell">
-													{column.renderCell(row)}
-												</Cell>
-											))}
-										</Row>
-									))}
-								</Body>
-							</>
-						)}
-					</Table>
-				</div>
-			</div>
+
+			<TableComponent
+				columns={columns.length > 0 ? columns : [{}]}
+				data={data}
+				theme={theme}
+				select={select}
+				emptyMessage="No rows"
+			/>
 		</div>
 	);
 };
