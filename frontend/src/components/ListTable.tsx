@@ -3,7 +3,7 @@
 import { useState } from "react";
 // import { Link } from "react-router-dom";
 
-import TableComponent from "../libs/TableComponent";
+import ListTableComponent from "../libs/ListTableComponent";
 
 // import { formatToLocalDate } from "../utils/dateUtils";
 
@@ -56,7 +56,7 @@ const ListTable = () => {
 	const { data, theme, select } = useTableComponent({
 		rows,
 		tableStyles: {
-			Table: `;
+			Table: `
 				min-width: calc(38px + 125px * ${columns.length > 0 ? columns.length : 1});
 			`,
 			BaseCell: `
@@ -132,7 +132,7 @@ const ListTable = () => {
 				
 			</div>
 
-			<TableComponent
+			<ListTableComponent
 				columns={columns.length > 0 ? columns : [{}]}
 				data={data}
 				theme={theme}

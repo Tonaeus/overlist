@@ -3,7 +3,7 @@ import type { HomeTableColumn, HomeTableRow } from "../types/HomeTable";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import TableComponent from "../libs/TableComponent";
+import HomeTableComponent from "../libs/HomeTableComponent";
 import TableSearchComponent from "../libs/TableSearchComponent";
 import HomeTableControls from "./HomeTableControls";
 
@@ -69,14 +69,9 @@ const HomeTable = () => {
 		rows,
 		tableStyles: {
 			Table: `
-				--data-table-library_grid-template-columns: 
-					38px 
-					calc(50% - 38px) 
-					repeat(3, calc(50% / 3));
-	
-				&.table {
-					min-width: calc(38px + 375px - 38px + 3 * 125px);
-				}
+				--data-table-library_grid-template-columns: 38px calc(50% - 38px) repeat(3, calc(50% / 3));
+
+				min-width: calc(38px + 375px - 38px + 3 * 125px);
 			`,
 		},
 	});
@@ -88,7 +83,7 @@ const HomeTable = () => {
 				<HomeTableControls rows={rows} setRows={setRows} select={select} />
 			</div>
 
-			<TableComponent
+			<HomeTableComponent
 				columns={columns}
 				data={data}
 				theme={theme}
