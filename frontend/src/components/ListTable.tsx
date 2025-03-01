@@ -55,14 +55,20 @@ const ListTable = () => {
 
 	const { data, theme, select } = useTableComponent({
 		rows,
-		tableStyles: `
-			--data-table-library_grid-template-columns: 
-				38px repeat(${columns.length > 0 ? columns.length : 1}, minmax(125px, 1fr));
-
-			&.table {
+		tableStyles: {
+			Table: `;
 				min-width: calc(38px + 125px * ${columns.length > 0 ? columns.length : 1});
-			}
-		`,
+			`,
+			BaseCell: `
+				&:nth-of-type(1) {
+					width: 38px;
+        }
+				&:not(:nth-of-type(1)) {
+					width: 1fr;
+					min-width: 125px;
+				}
+			`,
+		},
 	});
 
 	// useEffect(() => {

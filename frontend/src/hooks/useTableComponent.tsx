@@ -10,14 +10,14 @@ import {
 
 type useTableComponentProps = {
 	rows: any;
-	tableStyles: string;
+	tableStyles: Record<string, string>;
 };
 
 const useTableComponent = ({ rows, tableStyles }: useTableComponentProps) => {
 	const theme = useTheme([
 		getTheme(),
 		{
-			Table: `${tableStyles}`,
+			...tableStyles,
 			HeaderRow: `
 				&.header-row {
 					color: #495365;

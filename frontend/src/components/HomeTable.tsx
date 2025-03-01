@@ -67,16 +67,18 @@ const HomeTable = () => {
 
 	const { search, setSearch, data, theme, select } = useTableComponent({
 		rows,
-		tableStyles: `
-			--data-table-library_grid-template-columns: 
-				38px 
-				calc(50% - 38px) 
-				repeat(3, calc(50% / 3));
+		tableStyles: {
+			Table: `
+				--data-table-library_grid-template-columns: 
+					38px 
+					calc(50% - 38px) 
+					repeat(3, calc(50% / 3));
 	
-			&.table {
-				min-width: calc(38px + 375px - 38px + 3 * 125px);
-			}
-		`,
+				&.table {
+					min-width: calc(38px + 375px - 38px + 3 * 125px);
+				}
+			`,
+		},
 	});
 
 	return (
