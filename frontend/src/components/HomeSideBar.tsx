@@ -14,7 +14,7 @@ import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
 
 const HomeSideBar = () => {
-	const { label } = useParams();
+	const { id } = useParams();
 
 	const {
 		state: { directories },
@@ -188,8 +188,8 @@ const HomeSideBar = () => {
 						<SideBarBlock
 							key={directory.id}
 							object={directory}
-							label={label}
-							to={`/directory/${directory.label}`}
+							id={id}
+							to={`/directory/${directory.id}`}
 							handleEdit={handleEdit}
 							handleDelete={handleDelete}
 						/>

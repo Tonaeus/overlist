@@ -13,7 +13,7 @@ const App = () => {
 					<Routes>
 						<Route path="/" element={<Navigate to="/directory/" replace />} />
 						<Route path="/directory/" element={<Home />} />
-						<Route path="/directory/:label" element={<Home />} />
+						<Route path="/directory/:id" element={<Home />} />
 						<Route path="/list" element={<List />} />
 						<Route path="/list/:label" element={<List />} />
 						<Route path="*" element={<Navigate to="/directory/" replace />} />

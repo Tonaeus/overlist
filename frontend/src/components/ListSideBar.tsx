@@ -197,7 +197,6 @@ const ListSideBar = () => {
 						<SideBarBlock
 							key={column.id}
 							object={column}
-							label={label}
 							handleEdit={handleEdit}
 							handleDelete={handleDelete}
 						/>

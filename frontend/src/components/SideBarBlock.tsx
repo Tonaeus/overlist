@@ -5,18 +5,18 @@ import { Tooltip } from "react-tooltip";
 
 type SideBarBlockProps = {
 	object: any;
+	id?: string;
+	to?: string;
 	handleEdit: (e: React.MouseEvent<HTMLButtonElement>, object: any) => void;
 	handleDelete: (e: React.MouseEvent<HTMLButtonElement>, object: any) => void;
-	label?: string;
-	to?: string;
 };
 
 const SideBarBlock = ({
 	object,
+	id,
+	to,
 	handleEdit,
 	handleDelete,
-	label,
-	to,
 }: SideBarBlockProps) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const timeoutRef = useRef<number | null>(null);
@@ -65,7 +65,7 @@ const SideBarBlock = ({
 		<Link
 			to={to}
 			className={`h-9 flex justify-start items-center px-3 py-1.5 rounded-full ${
-				object.label === label
+				object.id === id
 					? "bg-selected text-blue-700"
 					: "hover:bg-hovered"
 			} group`}
