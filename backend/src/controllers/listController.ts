@@ -5,6 +5,31 @@ import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
 import { formatList } from "../utils/listUtils.js";
 
+const getList = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No such list" });
+    return;
+  }
+
+  try {
+    const list = await List.findById({ _id: id });
+
+    if (!list) {
+      res.status(404).json({ error: "No such list" });
+      return;
+    }
+
+    res.status(200).json(list);
+    return;
+  } 
+  catch (error) {
+    res.status(500).json({ error: "Failed to fetch list" });
+    return;
+  }
+};
+
 const getLists = async (req: Request, res: Response) => {
   try {
     const lists = await List.find({}).sort({ label: 1 });
@@ -144,6 +169,7 @@ const deleteLists = async (req: Request, res: Response) => {
 };
 
 export {
+  getList,
   getLists,
   createList,
   updateLists,

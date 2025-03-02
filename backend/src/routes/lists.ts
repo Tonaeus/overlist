@@ -1,5 +1,6 @@
 import express from "express";
 import { 
+  getList,
   getLists,
   createList,
   updateLists,
@@ -7,6 +8,8 @@ import {
 } from "../controllers/listController.js";
 
 const router = express.Router();
+
+router.get('/:id', getList);
 
 router.get('/', getLists);
 

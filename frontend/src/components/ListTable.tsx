@@ -10,6 +10,8 @@ import ListTableComponent from "../libs/ListTableComponent";
 import useListColumnsContext from "../hooks/useListColumnsContext";
 import useTableComponent from "../hooks/useTableComponent";
 
+import ListTableName from "./ListTableName";
+
 // type Column = {
 // 	id: string;
 // 	label: string;
@@ -129,7 +131,7 @@ const ListTable = () => {
 	return (
 		<div className="flex flex-col">
 			<div className="flex flex-row h-9 mb-6 bg-red-500">
-				
+				<ListTableName/>
 			</div>
 
 			<ListTableComponent
