@@ -1,19 +1,9 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import ListHeader from "../models/listHeaderModel.js";
-import { getIdFromLabel, extractColumns } from "../utils/listColumnUtils.js";
+import { extractColumns } from "../utils/listColumnUtils.js";
 
 const getListColumns = async (req: Request, res: Response) => {
-  // let { list_label } = req.params;
-  // list_label = list_label?.trim();
-
-  // if (!list_label) {
-  //   res.status(400).json({ error: "List label cannot be empty." });
-  //   return;
-  // }
-
-  // const list_id = await getIdFromLabel(list_label);
-
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -35,16 +25,6 @@ const getListColumns = async (req: Request, res: Response) => {
 };
 
 const createListColumn = async (req: Request, res: Response) => {
-  // let { list_label } = req.params;
-  // list_label = list_label?.trim();
-
-  // if (!list_label) {
-  //   res.status(400).json({ error: "List label cannot be empty." });
-  //   return;
-  // }
-
-  // const list_id = await getIdFromLabel(list_label);
-
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -101,16 +81,6 @@ const createListColumn = async (req: Request, res: Response) => {
 };
 
 const updateListColumn = async (req: Request, res: Response) => {
-  // let { list_label } = req.params;
-  // list_label = list_label?.trim();
-
-  // if (!list_label) {
-  //   res.status(400).json({ error: "List label cannot be empty." });
-  //   return;
-  // }
-
-  // const list_id = await getIdFromLabel(list_label);
-
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -177,16 +147,6 @@ const updateListColumn = async (req: Request, res: Response) => {
 };
 
 const deleteListColumn = async (req: Request, res: Response) => {
-  // let { list_label } = req.params;
-  // list_label = list_label?.trim();
-
-  // if (!list_label) {
-  //   res.status(400).json({ error: "List label cannot be empty." });
-  //   return;
-  // }
-
-  // const list_id = await getIdFromLabel(list_label);
-
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
