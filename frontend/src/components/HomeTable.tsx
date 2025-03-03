@@ -68,18 +68,22 @@ const HomeTable = () => {
 		fetchLists();
 	}, [directories]);
 
+	useEffect(() => {
+		select.fns.onRemoveAll();
+	}, [id]);
+
 	const filteredRows = rows.filter((row: HomeTableRow) => {
-    const directory = directories.find((dir: Directory) => dir.id === id);
-    return directory ? row.directory_label === directory.label : false;
+		const directory = directories.find((dir: Directory) => dir.id === id);
+		return directory ? row.directory_label === directory.label : false;
 	});
 
 	const { search, setSearch, data, theme, select } = useTableComponent({
-		rows: id ? filteredRows: rows,
+		rows: id ? filteredRows : rows,
 		tableStyles: {
 			Table: `
-				--data-table-library_grid-template-columns: 38px calc(50% - 38px) repeat(3, calc(50% / 3));
-
-				min-width: calc(38px + 375px - 38px + 3 * 125px);
+			--data-table-library_grid-template-columns: 38px calc(50% - 38px) repeat(3, calc(50% / 3));
+			
+			min-width: calc(38px + 375px - 38px + 3 * 125px);
 			`,
 		},
 	});
