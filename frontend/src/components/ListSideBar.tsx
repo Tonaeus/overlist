@@ -14,7 +14,7 @@ import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
 
 const ListSideBar = () => {
-	const { label } = useParams();
+	const { id } = useParams();
 
 	const {
 		state: { listColumns },
@@ -24,7 +24,7 @@ const ListSideBar = () => {
 	useEffect(() => {
 		const fetchListColumns = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${label}`
+				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`
 			);
 			const json = await response.json();
 
@@ -34,7 +34,7 @@ const ListSideBar = () => {
 		};
 
 		fetchListColumns();
-	}, [label, dispatch]);
+	}, [id, dispatch]);
 
 	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
 		useModal();
@@ -53,7 +53,7 @@ const ListSideBar = () => {
 			action: "Add",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${label}`,
+					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
 					{
 						method: "POST",
 						body: JSON.stringify({ column_label: getModalValue() }),
@@ -101,7 +101,7 @@ const ListSideBar = () => {
 			action: "Edit",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${label}`,
+					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
 					{
 						method: "PATCH",
 						body: JSON.stringify({ 
@@ -151,7 +151,7 @@ const ListSideBar = () => {
 			action: "Delete",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${label}`,
+					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
 					{
 						method: "DELETE",
 						body: JSON.stringify({ 

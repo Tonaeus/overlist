@@ -21,7 +21,7 @@ const HomeTable = () => {
 			id: 0,
 			label: "Label",
 			renderCell: (row: HomeTableRow) => (
-				<Link to={`/list/${row.label}`}>{row.label}</Link>
+				<Link to={`/list/${row.id}`}>{row.label}</Link>
 			),
 		},
 		{

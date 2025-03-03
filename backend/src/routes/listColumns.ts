@@ -8,12 +8,12 @@ import {
 
 const router = express.Router();
 
-router.get('/:list_label', getListColumns);
+router.get('/:list_id', getListColumns);
 
-router.post('/:list_label', createListColumn);
+router.post('/:list_id', createListColumn);
 
-router.patch('/:list_label', updateListColumn);
+router.patch('/:list_id', updateListColumn);
 
-router.delete('/:list_label', deleteListColumn);
+router.delete('/:list_id', deleteListColumn);
 
 export default router;
