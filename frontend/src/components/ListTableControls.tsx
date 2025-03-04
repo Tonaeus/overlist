@@ -5,13 +5,7 @@ import { TableNode } from "@table-library/react-table-library/types/table";
 
 import { useParams } from "react-router-dom";
 
-import {
-	Add,
-	// Remove,
-	// ContentCopy,
-	// SwapHoriz,
-	// ArrowDownward,
-} from "@mui/icons-material";
+import { Add, Remove, ContentCopy, Undo, Sync } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
 
 // import useModal from "../hooks/useModal";
@@ -32,10 +26,9 @@ const ListTableControls = ({
 	select,
 }: ListTableControlsProps) => {
 	console.log(rows);
-	console.log(setRows);
 	console.log(select);
 
-  const { id } = useParams();
+	const { id } = useParams();
 
 	// const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
 	// 	useModal();
@@ -43,18 +36,42 @@ const ListTableControls = ({
 	const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		console.log("add");
+		const response = await fetch(
+			`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+			{
+				method: "POST",
+			}
+		);
 
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
-      {
-        method: "POST",
-      }
-    );
+		const json = await response.json();
 
-    const json = await response.json();
+		if (response.ok) {
+			setRows((prev) => [...prev, json]);
+		}
+	};
 
-    console.log(json);
+	const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+
+		console.log("Delete");
+	};
+
+	const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+
+		console.log("Copy");
+	};
+
+	const handleUndo = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+
+		console.log("Undo");
+	};
+
+	const handleSync = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+
+		console.log("Sync");
 	};
 
 	return (
@@ -71,54 +88,54 @@ const ListTableControls = ({
 				<Tooltip anchorSelect=".add-button" place="top">
 					Add
 				</Tooltip>
-				{/* <button
-        className="remove-button button aspect-[1/1] mx-1.5"
-        onClick={(e) => {
-          handleDelete(e);
-        }}
-        disabled={select.state.ids.length === 0}
-      >
-        <Remove />
-      </button>
-      <Tooltip anchorSelect=".remove-button" place="top">
-        Delete
-      </Tooltip>
-      <button
-        className="copy-button button aspect-[1/1] mx-1.5"
-        onClick={(e) => {
-          handleCopy(e);
-        }}
-        disabled={select.state.ids.length === 0}
-      >
-        <ContentCopy />
-      </button>
-      <Tooltip anchorSelect=".copy-button" place="top">
-        Copy
-      </Tooltip>
-      <button
-        className="swap-button button aspect-[1/1] mx-1.5"
-        onClick={(e) => {
-          handleMove(e);
-        }}
-        disabled={select.state.ids.length === 0}
-      >
-        <SwapHoriz />
-      </button>
-      <Tooltip anchorSelect=".swap-button" place="top">
-        Move
-      </Tooltip>
-      <button
-        className="down-button button aspect-[1/1] ml-1.5"
-        onClick={(e) => {
-          handleExport(e);
-        }}
-        disabled={select.state.ids.length === 0}
-      >
-        <ArrowDownward />
-      </button>
-      <Tooltip anchorSelect=".down-button" place="top">
-        Export
-      </Tooltip> */}
+				<button
+					className="remove-button button aspect-[1/1] mx-1.5"
+					onClick={(e) => {
+						handleDelete(e);
+					}}
+					disabled={select.state.ids.length === 0}
+				>
+					<Remove />
+				</button>
+				<Tooltip anchorSelect=".remove-button" place="top">
+					Delete
+				</Tooltip>
+				<button
+					className="copy-button button aspect-[1/1] mx-1.5"
+					onClick={(e) => {
+						handleCopy(e);
+					}}
+					disabled={select.state.ids.length === 0}
+				>
+					<ContentCopy />
+				</button>
+				<Tooltip anchorSelect=".copy-button" place="top">
+					Copy
+				</Tooltip>
+				<button
+					className="undo-button button aspect-[1/1] mx-1.5"
+					onClick={(e) => {
+						handleUndo(e);
+					}}
+					disabled={select.state.ids.length === 0}
+				>
+					<Undo />
+				</button>
+				<Tooltip anchorSelect=".undo-button" place="top">
+					Reset
+				</Tooltip>
+				<button
+					className="sync-button button aspect-[1/1] ml-1.5"
+					onClick={(e) => {
+						handleSync(e);
+					}}
+					disabled={true}
+				>
+					<Sync />
+				</button>
+				<Tooltip anchorSelect=".sync-button" place="top">
+					Save
+				</Tooltip>
 			</div>
 
 			{/* <Modal {...modalProps} /> */}
