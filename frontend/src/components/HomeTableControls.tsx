@@ -23,7 +23,7 @@ import { formatToLocalDate } from "../utils/dateUtils";
 
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
 
-type HometableControlsProps = {
+type HomeTableControlsProps = {
 	rows: HomeTableRow[];
 	setRows: Dispatch<SetStateAction<HomeTableRow[]>>;
 	select: Select<TableNode>;
@@ -33,7 +33,7 @@ const HomeTableControls = ({
 	rows,
 	setRows,
 	select,
-}: HometableControlsProps) => {
+}: HomeTableControlsProps) => {
 	const {
 		state: { directories },
 	} = useDirectoriesContext();

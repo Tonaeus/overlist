@@ -1,61 +1,71 @@
-// import type { HomeTableColumn, HomeTableRow } from "../types/HomeTable";
+import type { ListTableColumn, ListTableRow } from "../types/ListTable";
 
-import { useState } from "react";
-// import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import ListTableComponent from "../libs/ListTableComponent";
-
-// import { formatToLocalDate } from "../utils/dateUtils";
+import ListTableControls from "./ListTableControls";
 
 import useListColumnsContext from "../hooks/useListColumnsContext";
-import useTableComponent from "../hooks/useTableComponent";
+import useListTableComponent from "../hooks/useListTableComponent";
 
 import ListTableName from "./ListTableName";
 
-// type Column = {
-// 	id: string;
-// 	label: string;
-// 	renderCell: (row: Row) => JSX.Element;
-// }
-
-// type Row = {
-// 	id: string;
-// 	[key: string]: string;
-// }
-
 const ListTable = () => {
-	// const [columns, setColumns] = useState<Column[]>([
-	// 	{
-	// 		id: "4e3b468c-7fa8-47d8-90a8-741bbea731ac",
-	// 		label: "text",
-	// 		renderCell: (item: Row) => (
-	// 			<input
-	// 				type="text"
-	// 				value={item["4e3b468c-7fa8-47d8-90a8-741bbea731ac"] || ""}
-	// 				onChange={(event) =>
-	// 					handleUpdate(event.target.value, item.id, "4e3b468c-7fa8-47d8-90a8-741bbea731ac")
-	// 				}
-	// 				className="w-full"
-	// 			/>
-	// 		),
-	// 	},
-	// ]);
-
-	// const [rows, setRows] = useState<Row[]>([
-	// 	{
-	// 		"id": uuidv4(),
-	// 		"4e3b468c-7fa8-47d8-90a8-741bbea731ac": "alpha",
-	// 	},
-	// ]);
+	const { id } = useParams();
 
 	const {
-		state: { listColumns: columns },
+		state: { listColumns },
 	} = useListColumnsContext();
-	
-	// const [columns, setColumns] = useState([]);
-	const [rows] = useState([]);
 
-	const { data, theme, select } = useTableComponent({
+	const [columns, setColumns] = useState<ListTableColumn[]>([]);
+	const [rows, setRows] = useState<ListTableRow[]>([]);
+
+	const handleUpdate = (value: string, rowId: string, columnId: string) => {
+		setRows((prevRow: ListTableRow[]) =>
+			prevRow.map((row: ListTableRow) =>
+				row.id === rowId ? { ...row, [columnId]: value } : row
+			)
+		);
+	};
+
+	useEffect(() => {
+		const createColumn = (column: any) => ({
+			id: column.id,
+			label: column.label,
+			renderCell: (item: ListTableRow) => (
+				<input
+					type="text"
+					value={item[column.id] || ""}
+					onChange={(e) => handleUpdate(e.target.value, item.id, column.id)}
+					className="w-full"
+				/>
+			),
+		});
+
+		if (listColumns) {
+			setColumns(listColumns.map(createColumn));
+		}
+	}, [listColumns]);
+
+	useEffect(() => {
+		const fetchListRows = async () => {
+			const response = await fetch(
+				`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`
+			);
+			const json = await response.json();
+
+			if (response.ok) {
+				setRows(json);
+			}
+		};
+
+		if (columns.length > 0) {
+			fetchListRows();
+		}
+	}, [id, columns]);
+
+	const { data, theme, select } = useListTableComponent({
 		rows,
 		tableStyles: {
 			Table: `
@@ -72,10 +82,6 @@ const ListTable = () => {
 			`,
 		},
 	});
-
-	// useEffect(() => {
-	// 	// console.log("columns.length", columns.length);
-	// }, [listColumns]); 
 
 	// const handleUpdate = (value: string, id: string, property: string) => {
 	// 	setRows((prevRows: Row[]) =>
@@ -130,8 +136,9 @@ const ListTable = () => {
 
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-row h-9 mb-6 bg-red-500">
-				<ListTableName/>
+			<div className="flex flex-row h-9 mb-6">
+				<ListTableName />
+				<ListTableControls rows={rows} setRows={setRows} select={select} />
 			</div>
 
 			<ListTableComponent

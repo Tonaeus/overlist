@@ -4,19 +4,11 @@ import mongoose from "mongoose";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
 
-import { getIdFromLabel, extractRows } from "../utils/listRowUtils.js";
+import { extractRows } from "../utils/listRowUtils.js";
 import { extractColumns } from "../utils/listColumnUtils.js";
 
 const getListRows = async (req: Request, res: Response) => {
-  let { list_label } = req.params;
-  list_label = list_label?.trim();
-
-  if (!list_label) {
-    res.status(400).json({ error: "List label cannot be empty." });
-    return;
-  }
-
-  const list_id = await getIdFromLabel(list_label);
+  const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
     res.status(404).json({ error: 'No such list.' });
@@ -37,15 +29,7 @@ const getListRows = async (req: Request, res: Response) => {
 };
 
 const createListRow = async (req: Request, res: Response) => {
-  let { list_label } = req.params;
-  list_label = list_label?.trim();
-
-  if (!list_label) {
-    res.status(400).json({ error: "List label cannot be empty." });
-    return;
-  }
-
-  const list_id = await getIdFromLabel(list_label);
+  const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
     res.status(404).json({ error: "No such list." });
@@ -65,7 +49,7 @@ const createListRow = async (req: Request, res: Response) => {
       { list_id: list_id },
       {
         $push: {
-          columns: {
+          rows: {
             $each: [newListRow],
           }
         }
