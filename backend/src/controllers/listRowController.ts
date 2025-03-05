@@ -70,7 +70,81 @@ const createListRow = async (req: Request, res: Response) => {
   }
 };
 
+const updateListRows = async (req: Request, res: Response) => {
+  const { list_id } = req.params;
+
+  if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
+    res.status(404).json({ error: "No such list." });
+    return;
+  }
+
+  const { rows } = req.body;
+
+  try {
+    const listBody = await ListBody.findOne({ list_id: list_id });
+
+    if (!listBody) {
+      res.status(404).json({ error: "No such list." });
+      return;
+    }
+
+    listBody.rows = rows;
+    await listBody.save();
+
+    res.status(200).send();
+    return;
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to update row(s)." });
+    return;
+  }
+};
+
+const deleteListRows = async (req: Request, res: Response) => {
+  const { list_id } = req.params;
+
+  if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
+    res.status(404).json({ error: "No such list." });
+    return;
+  }
+
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
+    res.status(400).json({ error: "No such row(s)." });
+    return;
+  }
+
+  try {
+    const listBody = await ListBody.findOne({ list_id: list_id });
+
+    if (!listBody) {
+      res.status(404).json({ error: "No such list." });
+      return;
+    }
+
+    const { rows } = listBody;
+
+    if (!ids.every(id => rows.some(row => row._id?.toString() === id))) {
+      res.status(404).json({ error: "No such row(s)." });
+      return;
+    }
+
+    listBody.rows = rows.filter(row => !ids.includes(row._id?.toString()));
+    await listBody.save();
+
+    res.status(200).send();
+    return;
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to delete row(s)." });
+    return;
+  }
+};
+
 export {
   getListRows,
-  createListRow
+  createListRow,
+  updateListRows,
+  deleteListRows,
 };
