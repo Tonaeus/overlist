@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
 
-import { extractRows, isValidRows } from "../utils/listRowUtils.js";
+import { extractRows, processRows, isValidRows } from "../utils/listRowUtils.js";
 import { extractColumns } from "../utils/listColumnUtils.js";
 
 const getListRows = async (req: Request, res: Response) => {
@@ -92,7 +92,7 @@ const updateListRows = async (req: Request, res: Response) => {
       return;
     }
 
-    listBody.rows = rows;
+    listBody.rows = processRows(rows);
     await listBody.save();
 
     res.status(200).json({});

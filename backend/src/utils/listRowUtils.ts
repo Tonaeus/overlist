@@ -8,6 +8,16 @@ const extractRows = (listBody: any) =>
     )
   }));
 
+
+const processRows = (rows: any[]) => rows.map((row: any) => {
+  const { id, ...columns } = row;
+  const stringId = typeof id === 'string' ? id : String(id);
+  return {
+    _id: new mongoose.Types.ObjectId(stringId),
+    ...columns
+  };
+});
+
 const isValidRows = (rows: any[]): boolean => {
   if (!Array.isArray(rows)) return false;
 
@@ -26,5 +36,6 @@ const isValidRows = (rows: any[]): boolean => {
 
 export {
   extractRows,
+  processRows,
   isValidRows
 }
