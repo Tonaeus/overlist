@@ -189,7 +189,7 @@ const ListTableControls = ({
 				>
 					<Add />
 				</button>
-				<Tooltip anchorSelect=".add-button" place="top">
+				<Tooltip anchorSelect=".add-button" place="top" className="z-10">
 					Add
 				</Tooltip>
 				<button
@@ -201,7 +201,7 @@ const ListTableControls = ({
 				>
 					<Remove />
 				</button>
-				<Tooltip anchorSelect=".remove-button" place="top">
+				<Tooltip anchorSelect=".remove-button" place="top" className="z-10">
 					Delete
 				</Tooltip>
 				<button
@@ -213,7 +213,7 @@ const ListTableControls = ({
 				>
 					<ContentCopy />
 				</button>
-				<Tooltip anchorSelect=".copy-button" place="top">
+				<Tooltip anchorSelect=".copy-button" place="top" className="z-10">
 					Copy
 				</Tooltip>
 				<button
@@ -225,7 +225,7 @@ const ListTableControls = ({
 				>
 					<Undo />
 				</button>
-				<Tooltip anchorSelect=".undo-button" place="top">
+				<Tooltip anchorSelect=".undo-button" place="top" className="z-10">
 					Reset
 				</Tooltip>
 				<button
@@ -237,7 +237,7 @@ const ListTableControls = ({
 				>
 					<Sync />
 				</button>
-				<Tooltip anchorSelect=".sync-button" place="top">
+				<Tooltip anchorSelect=".sync-button" place="top" className="z-10">
 					Save
 				</Tooltip>
 			</div>

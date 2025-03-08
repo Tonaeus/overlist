@@ -243,7 +243,7 @@ const HomeTableControls = ({
 				>
 					<Add />
 				</button>
-				<Tooltip anchorSelect=".add-button" place="top">
+				<Tooltip anchorSelect=".add-button" place="top" className="z-10">
 					Add
 				</Tooltip>
 				<button
@@ -255,7 +255,7 @@ const HomeTableControls = ({
 				>
 					<Remove />
 				</button>
-				<Tooltip anchorSelect=".remove-button" place="top">
+				<Tooltip anchorSelect=".remove-button" place="top" className="z-10">
 					Delete
 				</Tooltip>
 				<button
@@ -267,7 +267,7 @@ const HomeTableControls = ({
 				>
 					<ContentCopy />
 				</button>
-				<Tooltip anchorSelect=".copy-button" place="top">
+				<Tooltip anchorSelect=".copy-button" place="top" className="z-10">
 					Copy
 				</Tooltip>
 				<button
@@ -279,7 +279,7 @@ const HomeTableControls = ({
 				>
 					<SwapHoriz />
 				</button>
-				<Tooltip anchorSelect=".swap-button" place="top">
+				<Tooltip anchorSelect=".swap-button" place="top" className="z-10">
 					Move
 				</Tooltip>
 				<button
@@ -291,7 +291,7 @@ const HomeTableControls = ({
 				>
 					<ArrowDownward />
 				</button>
-				<Tooltip anchorSelect=".down-button" place="top">
+				<Tooltip anchorSelect=".down-button" place="top" className="z-10">
 					Export
 				</Tooltip>
 			</div>
