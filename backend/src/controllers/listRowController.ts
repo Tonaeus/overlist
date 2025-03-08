@@ -91,7 +91,7 @@ const updateListRows = async (req: Request, res: Response) => {
     listBody.rows = rows;
     await listBody.save();
 
-    res.status(200).send();
+    res.status(200).json({});
     return;
   }
   catch (error) {
@@ -133,7 +133,7 @@ const deleteListRows = async (req: Request, res: Response) => {
     listBody.rows = rows.filter(row => !ids.includes(row._id?.toString()));
     await listBody.save();
 
-    res.status(200).send();
+    res.status(200).json({});
     return;
   }
   catch (error) {
