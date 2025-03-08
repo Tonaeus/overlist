@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
 
-import { extractRows, processRows, isValidRows } from "../utils/listRowUtils.js";
+import { formatRow, isValidRow, extractRows, processRows } from "../utils/listRowUtils.js";
 import { extractColumns } from "../utils/listColumnUtils.js";
 
 const getListRows = async (req: Request, res: Response) => {
@@ -45,19 +45,21 @@ const createListRow = async (req: Request, res: Response) => {
       return acc;
     }, {});
 
+    const newListRowWithId = { _id: new mongoose.Types.ObjectId(), ...newListRow };
+
     const createResult = await ListBody.updateOne(
       { list_id: list_id },
       {
         $push: {
           rows: {
-            $each: [newListRow],
+            $each: [newListRowWithId],
           }
         }
       }
     );
 
     if (createResult.modifiedCount === 1) {
-      res.status(200).json(newListRow);
+      res.status(200).json(formatRow(newListRowWithId));
       return;
     }
     else {
@@ -81,7 +83,7 @@ const updateListRows = async (req: Request, res: Response) => {
   const { rows } = req.body;
 
   try {
-    if (!isValidRows(rows)) {
+    if (!rows.every(isValidRow)) {
       throw Error();
     }
 
