@@ -83,57 +83,6 @@ const ListTable = () => {
 		},
 	});
 
-	// const handleUpdate = (value: string, id: string, property: string) => {
-	// 	setRows((prevRows: Row[]) =>
-	// 		prevRows.map((row: Row) => (row.id === id ? { ...row, [property]: value } : row))
-	// 	);
-	// };
-
-	// const addRow = () => {
-	// 	const newRow: Row = {
-	// 		id: uuidv4(),
-	// 	};
-
-	// 	columns.slice(1).forEach((column: Column) => {
-	// 		newRow[column.label] = "";
-	// 	});
-
-	// 	setRows((prevRows: Row[]) => [...prevRows, newRow]);
-	// };
-
-	// const addColumn = () => {
-	// 	const label: string | null = prompt("Enter the column label:");
-	// 	if (!label) {
-	// 		alert("Column label is required.");
-	// 		return;
-	// 	}
-
-	// 	const id: string = uuidv4();
-	// 	const renderCell = (row: Row) => (
-	// 		<input
-	// 			type="text"
-	// 			value={row[id] || ""}
-	// 			onChange={(event) => handleUpdate(event.target.value, row.id, id)}
-	// 			className="w-full"
-	// 		/>
-	// 	);
-
-	// 	const newColumn: Column = {
-	// 		id: id,
-	// 		label,
-	// 		renderCell,
-	// 	};
-
-	// 	setRows((prevRows: Row[]) =>
-	// 		prevRows.map((row: Row) => ({
-	// 			...row,
-	// 			[id]: "",
-	// 		}))
-	// 	);
-
-	// 	setColumns((prevCols: Column[]) => [...prevCols, newColumn]);
-	// };
-
 	return (
 		<div className="flex flex-col">
 			<div className="flex flex-row h-9 mb-6">
