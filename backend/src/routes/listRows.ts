@@ -12,7 +12,7 @@ router.get('/:list_id', getListRows);
 
 router.post('/:list_id', createListRow)
 
-router.post('/:list_id', updateListRows)
+router.patch('/:list_id', updateListRows)
 
 router.delete('/:list_id', deleteListRows)
 

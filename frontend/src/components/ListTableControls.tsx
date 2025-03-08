@@ -55,11 +55,11 @@ const ListTableControls = ({
 
 		let message: string;
 		if (selectedPositions.length === 1) {
-			message = `Are you sure you want to delete the row ${selectedPositions[0]}?`;
+			message = `Are you sure you want to delete the row at index ${selectedPositions[0]}?`;
 		} else if (selectedPositions.length === 2) {
-			message = `Are you sure you want to delete the following rows: ${selectedPositions[0]} and ${selectedPositions[1]}?`;
+			message = `Are you sure you want to delete the following rows at indices: ${selectedPositions[0]} and ${selectedPositions[1]}?`;
 		} else {
-			message = `Are you sure you want to delete the following rows: ${selectedPositions
+			message = `Are you sure you want to delete the following rows at indices: ${selectedPositions
 				.slice(0, -1)
 				.join(", ")}, and ${selectedPositions[selectedPositions.length - 1]}?`;
 		}
@@ -113,7 +113,23 @@ const ListTableControls = ({
 	const handleSync = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		console.log("Sync");
+		const response = await fetch(
+			`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+			{
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ rows }),
+			}
+		);
+
+		const json = await response.json();
+
+		if (response.ok) {
+			console.log("success")
+			console.log(json);
+		}
 	};
 
 	return (

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
 
-import { extractRows } from "../utils/listRowUtils.js";
+import { extractRows, isValidRows } from "../utils/listRowUtils.js";
 import { extractColumns } from "../utils/listColumnUtils.js";
 
 const getListRows = async (req: Request, res: Response) => {
@@ -81,6 +81,10 @@ const updateListRows = async (req: Request, res: Response) => {
   const { rows } = req.body;
 
   try {
+    if (!isValidRows(rows)) {
+      throw Error();
+    }
+
     const listBody = await ListBody.findOne({ list_id: list_id });
 
     if (!listBody) {
