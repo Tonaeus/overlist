@@ -146,9 +146,58 @@ const deleteListRows = async (req: Request, res: Response) => {
   }
 };
 
+const copyListRows = async (req: Request, res: Response) => {
+  const { list_id } = req.params;
+
+  if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
+    res.status(404).json({ error: "No such list." });
+    return;
+  }
+
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
+    res.status(400).json({ error: "No such row(s)." });
+    return;
+  }
+
+  try {
+    const listBody = await ListBody.findOne({ list_id: list_id });
+
+    if (!listBody) {
+      res.status(404).json({ error: "No such list." });
+      return;
+    }
+
+    const { rows } = listBody;
+
+    if (!ids.every(id => rows.some(row => row._id?.toString() === id))) {
+      res.status(404).json({ error: "No such row(s)." });
+      return;
+    }
+
+    const rowsToCopy = rows.filter(row => ids.includes(row._id?.toString()));
+    const copiedRows = rowsToCopy.map((row: any) => ({
+      ...row.toObject(),
+      _id: new mongoose.Types.ObjectId()
+    }));
+
+    listBody.rows = [...listBody.rows, ...copiedRows];
+    await listBody.save();
+
+    res.status(200).json(copiedRows);
+    return;
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to delete row(s)." });
+    return;
+  }
+};
+
 export {
   getListRows,
   createListRow,
   updateListRows,
   deleteListRows,
+  copyListRows,
 };

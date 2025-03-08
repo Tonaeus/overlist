@@ -101,7 +101,53 @@ const ListTableControls = ({
 	const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		console.log("Copy");
+		const selectedPositions = rows
+			.map((row, index) =>
+				select.state.ids.includes(row.id) ? index + 1 : null
+			)
+			.filter((position) => position !== null);
+
+		let message: string;
+		if (selectedPositions.length === 1) {
+			message = `Are you sure you want to copy the row at index ${selectedPositions[0]}?`;
+		} else if (selectedPositions.length === 2) {
+			message = `Are you sure you want to copy the following rows at indices: ${selectedPositions[0]} and ${selectedPositions[1]}?`;
+		} else {
+			message = `Are you sure you want to copy the following rows at indices: ${selectedPositions
+				.slice(0, -1)
+				.join(", ")}, and ${selectedPositions[selectedPositions.length - 1]}?`;
+		}
+
+		showModal({
+			title: `Copy ${select.state.ids.length.length === 1 ? "Row" : "Rows"}`,
+			content: <ModalContentText message={message} />,
+			action: "Copy",
+			onAction: async () => {
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/copy/${id}`,
+					{
+						method: "PATCH",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ ids: select.state.ids }),
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					setRows((prev) => prev.concat(json));
+					hideModal();
+					select.fns.onRemoveAll();
+				} else {
+					showModal({
+						content: <ModalContentText message={message} error={json.error} />,
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
 	};
 
 	const handleUndo = async (e: React.MouseEvent<HTMLButtonElement>) => {
