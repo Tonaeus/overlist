@@ -187,7 +187,7 @@ const copyListRows = async (req: Request, res: Response) => {
     listBody.rows = [...listBody.rows, ...copiedRows];
     await listBody.save();
 
-    res.status(200).json(copiedRows);
+    res.status(200).json(copiedRows.map(formatRow));
     return;
   }
   catch (error) {
