@@ -8,11 +8,9 @@ import { useParams } from "react-router-dom";
 import { Add, Remove, ContentCopy, Undo, Sync } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
 
-// import useModal from "../hooks/useModal";
-// import Modal from "./Modal";
-// import ModalContentInput from "./ModalContentInput";
-// import ModalContentText from "./ModalContentText";
-// import ModalContentSelect from "./ModalContentSelect";
+import useModal from "../hooks/useModal";
+import Modal from "./Modal";
+import ModalContentText from "./ModalContentText";
 
 type ListTableControlsProps = {
 	rows: ListTableRow[];
@@ -25,13 +23,9 @@ const ListTableControls = ({
 	setRows,
 	select,
 }: ListTableControlsProps) => {
-	console.log(rows);
-	console.log(select);
-
 	const { id } = useParams();
 
-	// const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
-	// 	useModal();
+	const { modalProps, showModal, hideModal } = useModal();
 
 	const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -53,7 +47,55 @@ const ListTableControls = ({
 	const handleDelete = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		console.log("Delete");
+		const selectedPositions = rows
+			.map((row, index) =>
+				select.state.ids.includes(row.id) ? index + 1 : null
+			)
+			.filter((position) => position !== null);
+
+		let message: string;
+		if (selectedPositions.length === 1) {
+			message = `Are you sure you want to delete the row ${selectedPositions[0]}?`;
+		} else if (selectedPositions.length === 2) {
+			message = `Are you sure you want to delete the following rows: ${selectedPositions[0]} and ${selectedPositions[1]}?`;
+		} else {
+			message = `Are you sure you want to delete the following rows: ${selectedPositions
+				.slice(0, -1)
+				.join(", ")}, and ${selectedPositions[selectedPositions.length - 1]}?`;
+		}
+
+		showModal({
+			title: `Delete ${select.state.ids.length.length === 1 ? "Row" : "Rows"}`,
+			content: <ModalContentText message={message} />,
+			action: "Delete",
+			onAction: async () => {
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+					{
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ ids: select.state.ids }),
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					setRows((prev) =>
+						prev.filter((row) => !select.state.ids.includes(row.id))
+					);
+					hideModal();
+					select.fns.onRemoveAll();
+				} else {
+					showModal({
+						content: <ModalContentText message={message} error={json.error} />,
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
 	};
 
 	const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -125,11 +167,11 @@ const ListTableControls = ({
 					Reset
 				</Tooltip>
 				<button
-					className="sync-button button aspect-[1/1] ml-1.5"
+					className="sync-button button aspect-[1/1] ml-1.5 bg-red-500"
 					onClick={(e) => {
 						handleSync(e);
 					}}
-					disabled={true}
+					disabled={false}
 				>
 					<Sync />
 				</button>
@@ -138,7 +180,7 @@ const ListTableControls = ({
 				</Tooltip>
 			</div>
 
-			{/* <Modal {...modalProps} /> */}
+			<Modal {...modalProps} />
 		</>
 	);
 };
