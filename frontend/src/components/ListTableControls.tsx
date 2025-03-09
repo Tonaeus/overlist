@@ -150,10 +150,60 @@ const ListTableControls = ({
 		});
 	};
 
-	const handleUndo = async (e: React.MouseEvent<HTMLButtonElement>) => {
+	const handleReset = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		console.log("Undo");
+		const selectedPositions = rows
+			.map((row, index) =>
+				select.state.ids.includes(row.id) ? index + 1 : null
+			)
+			.filter((position) => position !== null);
+
+		let message: string;
+		if (selectedPositions.length === 1) {
+			message = `Are you sure you want to reset the row at index ${selectedPositions[0]}?`;
+		} else if (selectedPositions.length === 2) {
+			message = `Are you sure you want to reset the following rows at indices: ${selectedPositions[0]} and ${selectedPositions[1]}?`;
+		} else {
+			message = `Are you sure you want to reest the following rows at indices: ${selectedPositions
+				.slice(0, -1)
+				.join(", ")}, and ${selectedPositions[selectedPositions.length - 1]}?`;
+		}
+
+		showModal({
+			title: `Reset ${select.state.ids.length.length === 1 ? "Row" : "Rows"}`,
+			content: <ModalContentText message={message} />,
+			action: "Reset",
+			onAction: async () => {
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/reset/${id}`,
+					{
+						method: "PATCH",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ ids: select.state.ids }),
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					setRows((prev) => prev.map((row: any) =>
+						select.state.ids.includes(row.id)
+							? Object.fromEntries(Object.entries(row).map(([key, value]) => [key, key === 'id' ? value : '']))
+							: row
+					));
+					hideModal();
+					select.fns.onRemoveAll();
+				} else {
+					showModal({
+						content: <ModalContentText message={message} error={json.error} />,
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
 	};
 
 	const handleSync = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -173,8 +223,7 @@ const ListTableControls = ({
 		const json = await response.json();
 
 		if (response.ok) {
-			console.log("success")
-			console.log(json);
+			console.log("success", json);
 		}
 	};
 
@@ -219,7 +268,7 @@ const ListTableControls = ({
 				<button
 					className="undo-button button aspect-[1/1] mx-1.5"
 					onClick={(e) => {
-						handleUndo(e);
+						handleReset(e);
 					}}
 					disabled={select.state.ids.length === 0}
 				>
