@@ -1,8 +1,32 @@
-import type { ModalProps } from '../types/ModalProps';
+import { useEffect } from "react";
+import type { ModalProps } from "../types/ModalProps";
 
 import { Close } from "@mui/icons-material";
 
-const Modal = ({ show, title, content, action, onAction, onCancel }: ModalProps) => {
+const Modal = ({
+	show,
+	title,
+	content,
+	action,
+	onAction,
+	onCancel,
+}: ModalProps) => {
+	useEffect(() => {
+		if (show) {
+			const handleKeyDown = (event: KeyboardEvent) => {
+				if (event.key === "Enter") {
+					onAction();
+				}
+			};
+
+			window.addEventListener("keydown", handleKeyDown);
+
+			return () => {
+				window.removeEventListener("keydown", handleKeyDown);
+			};
+		}
+	}, [show, onAction]);
+
 	if (!show) return null;
 
 	return (
