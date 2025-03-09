@@ -33,7 +33,7 @@ const SideBarBlock = ({
 	};
 
 	const blockContent = (
-		<div className="w-full overflow-hidden text-ellipsis whitespace-nowrap py-1.5">
+		<div className="w-full truncate py-1.5">
 			{object.label}
 		</div>
 	);

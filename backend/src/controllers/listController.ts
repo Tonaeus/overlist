@@ -23,7 +23,7 @@ const getList = async (req: Request, res: Response) => {
 
     res.status(200).json(list);
     return;
-  } 
+  }
   catch (error) {
     res.status(500).json({ error: "Failed to fetch list." });
     return;
@@ -75,6 +75,52 @@ const createList = async (req: Request, res: Response) => {
   }
   catch (error) {
     res.status(500).json({ error: "Failed to create list." });
+    return;
+  }
+};
+
+const updateList = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({ error: "No such list." });
+    return;
+  }
+
+  let { label } = req.body;
+  label = label?.trim();
+
+  if (!label) {
+    res.status(400).json({ error: "List label cannot be empty." });
+    return;
+  }
+
+  try {
+    const existingListLabel = await List.findOne({
+      label: { $regex: `^${label}$`, $options: "i" },
+    });
+
+    if (existingListLabel) {
+      res.status(400).json({ error: "List label already exists." });
+      return;
+    }
+
+    const list = await List.findOneAndUpdate(
+      { _id: id },
+      { ...req.body },
+      { new: true }
+    );
+
+    if (!list) {
+      res.status(404).json({ error: "No such list." });
+      return;
+    }
+
+    res.status(200).json(label);
+    return;
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to update list." });
     return;
   }
 };
@@ -151,7 +197,7 @@ const deleteLists = async (req: Request, res: Response) => {
 
     if (
       deleteResult.deletedCount === ids.length &&
-      headerResult.deletedCount === ids.length && 
+      headerResult.deletedCount === ids.length &&
       bodyResult.deletedCount === ids.length
     ) {
       const formattedLists = await Promise.all(lists.map(formatList));
@@ -172,6 +218,7 @@ export {
   getList,
   getLists,
   createList,
+  updateList,
   updateLists,
   deleteLists,
 };

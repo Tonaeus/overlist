@@ -3,6 +3,7 @@ import {
   getList,
   getLists,
   createList,
+  updateList,
   updateLists,
   deleteLists,
 } from "../controllers/listController.js";
@@ -14,6 +15,8 @@ router.get('/:id', getList);
 router.get('/', getLists);
 
 router.post('/', createList);
+
+router.patch('/:id', updateList);
 
 router.patch('/', updateLists);
 
