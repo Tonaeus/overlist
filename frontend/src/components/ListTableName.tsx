@@ -8,7 +8,7 @@ import { Tooltip } from "react-tooltip";
 // import ModalContentInput from "./ModalContentInput";
 
 const ListTableName = () => {
-  const { label } = useParams();
+	const { label } = useParams();
 	// const [name, setName] = useState<string>(label);
 
 	// useEffect(() => {
@@ -81,17 +81,19 @@ const ListTableName = () => {
 		<>
 			<label
 				htmlFor="search"
-				className="w-1/2 p-1.5 rounded-full flex flex-row bg-white border border-line"
+				className="w-1/2 rounded-full flex flex-row bg-white border border-line"
 			>
-				<div className="h-full w-[calc(100%-38px)] focus:outline-none px-3">
+				<div className="h-full w-[calc(100%-38px)] focus:outline-none pl-[18px] pr-3 py-1.5">
 					{label}
 				</div>
 
 				<button
-					className="edit-button flex justify-center items-center pr-3 hover:scale-110"
+					className="flex justify-center items-center pr-[18px] hover:scale-110"
 					// onClick={(e) => handleEdit(e)}
 				>
-					<Edit />
+					<div className="edit-button flex justify-center items-center h-full">
+						<Edit />
+					</div>
 				</button>
 				<Tooltip anchorSelect=".edit-button" place="top">
 					Edit

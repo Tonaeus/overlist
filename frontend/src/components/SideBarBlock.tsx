@@ -33,27 +33,31 @@ const SideBarBlock = ({
 	};
 
 	const blockContent = (
-		<div className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
+		<div className="w-full overflow-hidden text-ellipsis whitespace-nowrap py-1.5">
 			{object.label}
 		</div>
 	);
 
 	const blockButtons = (
-		<div className="flex pl-3">
+		<div className="flex pl-3 h-full">
 			<button
-				className="edit-button hover:scale-110"
+				className="hover:scale-110"
 				onClick={(e) => handleEdit(e, object)}
 			>
-				<Edit />
+				<div className="edit-button flex justify-center items-center h-full">
+					<Edit />
+				</div>
 			</button>
 			<Tooltip anchorSelect=".edit-button" place="top">
 				Edit
 			</Tooltip>
 			<button
-				className="delete-button hover:scale-110"
+				className="hover:scale-110"
 				onClick={(e) => handleDelete(e, object)}
 			>
-				<Delete />
+				<div className="delete-button flex justify-center items-center h-full">
+					<Delete />
+				</div>
 			</button>
 			<Tooltip anchorSelect=".delete-button" place="top">
 				Delete
@@ -64,10 +68,8 @@ const SideBarBlock = ({
 	return to ? (
 		<Link
 			to={to}
-			className={`h-9 flex justify-start items-center px-3 py-1.5 rounded-full ${
-				object.id === id
-					? "bg-selected text-blue-700"
-					: "hover:bg-hovered"
+			className={`h-9 flex justify-start items-center px-3 rounded-full ${
+				object.id === id ? "bg-selected text-blue-700" : "hover:bg-hovered"
 			} group`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
@@ -77,7 +79,7 @@ const SideBarBlock = ({
 		</Link>
 	) : (
 		<div
-			className={`h-9 flex justify-start items-center px-3 py-1.5 rounded-full hover:bg-hovered group`}
+			className={`h-9 flex justify-start items-center px-3 rounded-full hover:bg-hovered group`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
