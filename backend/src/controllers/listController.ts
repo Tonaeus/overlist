@@ -9,7 +9,7 @@ const getList = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({ error: "No such list" });
+    res.status(404).json({ error: "No such list." });
     return;
   }
 
@@ -17,7 +17,7 @@ const getList = async (req: Request, res: Response) => {
     const list = await List.findById({ _id: id });
 
     if (!list) {
-      res.status(404).json({ error: "No such list" });
+      res.status(404).json({ error: "No such list." });
       return;
     }
 
@@ -25,7 +25,7 @@ const getList = async (req: Request, res: Response) => {
     return;
   } 
   catch (error) {
-    res.status(500).json({ error: "Failed to fetch list" });
+    res.status(500).json({ error: "Failed to fetch list." });
     return;
   }
 };
