@@ -54,11 +54,11 @@ const createList = async (req: Request, res: Response) => {
   }
 
   try {
-    const existingList = await List.findOne({
-      label: { $regex: `^${label}$`, $options: "i" },
+    const existingListLabel = await List.findOne({
+      label: { $regex: `^${label}$` },
     });
 
-    if (existingList) {
+    if (existingListLabel) {
       res.status(400).json({ error: "List label already exists." });
       return;
     }
@@ -96,11 +96,18 @@ const updateList = async (req: Request, res: Response) => {
   }
 
   try {
-    const existingListLabel = await List.findOne({
-      label: { $regex: `^${label}$`, $options: "i" },
+    const currentList = await List.findById({ _id: id });
+    
+    if (currentList && currentList.label === label) {
+      res.status(200).json(label);
+      return;
+    }
+
+    const existingList = await List.findOne({
+      label: { $regex: `^${label}$` },
     });
 
-    if (existingListLabel) {
+    if (existingList) {
       res.status(400).json({ error: "List label already exists." });
       return;
     }

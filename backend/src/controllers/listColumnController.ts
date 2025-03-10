@@ -43,7 +43,7 @@ const createListColumn = async (req: Request, res: Response) => {
   try {
     const existingListColumn = await ListHeader.findOne({
       list_id: list_id,
-      columns: { $elemMatch: { label: { $regex: `^${column_label}$`, $options: "i" } } }
+      columns: { $elemMatch: { label: { $regex: `^${column_label}$` } } }
     });
 
     if (existingListColumn) {
@@ -104,7 +104,7 @@ const updateListColumn = async (req: Request, res: Response) => {
   try {
     const existingListColumn = await ListHeader.findOne({
       list_id: list_id,
-      columns: { $elemMatch: { label: { $regex: `^${column_label}$`, $options: "i" } } }
+      columns: { $elemMatch: { label: { $regex: `^${column_label}$` } } }
     });
 
     if (existingListColumn) {

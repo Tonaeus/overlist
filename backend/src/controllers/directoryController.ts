@@ -34,7 +34,7 @@ const createDirectory = async (req: Request, res: Response) => {
 
   try {
     const existingDirectory = await Directory.findOne({
-      label: { $regex: `^${label}$`, $options: "i" },
+      label: { $regex: `^${label}$` },
     });
 
     if (existingDirectory) {
@@ -71,11 +71,11 @@ const updateDirectory = async (req: Request, res: Response) => {
   }
 
   try {
-    const existingDirectoryLabel = await Directory.findOne({
-      label: { $regex: `^${label}$`, $options: "i" },
+    const existingDirectory = await Directory.findOne({
+      label: { $regex: `^${label}$` },
     });
 
-    if (existingDirectoryLabel) {
+    if (existingDirectory) {
       res.status(400).json({ error: "Directory label already exists." });
       return;
     }
