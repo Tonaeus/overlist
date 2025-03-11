@@ -5,7 +5,7 @@ import { TableNode } from "@table-library/react-table-library/types/table";
 
 import { useParams } from "react-router-dom";
 
-import { Add, Remove, ContentCopy, Undo, Sync } from "@mui/icons-material";
+import { Add, Remove, ContentCopy, Undo, Sync, Edit } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
 
 import useModal from "../hooks/useModal";
@@ -211,8 +211,10 @@ const ListTableControls = ({
 
 	const handleSync = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
+		select.fns.onRemoveAll();
 
 		console.log("handleSync", isEditing);
+		console.log("select", select.fns);
 
 		if (!isEditing) {
 			startEditing();
@@ -247,6 +249,7 @@ const ListTableControls = ({
 					onClick={(e) => {
 						handleAdd(e);
 					}}
+					disabled={isEditing}
 				>
 					<Add />
 				</button>
@@ -258,7 +261,7 @@ const ListTableControls = ({
 					onClick={(e) => {
 						handleDelete(e);
 					}}
-					disabled={select.state.ids.length === 0}
+					disabled={select.state.ids.length === 0 || isEditing}
 				>
 					<Remove />
 				</button>
@@ -270,7 +273,7 @@ const ListTableControls = ({
 					onClick={(e) => {
 						handleCopy(e);
 					}}
-					disabled={select.state.ids.length === 0}
+					disabled={select.state.ids.length === 0 || isEditing}
 				>
 					<ContentCopy />
 				</button>
@@ -282,7 +285,7 @@ const ListTableControls = ({
 					onClick={(e) => {
 						handleReset(e);
 					}}
-					disabled={select.state.ids.length === 0}
+					disabled={select.state.ids.length === 0 || isEditing}
 				>
 					<Undo />
 				</button>
@@ -290,16 +293,16 @@ const ListTableControls = ({
 					Reset
 				</Tooltip>
 				<button
-					className="sync-button button aspect-[1/1] ml-1.5 bg-red-500"
+					className="sync-button button aspect-[1/1] ml-1.5"
 					onClick={(e) => {
 						handleSync(e);
 					}}
 					disabled={false}
 				>
-					<Sync />
+					{isEditing ? <Sync /> : <Edit/>}
 				</button>
 				<Tooltip anchorSelect=".sync-button" place="top" className="z-10">
-					Save
+					{isEditing ? "Save" : "Edit"}
 				</Tooltip>
 			</div>
 

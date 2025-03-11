@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import useEditingContext from "../hooks/useEditingContext";
+
 import { Edit } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
 
 const ListTableName = () => {
 	const { id } = useParams();
+
+	const { isEditing: isEditingTable } = useEditingContext();
+
 	const [label, setLabel] = useState<string>("");
 
 	const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -81,7 +86,7 @@ const ListTableName = () => {
 				</div>
 			)}
 
-			{!isEditing && (
+			{!isEditing && !isEditingTable && (
 				<>
 					<button
 						className="flex justify-center items-center pr-[18px] hover:scale-110"
