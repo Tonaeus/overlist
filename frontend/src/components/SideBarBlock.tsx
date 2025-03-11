@@ -9,6 +9,7 @@ type SideBarBlockProps = {
 	to?: string;
 	handleEdit: (e: React.MouseEvent<HTMLButtonElement>, object: any) => void;
 	handleDelete: (e: React.MouseEvent<HTMLButtonElement>, object: any) => void;
+	disabled?: boolean;
 };
 
 const SideBarBlock = ({
@@ -17,6 +18,7 @@ const SideBarBlock = ({
 	to,
 	handleEdit,
 	handleDelete,
+	disabled,
 }: SideBarBlockProps) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const timeoutRef = useRef<number | null>(null);
@@ -38,7 +40,7 @@ const SideBarBlock = ({
 		</div>
 	);
 
-	const blockButtons = (
+	const blockButtons = disabled ? null : (
 		<div className="flex pl-3 h-full">
 			<button
 				className="hover:scale-110"

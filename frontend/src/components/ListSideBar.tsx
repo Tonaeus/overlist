@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import useListColumnsContext from "../hooks/useListColumnsContext";
+import useEditingContext from "../hooks/useEditingContext";
 
 import SideBarButton from "./SideBarButton";
 import SideBarBlock from "./SideBarBlock";
@@ -15,6 +16,8 @@ import ModalContentText from "./ModalContentText";
 
 const ListSideBar = () => {
 	const { id } = useParams();
+
+	const { isEditing } = useEditingContext();
 
 	const {
 		state: { listColumns },
@@ -108,9 +111,9 @@ const ListSideBar = () => {
 					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
 					{
 						method: "PATCH",
-						body: JSON.stringify({ 
+						body: JSON.stringify({
 							column_id: listColumn.id,
-							column_label: getModalValue() 
+							column_label: getModalValue(),
 						}),
 						headers: {
 							"Content-Type": "application/json",
@@ -158,7 +161,7 @@ const ListSideBar = () => {
 					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
 					{
 						method: "DELETE",
-						body: JSON.stringify({ 
+						body: JSON.stringify({
 							column_id: listColumn.id,
 						}),
 						headers: {
@@ -195,6 +198,7 @@ const ListSideBar = () => {
 					onClick={(e) => {
 						handleAdd(e);
 					}}
+					disabled={isEditing}
 				/>
 				<div className="flex-1 overflow-y-auto">
 					{listColumns.map((column: ListColumn) => (
@@ -203,6 +207,7 @@ const ListSideBar = () => {
 							object={column}
 							handleEdit={handleEdit}
 							handleDelete={handleDelete}
+							disabled={isEditing}
 						/>
 					))}
 				</div>
