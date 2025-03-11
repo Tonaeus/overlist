@@ -1,6 +1,7 @@
 import type { TableComponentProps } from "../types/TableComponent";
 
 import { useEffect, useRef, useState } from "react";
+import useEditingContext from "../hooks/useEditingContext";
 
 import {
 	Table,
@@ -43,6 +44,16 @@ const ListTableComponent = ({
 			window.removeEventListener("resize", handleResize);
 		};
 	}, []);
+
+	const { isEditing } = useEditingContext();
+
+	useEffect(() => {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"].css-e0dnmk') as NodeListOf<HTMLInputElement>;
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.disabled = isEditing;
+    });
+	}, [isEditing]);
 
 	return (
 		<div className="bg-white p-1.5 rounded accent-blue-700 border border-line">
