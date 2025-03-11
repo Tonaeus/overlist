@@ -1,3 +1,5 @@
+import type {useTableComponentProps} from "../types/TableComponent"
+
 import { useState } from "react";
 
 import { useTheme } from "@table-library/react-table-library/theme";
@@ -8,12 +10,7 @@ import {
 	useRowSelect,
 } from "@table-library/react-table-library/select";
 
-type useTableComponentProps = {
-	rows: any;
-	tableStyles: Record<string, string>;
-};
-
-const useTableComponent = ({ rows, tableStyles }: useTableComponentProps) => {
+const useHomeTableComponent = ({ rows, tableStyles }: useTableComponentProps) => {
 	const theme = useTheme([
 		getTheme(),
 		{
@@ -75,4 +72,4 @@ const useTableComponent = ({ rows, tableStyles }: useTableComponentProps) => {
 	return { search, setSearch, data, theme, select };
 };
 
-export default useTableComponent;
+export default useHomeTableComponent;

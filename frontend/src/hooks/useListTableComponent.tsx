@@ -1,3 +1,5 @@
+import { useTableComponentProps } from "../types/TableComponent";
+
 import { useTheme } from "@table-library/react-table-library/theme";
 import { getTheme } from "@table-library/react-table-library/baseline";
 
@@ -5,11 +7,6 @@ import {
 	SelectClickTypes,
 	useRowSelect,
 } from "@table-library/react-table-library/select";
-
-type useTableComponentProps = {
-	rows: any;
-	tableStyles: Record<string, string>;
-};
 
 const useListTableComponent = ({ rows, tableStyles }: useTableComponentProps) => {
 	const theme = useTheme([

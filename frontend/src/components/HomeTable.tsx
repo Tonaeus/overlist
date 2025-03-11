@@ -11,7 +11,7 @@ import HomeTableControls from "./HomeTableControls";
 import { formatToLocalDate } from "../utils/dateUtils";
 
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
-import useTableComponent from "../hooks/useTableComponent";
+import useHomeTableComponent from "../hooks/useHomeTableComponent";
 
 const HomeTable = () => {
 	const { id } = useParams();
@@ -77,7 +77,7 @@ const HomeTable = () => {
 		return directory ? row.directory_label === directory.label : false;
 	});
 
-	const { search, setSearch, data, theme, select } = useTableComponent({
+	const { search, setSearch, data, theme, select } = useHomeTableComponent({
 		rows: id ? filteredRows : rows,
 		tableStyles: {
 			Table: `

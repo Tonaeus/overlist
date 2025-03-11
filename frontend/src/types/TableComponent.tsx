@@ -1,3 +1,8 @@
+type useTableComponentProps = {
+	rows: any;
+	tableStyles: Record<string, string>;
+};
+
 type TableComponentProps = {
 	columns: any;
 	data: any;
@@ -6,4 +11,4 @@ type TableComponentProps = {
 	emptyMessage: string;
 };
 
-export type { TableComponentProps };
+export type { useTableComponentProps, TableComponentProps };
