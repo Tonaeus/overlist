@@ -87,7 +87,7 @@ const ListTableComponent = ({
 										<>
 											{columns.map((column: any, index: number) => (
 												<Cell key={index} className="cell">
-													{column.renderCell(row)}
+													{column.renderCell(row, isEditing)}
 												</Cell>
 											))}
 										</>

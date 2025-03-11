@@ -33,14 +33,17 @@ const ListTable = () => {
 		const createColumn = (column: any) => ({
 			id: column.id,
 			label: column.label,
-			renderCell: (item: ListTableRow) => (
-				<input
-					type="text"
-					value={item[column.id] || ""}
-					onChange={(e) => handleUpdate(e.target.value, item.id, column.id)}
-					className="w-full"
-				/>
-			),
+			renderCell: (item: ListTableRow, isEditing: boolean) =>
+				isEditing ? (
+					<input
+						type="text"
+						value={item[column.id] || ""}
+						onChange={(e) => handleUpdate(e.target.value, item.id, column.id)}
+						className="w-full"
+					/>
+				) : (
+					<p>{item[column.id]}</p> // <div className="w-full">{item[column.id]}</div>
+				),
 		});
 
 		if (listColumns) {

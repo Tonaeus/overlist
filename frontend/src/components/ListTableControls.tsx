@@ -213,32 +213,27 @@ const ListTableControls = ({
 		e.preventDefault();
 		select.fns.onRemoveAll();
 
-		console.log("handleSync", isEditing);
-		console.log("select", select.fns);
-
 		if (!isEditing) {
 			startEditing();
+			return;
 		}
-		else {
+
+		stopEditing();
+
+		const response = await fetch(
+			`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+			{
+				method: "PATCH",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ rows }),
+			}
+		);
+
+		if (response.ok) {
 			stopEditing();
 		}
-
-		// const response = await fetch(
-		// 	`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
-		// 	{
-		// 		method: "PATCH",
-		// 		headers: {
-		// 			"Content-Type": "application/json",
-		// 		},
-		// 		body: JSON.stringify({ rows }),
-		// 	}
-		// );
-
-		// const json = await response.json();
-
-		// if (response.ok) {
-		// 	console.log("success", json);
-		// }
 	};
 
 	return (
