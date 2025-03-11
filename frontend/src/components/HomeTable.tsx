@@ -85,6 +85,41 @@ const HomeTable = () => {
 			
 			min-width: calc(38px + 375px - 38px + 3 * 125px);
 			`,
+			HeaderRow: `
+				&.header-row {
+					color: #495365;
+				}
+			`,
+			HeaderCell: `
+				&.header-cell:hover {
+					background-color: #F4F5F6;
+				}
+				&:nth-of-type(1) {
+					width: 38px;
+				}
+			`,
+			Row: `
+				&.row {
+					color: #495365;
+				}
+				&.row:hover {
+					color: #495365;
+					background-color: #F4F5F6;
+				}
+				&.row-select-selected {
+					background-color: #EFF6FF;
+					font-weight: normal;
+				}
+			`,
+			Cell: `
+				&.cell {
+				}
+				&.cell:hover {
+				}
+				&:nth-of-type(1) {
+					width: 38px;
+				}
+			`,
 		},
 	});
 

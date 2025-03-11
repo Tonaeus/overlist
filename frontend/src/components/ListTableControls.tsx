@@ -5,7 +5,14 @@ import { TableNode } from "@table-library/react-table-library/types/table";
 
 import { useParams } from "react-router-dom";
 
-import { Add, Remove, ContentCopy, Undo, Sync, Edit } from "@mui/icons-material";
+import {
+	Add,
+	Remove,
+	ContentCopy,
+	Undo,
+	Sync,
+	Edit,
+} from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
 
 import useModal from "../hooks/useModal";
@@ -26,7 +33,7 @@ const ListTableControls = ({
 }: ListTableControlsProps) => {
 	const { id } = useParams();
 
-	const {isEditing, startEditing, stopEditing} = useEditingContext();
+	const { isEditing, startEditing, stopEditing } = useEditingContext();
 
 	const { modalProps, showModal, hideModal } = useModal();
 
@@ -192,11 +199,18 @@ const ListTableControls = ({
 				const json = await response.json();
 
 				if (response.ok) {
-					setRows((prev) => prev.map((row: any) =>
-						select.state.ids.includes(row.id)
-							? Object.fromEntries(Object.entries(row).map(([key, value]) => [key, key === 'id' ? value : '']))
-							: row
-					));
+					setRows((prev) =>
+						prev.map((row: any) =>
+							select.state.ids.includes(row.id)
+								? Object.fromEntries(
+										Object.entries(row).map(([key, value]) => [
+											key,
+											key === "id" ? value : "",
+										])
+								  )
+								: row
+						)
+					);
 					hideModal();
 					select.fns.onRemoveAll();
 				} else {
@@ -294,7 +308,7 @@ const ListTableControls = ({
 					}}
 					disabled={false}
 				>
-					{isEditing ? <Sync /> : <Edit/>}
+					{isEditing ? <Sync /> : <Edit />}
 				</button>
 				<Tooltip anchorSelect=".sync-button" place="top" className="z-10">
 					{isEditing ? "Save" : "Edit"}
