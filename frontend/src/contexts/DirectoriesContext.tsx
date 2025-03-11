@@ -4,10 +4,14 @@ import { createContext, Dispatch, useReducer } from "react";
 
 import directoriesReducer from "./directoriesReducer";
 
-const DirectoriesContext = createContext<{
+type DirectoriesContextType = {
 	state: DirectoriesState;
 	dispatch: Dispatch<DirectoriesAction>;
-} | null>(null);
+};
+
+const DirectoriesContext = createContext<DirectoriesContextType | undefined>(
+	undefined
+);
 
 const DirectoriesContextProvider = ({
 	children,

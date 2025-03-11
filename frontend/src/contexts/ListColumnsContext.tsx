@@ -4,10 +4,14 @@ import { createContext, Dispatch, useReducer } from "react";
 
 import listColumnsReducer from "./listColumnsReducer";
 
-const ListColumnsContext = createContext<{
+type ListColumnsContextType = {
 	state: ListColumnsState;
 	dispatch: Dispatch<ListColumnsAction>;
-} | null>(null);
+};
+
+const ListColumnsContext = createContext<ListColumnsContextType | undefined>(
+	undefined
+);
 
 const ListColumnsContextProvider = ({
 	children,

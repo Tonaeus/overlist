@@ -11,6 +11,7 @@ import { Tooltip } from "react-tooltip";
 import useModal from "../hooks/useModal";
 import Modal from "./Modal";
 import ModalContentText from "./ModalContentText";
+import useEditingContext from "../hooks/useEditingContext";
 
 type ListTableControlsProps = {
 	rows: ListTableRow[];
@@ -24,6 +25,8 @@ const ListTableControls = ({
 	select,
 }: ListTableControlsProps) => {
 	const { id } = useParams();
+
+	const {isEditing, startEditing, stopEditing} = useEditingContext();
 
 	const { modalProps, showModal, hideModal } = useModal();
 
@@ -209,22 +212,31 @@ const ListTableControls = ({
 	const handleSync = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		const response = await fetch(
-			`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
-			{
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ rows }),
-			}
-		);
+		console.log("handleSync", isEditing);
 
-		const json = await response.json();
-
-		if (response.ok) {
-			console.log("success", json);
+		if (!isEditing) {
+			startEditing();
 		}
+		else {
+			stopEditing();
+		}
+
+		// const response = await fetch(
+		// 	`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+		// 	{
+		// 		method: "PATCH",
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 		},
+		// 		body: JSON.stringify({ rows }),
+		// 	}
+		// );
+
+		// const json = await response.json();
+
+		// if (response.ok) {
+		// 	console.log("success", json);
+		// }
 	};
 
 	return (
