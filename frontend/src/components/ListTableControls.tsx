@@ -20,6 +20,8 @@ import Modal from "./Modal";
 import ModalContentText from "./ModalContentText";
 import useEditingContext from "../hooks/useEditingContext";
 
+import BlockerComponent from "./BlockerComponent";
+
 type ListTableControlsProps = {
 	rows: ListTableRow[];
 	setRows: Dispatch<SetStateAction<ListTableRow[]>>;
@@ -316,6 +318,8 @@ const ListTableControls = ({
 			</div>
 
 			<Modal {...modalProps} />
+
+			<BlockerComponent shouldBlock={isEditing} />
 		</>
 	);
 };

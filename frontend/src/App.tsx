@@ -1,27 +1,67 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+	createBrowserRouter,
+	RouterProvider,
+	Navigate,
+} from "react-router-dom";
 
 import NavBar from "./layouts/NavBar";
 import Home from "./pages/Home";
 import List from "./pages/List";
 
-const App = () => {
-	return (
-		<div className="flex flex-col h-screen">
-			<BrowserRouter>
-				<NavBar />
-				<div className="flex-1">
-					<Routes>
-						<Route path="/" element={<Navigate to="/directory/" replace />} />
-						<Route path="/directory/" element={<Home />} />
-						<Route path="/directory/:id" element={<Home />} />
-						<Route path="/list" element={<List />} />
-						<Route path="/list/:id" element={<List />} />
-						<Route path="*" element={<Navigate to="/directory/" replace />} />
-					</Routes>
-				</div>
-			</BrowserRouter>
-		</div>
-	);
+type LayoutProps = {
+	children: React.ReactNode;
 };
+
+const Layout = ({ children }: LayoutProps) => (
+	<div className="flex flex-col h-screen">
+		<NavBar />
+		<div className="flex-1">{children}</div>
+	</div>
+);
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <Navigate to="/directory/" replace />,
+	},
+	{
+		path: "/directory/",
+		element: (
+			<Layout>
+				<Home />
+			</Layout>
+		),
+	},
+	{
+		path: "/directory/:id",
+		element: (
+			<Layout>
+				<Home />
+			</Layout>
+		),
+	},
+	{
+		path: "/list",
+		element: (
+			<Layout>
+				<List />
+			</Layout>
+		),
+	},
+	{
+		path: "/list/:id",
+		element: (
+			<Layout>
+				<List />
+			</Layout>
+		),
+	},
+	{
+		path: "*",
+		element: <Navigate to="/directory/" replace />,
+	},
+]);
+
+const App = () => <RouterProvider router={router} />;
 
 export default App;
