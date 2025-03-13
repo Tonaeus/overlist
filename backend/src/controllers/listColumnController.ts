@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import ListHeader from "../models/listHeaderModel.js";
+import ListBody from "../models/listBodyModel.js";
 import { extractColumns } from "../utils/listColumnUtils.js";
 
 const getListColumns = async (req: Request, res: Response) => {
@@ -51,7 +52,7 @@ const createListColumn = async (req: Request, res: Response) => {
       return;
     }
 
-    const createResult = await ListHeader.updateOne(
+    const listHeader = await ListHeader.findOneAndUpdate(
       { list_id: list_id },
       {
         $push: {
@@ -60,19 +61,39 @@ const createListColumn = async (req: Request, res: Response) => {
             $sort: { label: 1 }
           }
         }
-      }
+      },
+      { new: true }
     );
 
-    if (createResult.modifiedCount === 1) {
-      const listHeader = await ListHeader.findOne({ list_id: list_id });
-      const listColumns = extractColumns(listHeader);
-
-      res.status(200).json(listColumns);
-      return;
-    }
-    else {
+    if (listHeader) {
       throw new Error();
     }
+
+    const listColumns = extractColumns(listHeader);
+    const newColumnId = listColumns[listColumns.length - 1].id;
+
+    const listBody = await ListBody.findOneAndUpdate(
+      { list_id: list_id },
+      {
+        $set: {
+          rows: {
+            $map: {
+              input: "$rows",
+              as: "row",
+              in: { $mergeObjects: ["$$row", { newColumnId: "" }] }
+            }
+          }
+        }
+      },
+      { new: true }
+    );
+
+    if (!listBody) {
+      throw new Error();
+    }
+
+    res.status(200).json(listColumns);
+    return;
   }
   catch (error) {
     res.status(500).json({ error: "Failed to create column." });
@@ -123,7 +144,7 @@ const updateListColumn = async (req: Request, res: Response) => {
         $push: {
           columns: {
             $each: [],
-            $sort: { label: 1 } 
+            $sort: { label: 1 }
           }
         }
       }
@@ -162,21 +183,45 @@ const deleteListColumn = async (req: Request, res: Response) => {
   }
 
   try {
-    const deleteResult = await ListHeader.updateOne(
+    const listHeader = await ListHeader.findOneAndUpdate(
       { list_id: list_id, "columns._id": column_id },
-      { $pull: { columns: { _id: column_id } } }
+      { $pull: { columns: { _id: column_id } } },
+      { new: true }
     );
 
-    if (deleteResult.modifiedCount === 1) {
-      const listHeader = await ListHeader.findOne({ list_id: list_id });
-      const listColumns = extractColumns(listHeader);
-
-      res.status(200).json(listColumns);
-      return;
-    }
-    else {
+    if (!listHeader) {
       throw new Error();
     }
+
+    const listColumns = extractColumns(listHeader);
+
+    const listBody = await ListBody.findOneAndUpdate(
+      { list_id: list_id },
+      {
+        $set: {
+          rows: {
+            $map: {
+              input: "$rows",
+              as: "row",
+              in: {
+                $mergeObjects: [
+                  "$$row",
+                  { [column_id]: "$$REMOVE" }
+                ]
+              }
+            }
+          }
+        }
+      },
+      { new: true }
+    );
+
+    if (!listBody) {
+      throw new Error();
+    }
+
+    res.status(200).json(listColumns);
+    return;
   }
   catch (error) {
     res.status(500).json({ error: "Failed to delete column." });
