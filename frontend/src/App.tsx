@@ -2,63 +2,33 @@ import {
 	createBrowserRouter,
 	RouterProvider,
 	Navigate,
+	Outlet,
 } from "react-router-dom";
 
 import NavBar from "./layouts/NavBar";
 import Home from "./pages/Home";
 import List from "./pages/List";
 
-type LayoutProps = {
-	children: React.ReactNode;
-};
-
-const Layout = ({ children }: LayoutProps) => (
+const Layout = () => (
 	<div className="flex flex-col h-screen">
 		<NavBar />
-		<div className="flex-1">{children}</div>
+		<div className="flex-1">
+			<Outlet />
+		</div>
 	</div>
 );
 
 const router = createBrowserRouter([
 	{
 		path: "/",
-		element: <Navigate to="/directory/" replace />,
-	},
-	{
-		path: "/directory/",
-		element: (
-			<Layout>
-				<Home />
-			</Layout>
-		),
-	},
-	{
-		path: "/directory/:id",
-		element: (
-			<Layout>
-				<Home />
-			</Layout>
-		),
-	},
-	{
-		path: "/list",
-		element: (
-			<Layout>
-				<List />
-			</Layout>
-		),
-	},
-	{
-		path: "/list/:id",
-		element: (
-			<Layout>
-				<List />
-			</Layout>
-		),
-	},
-	{
-		path: "*",
-		element: <Navigate to="/directory/" replace />,
+		element: <Layout />,
+		children: [
+			{ path: "/directory/", element: <Home /> },
+			{ path: "/directory/:id", element: <Home /> },
+			{ path: "/list", element: <List /> },
+			{ path: "/list/:id", element: <List /> },
+			{ path: "*", element: <Navigate to="/directory/" replace /> },
+		],
 	},
 ]);
 
