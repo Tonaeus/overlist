@@ -13,6 +13,9 @@ import ListTableName from "./ListTableName";
 
 import useEditingContext from "../hooks/useEditingContext";
 
+import BlockerComponent from "./BlockerComponent";
+import { areArraysEqual } from "../utils/compUtils";
+
 const ListTable = () => {
 	const { id } = useParams();
 
@@ -24,6 +27,8 @@ const ListTable = () => {
 
 	const [columns, setColumns] = useState<ListTableColumn[]>([]);
 	const [rows, setRows] = useState<ListTableRow[]>([]);
+
+	const [orgRows, setOrgRows] = useState<ListTableRow[]>([]);
 
 	const handleUpdate = (value: string, rowId: string, columnId: string) => {
 		setRows((prevRow: ListTableRow[]) =>
@@ -64,6 +69,7 @@ const ListTable = () => {
 
 			if (response.ok) {
 				setRows(json);
+				setOrgRows(json);
 			}
 		};
 
@@ -126,20 +132,24 @@ const ListTable = () => {
 	});
 
 	return (
-		<div className="flex flex-col">
-			<div className="flex flex-row h-9 mb-6">
-				<ListTableName />
-				<ListTableControls columns={columns} rows={rows} setRows={setRows} select={select} />
+		<>
+			<div className="flex flex-col">
+				<div className="flex flex-row h-9 mb-6">
+					<ListTableName />
+					<ListTableControls columns={columns} rows={rows} setRows={setRows} select={select} />
+				</div>
+
+				<ListTableComponent
+					columns={columns.length > 0 ? columns : [{}]}
+					data={data}
+					theme={theme}
+					select={select}
+					emptyMessage="No rows"
+				/>
 			</div>
 
-			<ListTableComponent
-				columns={columns.length > 0 ? columns : [{}]}
-				data={data}
-				theme={theme}
-				select={select}
-				emptyMessage="No rows"
-			/>
-		</div>
+			<BlockerComponent shouldBlock={isEditing && !areArraysEqual(orgRows, rows)} />
+		</>
 	);
 };
 

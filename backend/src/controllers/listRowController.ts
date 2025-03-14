@@ -65,7 +65,9 @@ const createListRow = async (req: Request, res: Response) => {
       throw new Error();
     }
 
-    res.status(200).json(formatRow(listBody.rows[extractRows.length - 1]));
+    const listRows = extractRows(listBody);
+
+    res.status(200).json(formatRow(listRows[listRows.length - 1]));
     return;
   }
   catch (error) {
