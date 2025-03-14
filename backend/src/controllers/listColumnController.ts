@@ -57,8 +57,7 @@ const createListColumn = async (req: Request, res: Response) => {
       {
         $push: {
           columns: {
-            $each: [{ label: column_label }],
-            $sort: { label: 1 }
+            $each: [{ label: column_label }]
           }
         }
       },
@@ -132,8 +131,7 @@ const updateListColumn = async (req: Request, res: Response) => {
         $set: { "columns.$.label": column_label },
         $push: {
           columns: {
-            $each: [],
-            $sort: { label: 1 }
+            $each: []
           }
         }
       },
