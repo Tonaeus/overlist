@@ -65,7 +65,7 @@ const createListColumn = async (req: Request, res: Response) => {
       { new: true }
     );
 
-    if (listHeader) {
+    if (!listHeader) {
       throw new Error();
     }
 
