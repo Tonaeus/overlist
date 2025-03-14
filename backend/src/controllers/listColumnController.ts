@@ -78,13 +78,12 @@ const createListColumn = async (req: Request, res: Response) => {
       throw new Error();
     }
 
-    if (listBody.rows.length === 0) {
-      res.status(200).json(listColumns);
-      return;
+    if (listBody.rows.length > 0) {
+      listBody.rows = listBody.rows.map(
+        row => ({ ...row, [newColumnId]: '' })
+      );
+      listBody.save();
     }
-
-    listBody.rows = listBody.rows.map(row => ({ ...row, [newColumnId]: '' }));
-    listBody.save();
 
     res.status(200).json(listColumns);
     return;
@@ -127,33 +126,28 @@ const updateListColumn = async (req: Request, res: Response) => {
       return;
     }
 
-    const updateResult = await ListHeader.updateOne(
+    const listHeader = await ListHeader.findOneAndUpdate(
       { list_id: list_id, "columns._id": column_id },
-      { $set: { "columns.$.label": column_label } }
-    );
-
-    const sortResult = await ListHeader.updateOne(
-      { list_id: list_id },
       {
+        $set: { "columns.$.label": column_label },
         $push: {
           columns: {
             $each: [],
             $sort: { label: 1 }
           }
         }
-      }
+      },
+      { new: true }
     );
 
-    if (updateResult.modifiedCount === 1 && sortResult.modifiedCount === 1) {
-      const listHeader = await ListHeader.findOne({ list_id: list_id });
-      const listColumns = extractColumns(listHeader);
-
-      res.status(200).json(listColumns);
-      return;
-    }
-    else {
+    if (!listHeader) {
       throw new Error();
     }
+    
+    const listColumns = extractColumns(listHeader);
+
+    res.status(200).json(listColumns);
+    return;
   }
   catch (error) {
     res.status(500).json({ error: "Failed to update column." });
@@ -195,13 +189,12 @@ const deleteListColumn = async (req: Request, res: Response) => {
       throw new Error();
     }
 
-    if (listBody.rows.length === 0) {
-      res.status(200).json(listColumns);
-      return;
+    if (listBody.rows.length > 0) {
+      listBody.rows = listBody.rows.map(
+        row => ({ ...row, [column_id]: undefined })
+      );
+      await listBody.save();
     }
-
-    listBody.rows = listBody.rows.map(row => ({ ...row, [column_id]: undefined }));
-    await listBody.save();
 
     res.status(200).json(listColumns);
     return;

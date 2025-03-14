@@ -97,7 +97,7 @@ const updateList = async (req: Request, res: Response) => {
 
   try {
     const currentList = await List.findById({ _id: id });
-    
+
     if (currentList && currentList.label === label) {
       res.status(200).json(label);
       return;
@@ -136,7 +136,7 @@ const updateLists = async (req: Request, res: Response) => {
   const { ids, directory_id } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
-    res.status(400).json({ error: "No such list(s)." });
+    res.status(404).json({ error: "No such list(s)." });
     return;
   }
 
@@ -181,7 +181,7 @@ const deleteLists = async (req: Request, res: Response) => {
   const { ids } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
-    res.status(400).json({ error: "No such list(s)." });
+    res.status(404).json({ error: "No such list(s)." });
     return;
   }
 
@@ -195,10 +195,7 @@ const deleteLists = async (req: Request, res: Response) => {
       return;
     }
 
-    const deleteResult = await List.deleteMany({
-      _id: { $in: ids }
-    });
-
+    const deleteResult = await List.deleteMany({ _id: { $in: ids } });
     const headerResult = await ListHeader.deleteMany({ list_id: { $in: ids } });
     const bodyResult = await ListBody.deleteMany({ list_id: { $in: ids } });
 

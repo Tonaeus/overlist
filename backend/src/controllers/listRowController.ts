@@ -49,26 +49,24 @@ const createListRow = async (req: Request, res: Response) => {
       return acc;
     }, {});
 
-    const newListRowWithId = { _id: new mongoose.Types.ObjectId(), ...newListRow };
-
-    const createResult = await ListBody.updateOne(
+    const listBody = await ListBody.findOneAndUpdate(
       { list_id: list_id },
       {
         $push: {
           rows: {
-            $each: [newListRowWithId],
+            $each: [newListRow],
           }
         }
-      }
+      },
+      { new: true } 
     );
 
-    if (createResult.modifiedCount === 1) {
-      res.status(200).json(formatRow(newListRowWithId));
-      return;
-    }
-    else {
+    if (!listBody) {
       throw new Error();
     }
+
+    res.status(200).json(formatRow(listBody.rows[extractRows.length - 1]));
+    return;
   }
   catch (error) {
     res.status(500).json({ error: "Failed to create row." });
@@ -94,8 +92,7 @@ const updateListRows = async (req: Request, res: Response) => {
     const listBody = await ListBody.findOne({ list_id: list_id });
 
     if (!listBody) {
-      res.status(404).json({ error: "No such list." });
-      return;
+      throw new Error();
     }
 
     listBody.rows = processRows(rows);
@@ -121,7 +118,7 @@ const deleteListRows = async (req: Request, res: Response) => {
   const { ids } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
-    res.status(400).json({ error: "No such row(s)." });
+    res.status(404).json({ error: "No such row(s)." });
     return;
   }
 
@@ -129,8 +126,7 @@ const deleteListRows = async (req: Request, res: Response) => {
     const listBody = await ListBody.findOne({ list_id: list_id });
 
     if (!listBody) {
-      res.status(404).json({ error: "No such list." });
-      return;
+      throw new Error();
     }
 
     const { rows } = listBody;
@@ -163,7 +159,7 @@ const copyListRows = async (req: Request, res: Response) => {
   const { ids } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
-    res.status(400).json({ error: "No such row(s)." });
+    res.status(404).json({ error: "No such row(s)." });
     return;
   }
 
@@ -171,8 +167,7 @@ const copyListRows = async (req: Request, res: Response) => {
     const listBody = await ListBody.findOne({ list_id: list_id });
 
     if (!listBody) {
-      res.status(404).json({ error: "No such list." });
-      return;
+      throw new Error();
     }
 
     const { rows } = listBody;
@@ -211,7 +206,7 @@ const resetListRows = async (req: Request, res: Response) => {
   const { ids } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
-    res.status(400).json({ error: "No such row(s)." });
+    res.status(404).json({ error: "No such row(s)." });
     return;
   }
 
@@ -219,8 +214,7 @@ const resetListRows = async (req: Request, res: Response) => {
     const listBody = await ListBody.findOne({ list_id: list_id });
 
     if (!listBody) {
-      res.status(404).json({ error: "No such list." });
-      return;
+      throw new Error();
     }
 
     const { rows } = listBody;
