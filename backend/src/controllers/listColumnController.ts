@@ -72,25 +72,19 @@ const createListColumn = async (req: Request, res: Response) => {
     const listColumns = extractColumns(listHeader);
     const newColumnId = listColumns[listColumns.length - 1].id;
 
-    const listBody = await ListBody.findOneAndUpdate(
-      { list_id: list_id },
-      {
-        $set: {
-          rows: {
-            $map: {
-              input: "$rows",
-              as: "row",
-              in: { $mergeObjects: ["$$row", { newColumnId: "" }] }
-            }
-          }
-        }
-      },
-      { new: true }
-    );
+    const listBody = await ListBody.findOne({ list_id: list_id });
 
     if (!listBody) {
       throw new Error();
     }
+
+    if (listBody.rows.length === 0) {
+      res.status(200).json(listColumns);
+      return;
+    }
+
+    listBody.rows = listBody.rows.map(row => ({ ...row, [newColumnId]: '' }));
+    listBody.save();
 
     res.status(200).json(listColumns);
     return;
@@ -195,30 +189,19 @@ const deleteListColumn = async (req: Request, res: Response) => {
 
     const listColumns = extractColumns(listHeader);
 
-    const listBody = await ListBody.findOneAndUpdate(
-      { list_id: list_id },
-      {
-        $set: {
-          rows: {
-            $map: {
-              input: "$rows",
-              as: "row",
-              in: {
-                $mergeObjects: [
-                  "$$row",
-                  { [column_id]: "$$REMOVE" }
-                ]
-              }
-            }
-          }
-        }
-      },
-      { new: true }
-    );
+    const listBody = await ListBody.findOne({ list_id: list_id });
 
     if (!listBody) {
       throw new Error();
     }
+
+    if (listBody.rows.length === 0) {
+      res.status(200).json(listColumns);
+      return;
+    }
+
+    listBody.rows = listBody.rows.map(row => ({ ...row, [column_id]: undefined }));
+    await listBody.save();
 
     res.status(200).json(listColumns);
     return;
