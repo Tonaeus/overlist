@@ -25,10 +25,14 @@
 	}
 
 	.button {
-		@apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white hover:bg-blue-800 transition-all duration-300 ease-in-out;
+		@apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white;
 	
 		&:disabled {
 			@apply opacity-50;
+		}
+	
+		&:not(:disabled):hover {
+			@apply hover:bg-blue-900 transition-all duration-300 ease-in-out;
 		}
 	}
 
