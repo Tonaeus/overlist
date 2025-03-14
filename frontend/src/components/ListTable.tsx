@@ -129,7 +129,7 @@ const ListTable = () => {
 		<div className="flex flex-col">
 			<div className="flex flex-row h-9 mb-6">
 				<ListTableName />
-				<ListTableControls rows={rows} setRows={setRows} select={select} />
+				<ListTableControls columns={columns} rows={rows} setRows={setRows} select={select} />
 			</div>
 
 			<ListTableComponent

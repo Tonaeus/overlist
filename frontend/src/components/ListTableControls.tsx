@@ -1,4 +1,4 @@
-import type { ListTableRow } from "../types/ListTable";
+import type { ListTableColumn, ListTableRow } from "../types/ListTable";
 import { Dispatch, SetStateAction } from "react";
 import { Select } from "@table-library/react-table-library/types/select";
 import { TableNode } from "@table-library/react-table-library/types/table";
@@ -23,12 +23,14 @@ import useEditingContext from "../hooks/useEditingContext";
 import BlockerComponent from "./BlockerComponent";
 
 type ListTableControlsProps = {
+	columns: ListTableColumn[];
 	rows: ListTableRow[];
 	setRows: Dispatch<SetStateAction<ListTableRow[]>>;
 	select: Select<TableNode>;
 };
 
 const ListTableControls = ({
+	columns,
 	rows,
 	setRows,
 	select,
@@ -260,7 +262,7 @@ const ListTableControls = ({
 					onClick={(e) => {
 						handleAdd(e);
 					}}
-					disabled={isEditing}
+					disabled={columns.length === 0 || isEditing}
 				>
 					<Add />
 				</button>

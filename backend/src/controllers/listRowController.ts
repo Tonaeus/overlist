@@ -40,6 +40,10 @@ const createListRow = async (req: Request, res: Response) => {
     const listHeader = await ListHeader.findOne({ list_id: list_id });
     const listColumns = extractColumns(listHeader);
 
+    if (listColumns.length === 0) {
+      throw new Error();
+    }
+
     const newListRow = listColumns.reduce((acc: any, col: any) => {
       acc[col.id] = '';
       return acc;
