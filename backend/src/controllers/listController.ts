@@ -54,15 +54,6 @@ const createList = async (req: Request, res: Response) => {
   }
 
   try {
-    const existingListLabel = await List.findOne({
-      label: { $regex: `^${label}$` },
-    });
-
-    if (existingListLabel) {
-      res.status(400).json({ error: "List label already exists." });
-      return;
-    }
-
     const newList = await List.create({ label });
 
     await ListHeader.create({ list_id: newList._id });
@@ -96,22 +87,6 @@ const updateList = async (req: Request, res: Response) => {
   }
 
   try {
-    const currentList = await List.findById({ _id: id });
-
-    if (currentList && currentList.label === label) {
-      res.status(200).json(label);
-      return;
-    }
-
-    const existingList = await List.findOne({
-      label: { $regex: `^${label}$` },
-    });
-
-    if (existingList) {
-      res.status(400).json({ error: "List label already exists." });
-      return;
-    }
-
     const list = await List.findOneAndUpdate(
       { _id: id },
       { ...req.body },
@@ -256,9 +231,9 @@ const copyLists = async (req: Request, res: Response) => {
 
     ids.forEach(id => {
       const newId = new Types.ObjectId();
-      const newList = lists.find(list => list._id.toString()  === id);
+      const newList = lists.find(list => list._id.toString() === id);
       const newListHeader = listHeaders.find(listHeader => listHeader.list_id.toString() === id);
-      const newListBody = listBodies.find(listBody => listBody.list_id.toString()  === id);
+      const newListBody = listBodies.find(listBody => listBody.list_id.toString() === id);
 
       if (!newList || !newListHeader || !newListBody) {
         throw new Error();
