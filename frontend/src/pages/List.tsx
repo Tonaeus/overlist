@@ -9,7 +9,7 @@ const List = () => {
 	return (
 		<EditingContextProvider>
 			<ListColumnsContextProvider>
-				<div className="page h-[calc(100vh-4rem)]">
+				<div className="page h-[calc(100vh-3.5rem)]">
 					<div className="page-side-bar">
 						<ListSideBar />
 					</div>

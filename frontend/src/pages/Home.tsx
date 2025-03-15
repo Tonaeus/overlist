@@ -7,7 +7,7 @@ import { DirectoriesContextProvider } from "../contexts/DirectoriesContext.tsx";
 const Home = () => {
 	return (
 		<DirectoriesContextProvider>
-			<div className="page h-[calc(100vh-4rem)]">
+			<div className="page h-[calc(100vh-3.5rem)]">
 				<div className="page-side-bar">
 					<HomeSideBar />
 				</div>
