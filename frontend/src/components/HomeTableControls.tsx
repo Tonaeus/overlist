@@ -1,4 +1,6 @@
 import type { HomeTableRow } from "../types/HomeTable";
+import type { ListTableColumn, ListTableRow } from "../types/ListTable";
+
 import { Dispatch, SetStateAction } from "react";
 import { Select } from "@table-library/react-table-library/types/select";
 import { TableNode } from "@table-library/react-table-library/types/table";
@@ -22,12 +24,19 @@ import { sortObjectsByProp } from "../utils/sortUtils";
 import { formatToLocalDate } from "../utils/dateUtils";
 
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
+import useListTableDownload from "../libs/useListTableDownload";
 
 type HomeTableControlsProps = {
 	rows: HomeTableRow[];
 	setRows: Dispatch<SetStateAction<HomeTableRow[]>>;
 	select: Select<TableNode>;
 };
+
+type DownloadListTableInput = {
+	label: string;
+	columns: ListTableColumn[];
+	rows: ListTableRow[];
+}
 
 const HomeTableControls = ({
 	rows,
@@ -227,9 +236,50 @@ const HomeTableControls = ({
 		});
 	};
 
-	const handleExport = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const {DownloadListTable} = useListTableDownload();
+
+	const handleExport = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		console.log("export");
+
+		const ids = select.state.ids.sort(
+			(a: string, b: string) =>
+				rows.findIndex((row: HomeTableRow) => row.id === a) -
+				rows.findIndex((row: HomeTableRow) => row.id === b)
+		);
+
+		const inputs: DownloadListTableInput[] = [];		
+
+		for (const id of ids) {
+			const label = rows.find((row: HomeTableRow) => row.id === id)?.label;
+
+			const listColumnsResponse = await fetch(
+				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`
+			);
+			const listColumns = await listColumnsResponse.json();
+
+			const listRowsResponse = await fetch(
+				`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`
+			);
+			const listRows = await listRowsResponse.json();
+
+			if (label && listColumnsResponse.ok && listRowsResponse) {
+				console.log(listColumns);
+				console.log(listRows);
+
+				inputs.push({
+					label: label,
+					columns: listColumns,
+					rows: listRows,
+				})
+			}
+			else {
+				return;
+			}
+		};
+
+		for (const input of inputs) {
+			DownloadListTable(input.label, input.columns, input.rows);
+		}
 	};
 
 	return (
