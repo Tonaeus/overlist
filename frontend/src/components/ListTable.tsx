@@ -144,7 +144,6 @@ const ListTable = () => {
 					data={data}
 					theme={theme}
 					select={select}
-					emptyMessage="No rows"
 				/>
 			</div>
 

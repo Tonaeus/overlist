@@ -1,6 +1,6 @@
 import type { TableComponentProps } from "../types/TableComponent";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import useEditingContext from "../hooks/useEditingContext";
 
 import {
@@ -23,36 +23,17 @@ const ListTableComponent = ({
 	data,
 	theme,
 	select,
-	emptyMessage,
 }: TableComponentProps) => {
-	const elementOneRef = useRef<HTMLDivElement | null>(null);
-	const elementTwoRef = useRef<HTMLDivElement | null>(null);
-	const [elementOneWidth, setElementOneWidth] = useState(0);
-
-	useEffect(() => {
-		const handleResize = () => {
-			if (elementOneRef.current) {
-				setElementOneWidth(elementOneRef.current.offsetWidth);
-			}
-		};
-
-		handleResize();
-
-		window.addEventListener("resize", handleResize);
-
-		return () => {
-			window.removeEventListener("resize", handleResize);
-		};
-	}, []);
-
 	const { isEditing } = useEditingContext();
 
 	useEffect(() => {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"].css-e0dnmk') as NodeListOf<HTMLInputElement>;
+		const checkboxes = document.querySelectorAll(
+			'input[type="checkbox"].css-e0dnmk'
+		) as NodeListOf<HTMLInputElement>;
 
-    checkboxes.forEach((checkbox) => {
-        checkbox.disabled = isEditing;
-    });
+		checkboxes.forEach((checkbox) => {
+			checkbox.disabled = isEditing;
+		});
 	}, [isEditing]);
 
 	return (
@@ -97,18 +78,7 @@ const ListTableComponent = ({
 						</>
 					)}
 				</Table>
-				{data.nodes.length === 0 ? (
-					<>
-						<div ref={elementOneRef} className="h-9"></div>
-						<div
-							ref={elementTwoRef}
-							className="fixed flex justify-center items-center h-9 -mt-9"
-							style={{ width: `${elementOneWidth}px` }}
-						>
-							<p>{emptyMessage}</p>
-						</div>
-					</>
-				) : null}
+				{data.nodes.length === 0 ? <div className="h-9"></div> : null}
 			</div>
 		</div>
 	);

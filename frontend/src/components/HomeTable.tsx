@@ -135,7 +135,6 @@ const HomeTable = () => {
 				data={data}
 				theme={theme}
 				select={select}
-				emptyMessage="No lists"
 			/>
 		</div>
 	);

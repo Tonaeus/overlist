@@ -8,7 +8,6 @@ type TableComponentProps = {
 	data: any;
 	theme: any;
 	select: any;
-	emptyMessage: string;
 };
 
 export type { useTableComponentProps, TableComponentProps };
