@@ -127,21 +127,14 @@ const updateListColumn = async (req: Request, res: Response) => {
 
     const listHeader = await ListHeader.findOneAndUpdate(
       { list_id: list_id, "columns._id": column_id },
-      {
-        $set: { "columns.$.label": column_label },
-        $push: {
-          columns: {
-            $each: []
-          }
-        }
-      },
+      { $set: { "columns.$.label": column_label } },
       { new: true }
     );
 
     if (!listHeader) {
       throw new Error();
     }
-    
+
     const listColumns = extractColumns(listHeader);
 
     res.status(200).json(listColumns);
