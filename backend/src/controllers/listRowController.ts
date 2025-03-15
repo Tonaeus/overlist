@@ -192,7 +192,7 @@ const copyListRows = async (req: Request, res: Response) => {
     return;
   }
   catch (error) {
-    res.status(500).json({ error: "Failed to delete row(s)." });
+    res.status(500).json({ error: "Failed to copy row(s)." });
     return;
   }
 };
@@ -237,7 +237,7 @@ const resetListRows = async (req: Request, res: Response) => {
     return;
   }
   catch (error) {
-    res.status(500).json({ error: "Failed to delete row(s)." });
+    res.status(500).json({ error: "Failed to reset row(s)." });
     return;
   }
 };

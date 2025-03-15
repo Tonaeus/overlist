@@ -36,7 +36,7 @@ type DownloadListTableInput = {
 	label: string;
 	columns: ListTableColumn[];
 	rows: ListTableRow[];
-}
+};
 
 const HomeTableControls = ({
 	rows,
@@ -163,7 +163,64 @@ const HomeTableControls = ({
 
 	const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		console.log("copy");
+
+		const selectedLabels = rows
+			.map((row) => {
+				const labelIndex = select.state.ids.indexOf(row.id);
+				return labelIndex !== -1 ? row.label : null;
+			})
+			.filter((label) => label !== null);
+
+		let message: string;
+		if (selectedLabels.length === 1) {
+			message = `Are you sure you want to copy the list "${selectedLabels[0]}"?`;
+		} else if (selectedLabels.length === 2) {
+			message = `Are you sure you want to copy the following lists: "${selectedLabels[0]}" and "${selectedLabels[1]}"?`;
+		} else {
+			message = `Are you sure you want to copy the following lists: "${selectedLabels
+				.slice(0, -1)
+				.join('", "')}", and "${selectedLabels[selectedLabels.length - 1]}"?`;
+		}
+
+		showModal({
+			title: `Copy ${select.state.ids.length.length === 1 ? "List" : "Lists"}`,
+			content: <ModalContentText message={message} />,
+			action: "Copy",
+			onAction: async () => {
+				const response = await fetch(
+					`${import.meta.env.VITE_BACKEND_URL}/api/lists/copy/`,
+					{
+						method: "PATCH",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({ ids: select.state.ids }),
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					setRows((prev) =>
+						[
+							...prev,
+							...json.map((row: HomeTableRow) => ({
+								...row,
+								created: formatToLocalDate(row.created),
+								modified: formatToLocalDate(row.modified),
+							})),
+						].sort(sortObjectsByProp("label"))
+					);
+					hideModal();
+					select.fns.onRemoveAll();
+				} else {
+					showModal({
+						content: <ModalContentText message={message} error={json.error} />,
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
 	};
 
 	const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -236,7 +293,7 @@ const HomeTableControls = ({
 		});
 	};
 
-	const {DownloadListTable} = useListTableDownload();
+	const { DownloadListTable } = useListTableDownload();
 
 	const handleExport = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -247,7 +304,7 @@ const HomeTableControls = ({
 				rows.findIndex((row: HomeTableRow) => row.id === b)
 		);
 
-		const inputs: DownloadListTableInput[] = [];		
+		const inputs: DownloadListTableInput[] = [];
 
 		for (const id of ids) {
 			const label = rows.find((row: HomeTableRow) => row.id === id)?.label;
@@ -267,12 +324,11 @@ const HomeTableControls = ({
 					label: label,
 					columns: listColumns,
 					rows: listRows,
-				})
-			}
-			else {
+				});
+			} else {
 				return;
 			}
-		};
+		}
 
 		for (const input of inputs) {
 			DownloadListTable(input.label, input.columns, input.rows);

@@ -6,6 +6,7 @@ import {
   updateList,
   updateLists,
   deleteLists,
+  copyLists,
 } from "../controllers/listController.js";
 
 const router = express.Router();
@@ -15,6 +16,8 @@ router.get('/:id', getList);
 router.get('/', getLists);
 
 router.post('/', createList);
+
+router.patch('/copy', copyLists);
 
 router.patch('/:id', updateList);
 

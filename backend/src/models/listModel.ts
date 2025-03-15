@@ -11,7 +11,6 @@ const listSchema = new Schema<IList>({
   label: {
     type: String,
     required: true,
-    unique: true
   },
   directory_id: {
     type: String,

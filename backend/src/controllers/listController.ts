@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import List from "../models/listModel.js";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
@@ -150,7 +150,7 @@ const updateLists = async (req: Request, res: Response) => {
       _id: { $in: ids }
     });
 
-    if (ids.length !== lists.length) {
+    if (!lists || ids.length !== lists.length) {
       res.status(404).json({ error: "No such list(s)." });
       return;
     }
@@ -160,16 +160,15 @@ const updateLists = async (req: Request, res: Response) => {
       { $set: { directory_id } }
     );
 
-    if (updateResult.modifiedCount === ids.length) {
-      const updatedLists = await List.find({ _id: { $in: ids } });
-      const formattedLists = await Promise.all(updatedLists.map(formatList));
-
-      res.status(200).json(formattedLists);
-      return;
-    }
-    else {
+    if (updateResult.modifiedCount !== ids.length) {
       throw new Error();
     }
+
+    const updatedLists = await List.find({ _id: { $in: ids } });
+    const formattedLists = await Promise.all(updatedLists.map(formatList));
+
+    res.status(200).json(formattedLists);
+    return;
   }
   catch (error) {
     res.status(500).json({ error: "Failed to update list(s)." });
@@ -190,7 +189,7 @@ const deleteLists = async (req: Request, res: Response) => {
       _id: { $in: ids }
     });
 
-    if (ids.length !== lists.length) {
+    if (!lists || ids.length !== lists.length) {
       res.status(404).json({ error: "No such list(s)." });
       return;
     }
@@ -200,20 +199,101 @@ const deleteLists = async (req: Request, res: Response) => {
     const bodyResult = await ListBody.deleteMany({ list_id: { $in: ids } });
 
     if (
-      deleteResult.deletedCount === ids.length &&
-      headerResult.deletedCount === ids.length &&
-      bodyResult.deletedCount === ids.length
+      deleteResult.deletedCount !== ids.length ||
+      headerResult.deletedCount !== ids.length ||
+      bodyResult.deletedCount !== ids.length
     ) {
-      const formattedLists = await Promise.all(lists.map(formatList));
-      res.status(200).json(formattedLists);
-      return;
-    }
-    else {
       throw new Error();
     }
+
+    const formattedLists = await Promise.all(lists.map(formatList));
+    res.status(200).json(formattedLists);
+    return;
   }
   catch (error) {
     res.status(500).json({ error: "Failed to delete list(s)." });
+    return;
+  }
+};
+
+const copyLists = async (req: Request, res: Response) => {
+  const { ids } = req.body;
+
+  if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
+    res.status(404).json({ error: "No such list(s)." });
+    return;
+  }
+
+  try {
+    const lists = await List.find({
+      _id: { $in: ids }
+    });
+
+    if (!lists || lists.length !== ids.length) {
+      res.status(404).json({ error: "No such list(s)." });
+      return;
+    }
+
+    const listHeaders = await ListHeader.find({
+      list_id: { $in: ids }
+    });
+
+    if (!listHeaders || listHeaders.length !== ids.length) {
+      throw new Error();
+    }
+
+    const listBodies = await ListBody.find({
+      list_id: { $in: ids }
+    });
+
+    if (!listBodies || listBodies.length !== ids.length) {
+      throw new Error();
+    }
+
+    const listsToCopy: any = [];
+    const listHeadersToCopy: any = [];
+    const listBodiesToCopy: any = [];
+
+    ids.forEach(id => {
+      const newId = new Types.ObjectId();
+      const newList = lists.find(list => list._id.toString()  === id);
+      const newListHeader = listHeaders.find(listHeader => listHeader.list_id.toString() === id);
+      const newListBody = listBodies.find(listBody => listBody.list_id.toString()  === id);
+
+      if (!newList || !newListHeader || !newListBody) {
+        throw new Error();
+      }
+
+      listsToCopy.push({
+        ...newList.toObject(),
+        _id: newId,
+        label: `Copy of ${newList.label}`
+      });
+
+      listHeadersToCopy.push({
+        ...newListHeader.toObject(),
+        _id: new Types.ObjectId(),
+        list_id: newId.toString()
+      })
+
+      listBodiesToCopy.push({
+        ...newListBody.toObject(),
+        _id: new Types.ObjectId(),
+        list_id: newId.toString()
+      })
+    });
+
+    const newLists = await List.insertMany(listsToCopy);
+
+    await ListHeader.insertMany(listHeadersToCopy);
+    await ListBody.insertMany(listBodiesToCopy);
+
+    const formattedLists = await Promise.all(newLists.map(formatList));
+    res.status(200).json(formattedLists);
+    return;
+  }
+  catch (error) {
+    res.status(500).json({ error: "Failed to copy list(s)." });
     return;
   }
 };
@@ -225,4 +305,5 @@ export {
   updateList,
   updateLists,
   deleteLists,
+  copyLists,
 };

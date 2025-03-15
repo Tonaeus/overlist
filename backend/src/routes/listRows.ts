@@ -14,12 +14,12 @@ router.get('/:list_id', getListRows);
 
 router.post('/:list_id', createListRow);
 
-router.patch('/:list_id', updateListRows);
-
-router.delete('/:list_id', deleteListRows);
-
 router.patch('/copy/:list_id', copyListRows);
 
 router.patch('/reset/:list_id', resetListRows);
+
+router.patch('/:list_id', updateListRows);
+
+router.delete('/:list_id', deleteListRows);
 
 export default router;
