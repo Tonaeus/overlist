@@ -226,10 +226,13 @@ const HomeTableControls = ({
 	const handleMove = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		const options = directories.map((dir) => ({
-			value: dir.id,
-			label: dir.label,
-		}));
+		const options = [
+			{ value: "null", label: " " },
+			...directories.map((dir) => ({
+				value: dir.id,
+				label: dir.label,
+			})),
+		];
 
 		showModal({
 			show: true,

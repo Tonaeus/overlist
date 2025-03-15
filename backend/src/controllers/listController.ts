@@ -108,17 +108,19 @@ const updateList = async (req: Request, res: Response) => {
 };
 
 const updateLists = async (req: Request, res: Response) => {
-  const { ids, directory_id } = req.body;
+  let { ids, directory_id } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
     res.status(404).json({ error: "No such list(s)." });
     return;
   }
 
-  if (!directory_id || !mongoose.Types.ObjectId.isValid(directory_id)) {
+  if (directory_id !== "null" && (!directory_id || !mongoose.Types.ObjectId.isValid(directory_id))) {
     res.status(404).json({ error: "No such directory." });
     return;
   }
+
+  directory_id = directory_id === "null" ? null : directory_id;
 
   try {
     const lists = await List.find({

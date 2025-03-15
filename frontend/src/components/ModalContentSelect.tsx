@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 
 type ModalContentSelectProps = {
@@ -6,7 +6,7 @@ type ModalContentSelectProps = {
 	options: { value: string; label: string }[];
 	error?: string;
 	onChange: (value: string) => void;
-}
+};
 
 const ModalContentSelect = ({
 	placeholder,
@@ -16,6 +16,10 @@ const ModalContentSelect = ({
 }: ModalContentSelectProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const [selectedOption, setSelectedOption] = useState<string | null>(null);
+
+	useEffect(() => {
+		setSelectedOption(null);
+	}, [error]);
 
 	const handleSelect = (value: string) => {
 		setSelectedOption(value);
