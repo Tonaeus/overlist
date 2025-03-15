@@ -48,7 +48,7 @@ const ListTable = () => {
 						type="text"
 						value={item[column.id] || ""}
 						onChange={(e) => handleUpdate(e.target.value, item.id, column.id)}
-						className="w-full"
+						className="w-full focus:outline-none"
 					/>
 				) : (
 					<p className="truncate">{item[column.id]}</p>
