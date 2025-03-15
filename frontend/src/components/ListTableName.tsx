@@ -16,6 +16,8 @@ const ListTableName = () => {
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 	const [tempLabel, setTempLabel] = useState<string>("");
 
+	const [error, setError] = useState<boolean>(false);
+
 	useEffect(() => {
 		const fetchList = async () => {
 			const response = await fetch(
@@ -25,6 +27,8 @@ const ListTableName = () => {
 
 			if (response.ok) {
 				setLabel(json.label);
+			} else {
+				setError(true);
 			}
 		};
 
@@ -86,7 +90,7 @@ const ListTableName = () => {
 				</div>
 			)}
 
-			{!isEditing && !isEditingTable && (
+			{!isEditing && !isEditingTable && !error && (
 				<>
 					<button
 						className="flex justify-center items-center pr-[18px] hover:scale-110"

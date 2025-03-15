@@ -1,6 +1,6 @@
 import type { ListColumn } from "../types/ListColumn";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import useListColumnsContext from "../hooks/useListColumnsContext";
@@ -19,6 +19,8 @@ const ListSideBar = () => {
 
 	const { isEditing } = useEditingContext();
 
+	const [error, setError] = useState<boolean>(false);
+
 	const {
 		state: { listColumns },
 		dispatch,
@@ -33,6 +35,8 @@ const ListSideBar = () => {
 
 			if (response.ok) {
 				dispatch({ type: "SET_LIST_COLUMNS", payload: json });
+			} else {
+				setError(true);
 			}
 		};
 
@@ -198,7 +202,7 @@ const ListSideBar = () => {
 					onClick={(e) => {
 						handleAdd(e);
 					}}
-					disabled={isEditing}
+					disabled={isEditing || error}
 				/>
 				<div className="flex-1 overflow-y-auto">
 					{listColumns.map((column: ListColumn) => (
