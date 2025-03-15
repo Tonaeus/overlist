@@ -263,9 +263,6 @@ const HomeTableControls = ({
 			const listRows = await listRowsResponse.json();
 
 			if (label && listColumnsResponse.ok && listRowsResponse) {
-				console.log(listColumns);
-				console.log(listRows);
-
 				inputs.push({
 					label: label,
 					columns: listColumns,
