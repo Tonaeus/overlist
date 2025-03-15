@@ -1,4 +1,4 @@
-import type {useTableComponentProps} from "../types/TableComponent"
+import type { useTableComponentProps } from "../types/TableComponent";
 
 import { useState } from "react";
 
@@ -10,11 +10,13 @@ import {
 	useRowSelect,
 } from "@table-library/react-table-library/select";
 
-const useHomeTableComponent = ({ rows, tableStyles }: useTableComponentProps) => {
-	const theme = useTheme([
-		getTheme(),
-		tableStyles,
-	]);
+import { useSort } from "@table-library/react-table-library/sort";
+
+const useHomeTableComponent = ({
+	rows,
+	tableStyles,
+}: useTableComponentProps) => {
+	const theme = useTheme([getTheme(), tableStyles]);
 
 	const [search, setSearch] = useState<string>("");
 
@@ -34,7 +36,31 @@ const useHomeTableComponent = ({ rows, tableStyles }: useTableComponentProps) =>
 		}
 	);
 
-	return { search, setSearch, data, theme, select };
+	const sort = useSort(
+		data,
+		{
+			state: {
+        sortKey: "Label",
+        reverse: false,
+      },
+			onChange: () => {},
+		},
+		{
+			sortIcon: {
+				iconDefault: null,
+				iconUp: null,
+				iconDown: null,
+			},
+			sortFns: {
+				Label: (row) => row.sort((a, b) => a.label.localeCompare(b.label)),
+				Directory: (row) => row.sort((a, b) => a.directory_label.localeCompare(b.directory_label)),
+				Created: (row) => row.sort((a, b) => new Date(String(a.created)).getTime() - new Date(String(b.created)).getTime()),
+				Modified: (row) => row.sort((a, b) => new Date(String(a.modified)).getTime() - new Date(String(b.modified)).getTime()),				
+			},
+		}
+	);
+
+	return { search, setSearch, data, theme, select, sort };
 };
 
 export default useHomeTableComponent;

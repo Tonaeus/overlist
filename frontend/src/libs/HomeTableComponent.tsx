@@ -6,7 +6,6 @@ import {
 	HeaderRow,
 	Body,
 	Row,
-	HeaderCell,
 	Cell,
 } from "@table-library/react-table-library/table";
 
@@ -15,11 +14,16 @@ import {
 	CellSelect,
 } from "@table-library/react-table-library/select";
 
+import {
+	HeaderCellSort
+} from "@table-library/react-table-library/sort";
+
 const HomeTableComponent = ({
 	columns,
 	data,
 	theme,
 	select,
+	sort,
 }: TableComponentProps) => {
 	return (
 		<div className="bg-white p-1.5 rounded accent-blue-700 border border-line">
@@ -28,6 +32,7 @@ const HomeTableComponent = ({
 					data={data}
 					theme={theme}
 					select={select}
+					sort={sort}
 					layout={{ custom: true }}
 					className="table"
 				>
@@ -37,9 +42,9 @@ const HomeTableComponent = ({
 								<HeaderRow className="header-row">
 									<HeaderCellSelect className="header-cell" />
 									{columns.map((column: any, index: number) => (
-										<HeaderCell key={index} className="header-cell">
+										<HeaderCellSort key={index} sortKey={column.label} className="header-cell">
 											{column.label}
-										</HeaderCell>
+										</HeaderCellSort>
 									))}
 								</HeaderRow>
 							</Header>

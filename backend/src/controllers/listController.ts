@@ -32,7 +32,7 @@ const getList = async (req: Request, res: Response) => {
 
 const getLists = async (req: Request, res: Response) => {
   try {
-    const lists = await List.find({}).sort({ label: 1 });
+    const lists = await List.find({});
     const formattedLists = await Promise.all(lists.map(formatList));
 
     res.status(200).json(formattedLists);

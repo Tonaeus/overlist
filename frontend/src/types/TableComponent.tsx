@@ -8,6 +8,7 @@ type TableComponentProps = {
 	data: any;
 	theme: any;
 	select: any;
+	sort?: any;
 };
 
 export type { useTableComponentProps, TableComponentProps };

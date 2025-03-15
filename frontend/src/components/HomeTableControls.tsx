@@ -20,7 +20,6 @@ import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
 import ModalContentSelect from "./ModalContentSelect";
 
-import { sortObjectsByProp } from "../utils/sortUtils";
 import { formatToLocalDate } from "../utils/dateUtils";
 
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
@@ -85,7 +84,7 @@ const HomeTableControls = ({
 								created: formatToLocalDate(json.created),
 								modified: formatToLocalDate(json.modified),
 							},
-						].sort(sortObjectsByProp("label"))
+						]
 					);
 					hideModal();
 				} else {
@@ -209,7 +208,7 @@ const HomeTableControls = ({
 								created: formatToLocalDate(row.created),
 								modified: formatToLocalDate(row.modified),
 							})),
-						].sort(sortObjectsByProp("label"))
+						]
 					);
 					hideModal();
 					select.fns.onRemoveAll();

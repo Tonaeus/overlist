@@ -77,7 +77,7 @@ const HomeTable = () => {
 		return directory ? row.directory_label === directory.label : false;
 	});
 
-	const { search, setSearch, data, theme, select } = useHomeTableComponent({
+	const { search, setSearch, data, theme, select, sort } = useHomeTableComponent({
 		rows: id ? filteredRows : rows,
 		tableStyles: {
 			Table: `
@@ -135,6 +135,7 @@ const HomeTable = () => {
 				data={data}
 				theme={theme}
 				select={select}
+				sort={sort}
 			/>
 		</div>
 	);
