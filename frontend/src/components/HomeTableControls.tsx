@@ -76,16 +76,14 @@ const HomeTableControls = ({
 				const json = await response.json();
 
 				if (response.ok) {
-					setRows((prev) =>
-						[
-							...prev,
-							{
-								...json,
-								created: formatToLocalDate(json.created),
-								modified: formatToLocalDate(json.modified),
-							},
-						]
-					);
+					setRows((prev) => [
+						...prev,
+						{
+							...json,
+							created: formatToLocalDate(json.created),
+							modified: formatToLocalDate(json.modified),
+						},
+					]);
 					hideModal();
 				} else {
 					showModal({
@@ -111,7 +109,8 @@ const HomeTableControls = ({
 				const labelIndex = select.state.ids.indexOf(row.id);
 				return labelIndex !== -1 ? row.label : null;
 			})
-			.filter((label) => label !== null);
+			.filter((label) => label !== null)
+			.sort((a, b) => a.localeCompare(b));
 
 		let message: string;
 		if (selectedLabels.length === 1) {
@@ -168,7 +167,8 @@ const HomeTableControls = ({
 				const labelIndex = select.state.ids.indexOf(row.id);
 				return labelIndex !== -1 ? row.label : null;
 			})
-			.filter((label) => label !== null);
+			.filter((label) => label !== null)
+			.sort((a, b) => a.localeCompare(b));
 
 		let message: string;
 		if (selectedLabels.length === 1) {
@@ -200,16 +200,14 @@ const HomeTableControls = ({
 				const json = await response.json();
 
 				if (response.ok) {
-					setRows((prev) =>
-						[
-							...prev,
-							...json.map((row: HomeTableRow) => ({
-								...row,
-								created: formatToLocalDate(row.created),
-								modified: formatToLocalDate(row.modified),
-							})),
-						]
-					);
+					setRows((prev) => [
+						...prev,
+						...json.map((row: HomeTableRow) => ({
+							...row,
+							created: formatToLocalDate(row.created),
+							modified: formatToLocalDate(row.modified),
+						})),
+					]);
 					hideModal();
 					select.fns.onRemoveAll();
 				} else {
@@ -300,11 +298,13 @@ const HomeTableControls = ({
 	const handleExport = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
-		const ids = select.state.ids.sort(
-			(a: string, b: string) =>
-				rows.findIndex((row: HomeTableRow) => row.id === a) -
-				rows.findIndex((row: HomeTableRow) => row.id === b)
-		);
+		const ids = select.state.ids.sort((a: string, b: string) => {
+			const labelA =
+				rows.find((row: HomeTableRow) => row.id === a)?.label || "";
+			const labelB =
+				rows.find((row: HomeTableRow) => row.id === b)?.label || "";
+			return labelA.localeCompare(labelB);
+		});
 
 		const inputs: DownloadListTableInput[] = [];
 
