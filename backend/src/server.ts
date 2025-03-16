@@ -36,7 +36,7 @@ app.use('/api/directories', directoryRoutes);
 app.use("/api/lists", listRoutes);
 app.use("/api/list-columns", listColumnRoutes);
 app.use("/api/list-rows", listRowRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 
 // Connect to db
 mongoose.connect(mongoUri)
