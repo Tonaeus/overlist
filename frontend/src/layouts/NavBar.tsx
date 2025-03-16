@@ -13,7 +13,7 @@ const NavBar = () => {
 	return (
 		<div className="flex flex-row h-14">
 			<div className="flex-1 pl-6 flex justify-start items-center">
-				<button className="button-side-bar aspect-[1/1]" onClick={handleSideBar}>
+				<button className="button-nav" onClick={handleSideBar}>
 					<Menu fontSize="medium" />
 				</button>
 			</div>
@@ -23,7 +23,9 @@ const NavBar = () => {
 				</Link>
 			</div>
 			<div className="flex-1 pr-10 flex justify-end items-center">
-				<Person fontSize="medium" />
+				<button className="button-nav">
+					<Person fontSize="medium" />
+				</button>
 			</div>
 		</div>
 	);

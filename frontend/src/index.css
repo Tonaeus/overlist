@@ -11,6 +11,10 @@
 		@apply bg-inherit;
 	}
 
+	.button-nav {
+		@apply h-9 flex justify-center items-center aspect-[1/1] rounded-full hover:bg-hovered transition-all duration-300 ease-in-out;
+	}
+
 	.button {
 		@apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white;
 	
@@ -25,9 +29,5 @@
 
 	.button-cancel {
 		@apply h-9 flex justify-center items-center rounded-full border border-line hover:bg-section transition-all duration-300 ease-in-out;
-	}
-
-	.button-side-bar {
-		@apply h-9 flex justify-center items-center rounded-full hover:bg-hovered transition-all duration-300 ease-in-out;
 	}
 }
