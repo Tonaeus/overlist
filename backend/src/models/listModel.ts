@@ -18,6 +18,6 @@ const listSchema = new Schema<IList>({
   },
 }, {timestamps: true} )
 
-const List = model<IList>("List", listSchema, "list");
+const List = model<IList>("List", listSchema);
 
 export default List;

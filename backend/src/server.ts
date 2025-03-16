@@ -7,6 +7,7 @@ import directoryRoutes from "./routes/directories.js";
 import listRoutes from "./routes/lists.js";
 import listColumnRoutes from "./routes/listColumns.js";
 import listRowRoutes from "./routes/listRows.js";
+import userRoutes from "./routes/user.js";
 
 dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
 
@@ -35,6 +36,7 @@ app.use('/api/directories', directoryRoutes);
 app.use("/api/lists", listRoutes);
 app.use("/api/list-columns", listColumnRoutes);
 app.use("/api/list-rows", listRowRoutes);
+app.use("/api/user", userRoutes);
 
 // Connect to db
 mongoose.connect(mongoUri)
