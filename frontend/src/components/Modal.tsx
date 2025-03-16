@@ -41,7 +41,7 @@ const Modal = ({
 				<div className="mb-6">{content}</div>
 				<div className="flex flex-row justify-end items-center">
 					<button
-						className="button-secondary px-3 py-1.5 mr-1.5"
+						className="button-cancel px-3 py-1.5 mr-1.5"
 						onClick={onCancel}
 					>
 						Cancel

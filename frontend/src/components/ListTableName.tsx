@@ -66,7 +66,7 @@ const ListTableName = () => {
 
 	return (
 		<div
-			className={`w-1/2 rounded-full flex flex-row border border-line ${
+			className={`w-full sm:w-1/2 rounded-full flex flex-row border border-line ${
 				isEditing ? "bg-white" : ""
 			}`}
 		>

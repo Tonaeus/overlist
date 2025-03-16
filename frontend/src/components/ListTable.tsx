@@ -19,7 +19,7 @@ import { areArraysEqual } from "../utils/compUtils";
 const ListTable = () => {
 	const { id } = useParams();
 
-	const { isEditing} = useEditingContext();
+	const { isEditing } = useEditingContext();
 
 	const {
 		state: { listColumns },
@@ -134,9 +134,14 @@ const ListTable = () => {
 	return (
 		<>
 			<div className="flex flex-col">
-				<div className="flex flex-row h-9 mb-6">
+				<div className="flex justify-between mb-6 flex-col-reverse h-[84px] sm:flex-row sm:h-9">
 					<ListTableName />
-					<ListTableControls columns={columns} rows={rows} setRows={setRows} select={select} />
+					<ListTableControls
+						columns={columns}
+						rows={rows}
+						setRows={setRows}
+						select={select}
+					/>
 				</div>
 
 				<ListTableComponent
@@ -147,7 +152,9 @@ const ListTable = () => {
 				/>
 			</div>
 
-			<BlockerComponent shouldBlock={isEditing && !areArraysEqual(orgRows, rows)} />
+			<BlockerComponent
+				shouldBlock={isEditing && !areArraysEqual(orgRows, rows)}
+			/>
 		</>
 	);
 };

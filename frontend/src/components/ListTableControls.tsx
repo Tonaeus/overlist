@@ -254,9 +254,9 @@ const ListTableControls = ({
 
 	return (
 		<>
-			<div className="w-1/2 flex flex-row justify-end">
+			<div className="w-full sm:w-1/2 flex flex-row justify-end">
 				<button
-					className="add-button button aspect-[1/1] mr-1.5"
+					className="add-button button max-sm:flex-1 sm:aspect-[1/1] mr-1.5"
 					onClick={(e) => {
 						handleAdd(e);
 					}}
@@ -268,7 +268,7 @@ const ListTableControls = ({
 					Add
 				</Tooltip>
 				<button
-					className="remove-button button aspect-[1/1] mx-1.5"
+					className="remove-button button max-sm:flex-1 sm:aspect-[1/1] mx-1.5"
 					onClick={(e) => {
 						handleDelete(e);
 					}}
@@ -280,7 +280,7 @@ const ListTableControls = ({
 					Delete
 				</Tooltip>
 				<button
-					className="copy-button button aspect-[1/1] mx-1.5"
+					className="copy-button button max-sm:flex-1 sm:aspect-[1/1] mx-1.5"
 					onClick={(e) => {
 						handleCopy(e);
 					}}
@@ -292,7 +292,7 @@ const ListTableControls = ({
 					Copy
 				</Tooltip>
 				<button
-					className="undo-button button aspect-[1/1] mx-1.5"
+					className="undo-button button max-sm:flex-1 sm:aspect-[1/1] mx-1.5"
 					onClick={(e) => {
 						handleReset(e);
 					}}
@@ -304,7 +304,7 @@ const ListTableControls = ({
 					Reset
 				</Tooltip>
 				<button
-					className="sync-button button aspect-[1/1] ml-1.5"
+					className="sync-button button max-sm:flex-1 sm:aspect-[1/1] ml-1.5"
 					onClick={(e) => {
 						handleSync(e);
 					}}

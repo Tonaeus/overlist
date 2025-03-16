@@ -17,7 +17,7 @@ const TableSearchComponent = ({
 	return (
 		<label
 			htmlFor="search"
-			className="w-1/2 p-1.5 rounded-full flex flex-row bg-white border border-line"
+			className="w-full sm:w-1/2 p-1.5 rounded-full flex flex-row bg-white border border-line"
 		>
 			<div className="flex justify-center items-center w-[38px]">
 				<Search />

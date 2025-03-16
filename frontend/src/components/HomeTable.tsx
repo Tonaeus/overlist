@@ -77,20 +77,21 @@ const HomeTable = () => {
 		return directory ? row.directory_label === directory.label : false;
 	});
 
-	const { search, setSearch, data, theme, select, sort } = useHomeTableComponent({
-		rows: id ? filteredRows : rows,
-		tableStyles: {
-			Table: `
+	const { search, setSearch, data, theme, select, sort } =
+		useHomeTableComponent({
+			rows: id ? filteredRows : rows,
+			tableStyles: {
+				Table: `
 			--data-table-library_grid-template-columns: 38px calc(50% - 38px) repeat(3, calc(50% / 3));
 			
 			min-width: calc(38px + 375px - 38px + 3 * 125px);
 			`,
-			HeaderRow: `
+				HeaderRow: `
 				&.header-row {
 					color: #495365;
 				}
 			`,
-			HeaderCell: `
+				HeaderCell: `
 				&.header-cell:hover {
 					background-color: #F4F5F6;
 				}
@@ -98,7 +99,7 @@ const HomeTable = () => {
 					width: 38px;
 				}
 			`,
-			Row: `
+				Row: `
 				&.row {
 					color: #495365;
 				}
@@ -111,7 +112,7 @@ const HomeTable = () => {
 					font-weight: normal;
 				}
 			`,
-			Cell: `
+				Cell: `
 				&.cell {
 				}
 				&.cell:hover {
@@ -120,12 +121,12 @@ const HomeTable = () => {
 					width: 38px;
 				}
 			`,
-		},
-	});
+			},
+		});
 
 	return (
 		<div className="flex flex-col">
-			<div className="flex flex-row h-9 mb-6">
+			<div className="flex justify-between mb-6 flex-col-reverse h-[84px] sm:flex-row sm:h-9">
 				<TableSearchComponent search={search} setSearch={setSearch} />
 				<HomeTableControls rows={rows} setRows={setRows} select={select} />
 			</div>
