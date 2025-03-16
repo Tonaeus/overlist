@@ -3,8 +3,12 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 
+import { SideBarContextProvider } from "./contexts/SideBarContext.tsx";
+
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<App />
+		<SideBarContextProvider>
+			<App />
+		</SideBarContextProvider>
 	</StrictMode>
 );

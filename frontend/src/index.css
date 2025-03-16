@@ -21,7 +21,7 @@
 		width: clamp(15rem, 15vw, 20rem);
 	}
 	.page-content {
-		@apply flex flex-col flex-1 rounded-tl-3xl bg-section border-l border-t border-line overflow-x-hidden;
+		@apply flex flex-col flex-1 bg-section border-l border-t border-line overflow-x-hidden;
 	}
 
 	.button {
@@ -38,5 +38,9 @@
 
 	.button-secondary {
 		@apply h-9 flex justify-center items-center rounded-full border border-line hover:bg-section transition-all duration-300 ease-in-out;
+	}
+
+	.menu-button {
+		@apply h-9 flex justify-center items-center rounded-full hover:bg-hovered transition-all duration-300 ease-in-out;
 	}
 }
