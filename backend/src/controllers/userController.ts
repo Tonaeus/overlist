@@ -1,5 +1,13 @@
 import type { Request, Response } from "express";
+import type { Types } from "mongoose";
+import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+
+import { SECRET } from "../configs/dotenvConfig.js";
+
+const createToken = (id: Types.ObjectId) => {
+  return jwt.sign({ id }, SECRET, { expiresIn: "7d" })
+};
 
 // Login user
 const loginUser = async (req: Request, res: Response) => {
@@ -13,7 +21,9 @@ const signupUser = async (req: Request, res: Response) => {
   try {
     const user = await User.signup(email, password);
 
-    res.status(200).json({ email, user })
+    const token = createToken(user._id);
+
+    res.status(200).json({ email, token })
     return;
   }
   catch (error: unknown) {

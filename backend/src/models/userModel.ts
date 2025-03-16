@@ -1,8 +1,9 @@
-import { Model, Schema, model } from "mongoose";
+import { Model, Schema, Types, model } from "mongoose";
 import bcrypt from "bcrypt";
 import validator from "validator";
 
 type IUser = {
+	_id: Types.ObjectId;
 	email: string;
 	password: string;
 };
