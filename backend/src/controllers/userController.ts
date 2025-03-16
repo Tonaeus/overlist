@@ -11,7 +11,25 @@ const createToken = (id: Types.ObjectId) => {
 
 // Login user
 const loginUser = async (req: Request, res: Response) => {
-  res.json({ msg: 'login user' });
+  const {email, password} = req.body;
+
+  try {
+    const user = await User.login(email, password);
+
+    const token = createToken(user._id);
+
+    res.status(200).json({ email, token })
+    return;
+  }
+  catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).json({ error: error.message });
+      return;
+    } else {
+      res.status(500).json({ error: "Unknown error." });
+      return;
+    }
+  }
 };
 
 // Signup user
