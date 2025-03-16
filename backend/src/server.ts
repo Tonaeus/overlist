@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
@@ -9,11 +8,7 @@ import listColumnRoutes from "./routes/listColumns.js";
 import listRowRoutes from "./routes/listRows.js";
 import userRoutes from "./routes/user.js";
 
-dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
-
-const mongoUri = process.env.MONGO_URI as string;
-const port = process.env.PORT as string;
-const frontendUrl = process.env.FRONTEND_URL as string;
+import { FRONTEND_URL, MONGO_URI, PORT } from "./configs/dotenvConfig.js";
 
 // Express app
 const app = express();
@@ -22,7 +17,7 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: frontendUrl, 
+  origin: FRONTEND_URL, 
   methods: ['GET', 'POST', 'PATCH', 'DELETE'], 
 }));
 
@@ -39,11 +34,11 @@ app.use("/api/list-rows", listRowRoutes);
 app.use("/api/users", userRoutes);
 
 // Connect to db
-mongoose.connect(mongoUri)
+mongoose.connect(MONGO_URI)
   .then(() => {
     // Listen for requests
-    app.listen(port, () => {
-      console.log('Connected to db and listening on port', port)
+    app.listen(PORT, () => {
+      console.log('Connected to db and listening on port', PORT)
     });
   })
   .catch((error) => {
