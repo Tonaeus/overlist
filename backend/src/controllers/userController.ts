@@ -11,14 +11,14 @@ const createToken = (id: Types.ObjectId) => {
 
 // Login user
 const loginUser = async (req: Request, res: Response) => {
-  const {email, password} = req.body;
+  const {username, password} = req.body;
 
   try {
-    const user = await User.login(email, password);
+    const user = await User.login(username, password);
 
     const token = createToken(user._id);
 
-    res.status(200).json({ email, token })
+    res.status(200).json({ username, token })
     return;
   }
   catch (error: unknown) {
@@ -34,14 +34,14 @@ const loginUser = async (req: Request, res: Response) => {
 
 // Signup user
 const signupUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
   try {
-    const user = await User.signup(email, password);
+    const user = await User.signup(username, password);
 
     const token = createToken(user._id);
 
-    res.status(200).json({ email, token })
+    res.status(200).json({ username, token })
     return;
   }
   catch (error: unknown) {
