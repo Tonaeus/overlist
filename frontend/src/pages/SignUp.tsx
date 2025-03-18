@@ -1,19 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
+import useSignUp from "../hooks/useSignUp";
+
 const SignUp = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
 
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const togglePasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
 
-  const handleSubmit = async () => {
-    console.log("Username:", username);
-    console.log("Password:", password);
-  }
+	const { signUp, isLoading, error } = useSignUp();
+
+	const handleSubmit = async () => {
+		await signUp(username, password);
+	};
 
 	return (
 		<div className="flex flex-col h-screen items-center">
@@ -26,7 +28,7 @@ const SignUp = () => {
 					<input
 						id="username"
 						type="text"
-            onChange={(e) => setUsername(e.target.value)}
+						onChange={(e) => setUsername(e.target.value)}
 						className="h-9 px-[18px] py-1.5 rounded-full border border-line focus:outline-none mb-3"
 					/>
 					<label htmlFor="password">Password</label>
@@ -34,7 +36,7 @@ const SignUp = () => {
 						<input
 							id="password"
 							type={isPasswordVisible ? "text" : "password"}
-              onChange={(e) => setPassword(e.target.value)}
+							onChange={(e) => setPassword(e.target.value)}
 							className="flex-1 py-1.5 pr-3 focus:outline-none h-9"
 						/>
 						<button
@@ -45,9 +47,15 @@ const SignUp = () => {
 							{isPasswordVisible ? <VisibilityOff /> : <Visibility />}
 						</button>
 					</div>
-					<button type="button" className="button mb-3" onClick={handleSubmit}>
+					<button
+						type="button"
+						className="button mb-3"
+						onClick={handleSubmit}
+						disabled={isLoading}
+					>
 						Sign Up
 					</button>
+					{error && <div>{error}</div>}
 					<p className="text-center">
 						Already have an account?{" "}
 						<Link to="/login" className="text-blue-700 hover:underline">
