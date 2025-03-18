@@ -1,78 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-
 import useSignUp from "../hooks/useSignUp";
+import UserAndPass from "../layouts/UserAndPass";
 
-const SignUp = () => {
-	const [username, setUsername] = useState("");
-	const [password, setPassword] = useState("");
-
-	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-	const togglePasswordVisibility = () => setIsPasswordVisible((prev) => !prev);
-
+const Login = () => {
 	const { signUp, isLoading, error } = useSignUp();
+	const [username, setUsername] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
 
-	const handleSubmit = async () => {
+	const handleLogin = async () => {
 		await signUp(username, password);
 	};
 
 	return (
-		<div className="flex flex-col h-screen items-center">
-			<div className="flex flex-col h-full justify-center items-center">
-				<div className="flex flex-col w-80">
-					<h1 className="text-center text-2xl font-bold mb-6">
-						Sign Up for Overlist
-					</h1>
-					<label htmlFor="username">Username</label>
-					<input
-						id="username"
-						type="text"
-						onChange={(e) => setUsername(e.target.value)}
-						className="h-9 px-[18px] py-1.5 rounded-full border border-line focus:outline-none mb-3"
-						disabled={isLoading}
-					/>
-					<label htmlFor="password">Password</label>
-					<div className="flex flex-row px-[18px] w-full h-9 rounded-full border border-line mb-[18px]">
-						<input
-							id="password"
-							type={isPasswordVisible && !isLoading ? "text" : "password"}
-							onChange={(e) => setPassword(e.target.value)}
-							className={`flex-1 py-1.5 ${
-								isLoading ? "" : "pr-3"
-							} focus:outline-none h-9`}
-							disabled={isLoading}
-						/>
-						{!isLoading && (
-							<button
-								type="button"
-								onClick={togglePasswordVisibility}
-								className="flex justify-center items-center"
-								disabled={isLoading}
-							>
-								{isPasswordVisible ? <VisibilityOff /> : <Visibility />}
-							</button>
-						)}
-					</div>
-					{error && <div className="error whitespace-pre-wrap">{error}</div>}
-					<button
-						type="button"
-						className="button mt-[18px] mb-3"
-						onClick={handleSubmit}
-						disabled={isLoading}
-					>
-						Sign Up
-					</button>
-					<p className="text-center">
-						Already have an account?{" "}
-						<Link to="/login/" className="text-blue-700 hover:underline">
-							Log In
-						</Link>
-					</p>
-				</div>
-			</div>
-		</div>
+		<UserAndPass
+			onSubmit={handleLogin}
+			title="Sign Up for Overlist"
+			isLoading={isLoading}
+			error={error}
+			setUsername={setUsername}
+			setPassword={setPassword}
+			buttonText="Sign Up"
+			accountText="Already have an account?"
+			linkText="Log In"
+			linkTo="/login/"
+		/>
 	);
 };
 
-export default SignUp;
+export default Login;
