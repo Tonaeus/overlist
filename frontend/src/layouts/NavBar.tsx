@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
-import { Menu, Person } from "@mui/icons-material";
+import { Login, Logout, Menu } from "@mui/icons-material";
 import useSideBarContext from "../hooks/useSideBarContext";
+import useAuthContext from "../hooks/useAuthContext";
 
 const NavBar = () => {
+	const { state: user } = useAuthContext();
 	const { toggleSideBar } = useSideBarContext();
 
 	const handleSideBar = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -23,9 +25,15 @@ const NavBar = () => {
 				</Link>
 			</div>
 			<div className="flex-1 pr-10 flex justify-end items-center">
-				<button className="button-nav">
-					<Person fontSize="medium" />
-				</button>
+				{user ? (
+					<button className="button-nav">
+						<Logout fontSize="medium" />
+					</button>
+				) : (
+					<button className="button-nav">
+						<Login fontSize="medium" />
+					</button>
+				)}
 			</div>
 		</div>
 	);
