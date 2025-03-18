@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import { Login, Logout, Menu } from "@mui/icons-material";
+import { Logout, Menu } from "@mui/icons-material";
 import useSideBarContext from "../hooks/useSideBarContext";
-import useAuthContext from "../hooks/useAuthContext";
+import useLogOut from "../hooks/useLogOut";
 
 const NavBar = () => {
-	const { state: user } = useAuthContext();
+	const { logOut } = useLogOut();
 	const { toggleSideBar } = useSideBarContext();
 
 	const handleSideBar = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -12,10 +12,14 @@ const NavBar = () => {
 		toggleSideBar();
 	};
 
+	const handleLogOut = () => {
+		logOut();
+	};
+
 	return (
 		<div className="flex flex-row h-14">
 			<div className="flex-1 pl-6 flex justify-start items-center">
-				<button className="button-nav" onClick={handleSideBar}>
+				<button type="button" className="button-nav" onClick={handleSideBar}>
 					<Menu fontSize="medium" />
 				</button>
 			</div>
@@ -25,15 +29,9 @@ const NavBar = () => {
 				</Link>
 			</div>
 			<div className="flex-1 pr-10 flex justify-end items-center">
-				{user ? (
-					<button className="button-nav">
-						<Logout fontSize="medium" />
-					</button>
-				) : (
-					<button className="button-nav">
-						<Login fontSize="medium" />
-					</button>
-				)}
+				<button type="button" className="button-nav" onClick={handleLogOut}>
+					<Logout fontSize="medium" />
+				</button>
 			</div>
 		</div>
 	);
