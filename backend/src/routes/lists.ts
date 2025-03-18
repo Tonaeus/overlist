@@ -17,7 +17,7 @@ router.get('/', getLists);
 
 router.post('/', createList);
 
-router.patch('/copy', copyLists);
+router.patch('/copy/', copyLists);
 
 router.patch('/:id', updateList);
 
