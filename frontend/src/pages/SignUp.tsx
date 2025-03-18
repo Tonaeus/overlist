@@ -30,22 +30,29 @@ const SignUp = () => {
 						type="text"
 						onChange={(e) => setUsername(e.target.value)}
 						className="h-9 px-[18px] py-1.5 rounded-full border border-line focus:outline-none mb-3"
+						disabled={isLoading}
 					/>
 					<label htmlFor="password">Password</label>
 					<div className="flex flex-row px-[18px] w-full h-9 rounded-full border border-line mb-[18px]">
 						<input
 							id="password"
-							type={isPasswordVisible ? "text" : "password"}
+							type={isPasswordVisible && !isLoading ? "text" : "password"}
 							onChange={(e) => setPassword(e.target.value)}
-							className="flex-1 py-1.5 pr-3 focus:outline-none h-9"
+							className={`flex-1 py-1.5 ${
+								isLoading ? "" : "pr-3"
+							} focus:outline-none h-9`}
+							disabled={isLoading}
 						/>
-						<button
-							type="button"
-							onClick={togglePasswordVisibility}
-							className="flex justify-center items-center"
-						>
-							{isPasswordVisible ? <VisibilityOff /> : <Visibility />}
-						</button>
+						{!isLoading && (
+							<button
+								type="button"
+								onClick={togglePasswordVisibility}
+								className="flex justify-center items-center"
+								disabled={isLoading}
+							>
+								{isPasswordVisible ? <VisibilityOff /> : <Visibility />}
+							</button>
+						)}
 					</div>
 					{error && <div className="error whitespace-pre-wrap">{error}</div>}
 					<button
