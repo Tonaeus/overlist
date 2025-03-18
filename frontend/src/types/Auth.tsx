@@ -1,7 +1,7 @@
 type AuthState = {
-	user: string | null;
+	user: any | null;
 };
 
-type AuthAction = { type: "LOGIN"; payload: string } | { type: "LOGOUT" };
+type AuthAction = { type: "LOGIN"; payload: any } | { type: "LOGOUT" };
 
 export type { AuthState, AuthAction };
