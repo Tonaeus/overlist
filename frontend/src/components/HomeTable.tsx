@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import HomeTableComponent from "../libs/HomeTableComponent";
-import TableSearchComponent from "../libs/TableSearchComponent";
+import HomeTableSearchBar from "../libs/HomeTableSearchBar";
 import HomeTableControls from "./HomeTableControls";
 
 import { formatToLocalDate } from "../utils/dateUtils";
@@ -127,7 +127,7 @@ const HomeTable = () => {
 	return (
 		<div className="flex flex-col">
 			<div className="flex justify-between mb-6 flex-col-reverse h-[84px] sm:flex-row sm:h-9">
-				<TableSearchComponent search={search} setSearch={setSearch} />
+				<HomeTableSearchBar search={search} setSearch={setSearch} />
 				<HomeTableControls rows={rows} setRows={setRows} select={select} />
 			</div>
 

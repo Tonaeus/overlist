@@ -1,13 +1,13 @@
 import NavBar from "./NavBar.tsx";
-import Footer from "../layouts/Footer";
+import Footer from "./Footer.tsx";
 import useSideBarContext from "../hooks/useSideBarContext.tsx";
 
-type PageLayoutProps = {
+type TableAndSideBarProps = {
 	sidebar: JSX.Element;
 	table: JSX.Element;
 };
 
-const PageLayout = ({ sidebar, table }: PageLayoutProps) => {
+const TableAndSideBar = ({ sidebar, table }: TableAndSideBarProps) => {
 	const { isSideBarVisible } = useSideBarContext();
 
 	return (
@@ -42,4 +42,4 @@ const PageLayout = ({ sidebar, table }: PageLayoutProps) => {
 	);
 };
 
-export default PageLayout;
+export default TableAndSideBar;

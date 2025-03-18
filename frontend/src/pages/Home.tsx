@@ -1,13 +1,13 @@
 import HomeSideBar from "../components/HomeSideBar";
 import HomeTable from "../components/HomeTable";
-import PageWithSidebar from "../layouts/TableWithSideBar";
+import TableAndSideBar from "../layouts/TableAndSideBar.tsx";
 
 import { DirectoriesContextProvider } from "../contexts/DirectoriesContext.tsx";
 
 const Home = () => {
 	return (
 		<DirectoriesContextProvider>
-			<PageWithSidebar sidebar={<HomeSideBar />} table={<HomeTable />} />
+			<TableAndSideBar sidebar={<HomeSideBar />} table={<HomeTable />} />
 		</DirectoriesContextProvider>
 	);
 };

@@ -1,15 +1,15 @@
 import { Dispatch, SetStateAction } from "react";
 import { Search } from "@mui/icons-material";
 
-type TableSearchComponentProps = {
+type HomeTableSearchBarProps = {
 	search: string;
 	setSearch: Dispatch<SetStateAction<string>>;
 };
 
-const TableSearchComponent = ({
+const HomeTableSearchBar = ({
 	search,
 	setSearch,
-}: TableSearchComponentProps) => {
+}: HomeTableSearchBarProps) => {
 	const handleSearch = (e: any) => {
 		setSearch(e.target.value);
 	};
@@ -33,4 +33,4 @@ const TableSearchComponent = ({
 	);
 };
 
-export default TableSearchComponent;
+export default HomeTableSearchBar;
