@@ -60,7 +60,7 @@ const UserAndPass = ({
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="flex justify-center items-center"
+                className="flex justify-center items-center hover:scale-110"
                 disabled={isLoading}
               >
                 {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
