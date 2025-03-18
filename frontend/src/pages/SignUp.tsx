@@ -58,7 +58,7 @@ const SignUp = () => {
 					{error && <div>{error}</div>}
 					<p className="text-center">
 						Already have an account?{" "}
-						<Link to="/login" className="text-blue-700 hover:underline">
+						<Link to="/login/" className="text-blue-700 hover:underline">
 							Log In
 						</Link>
 					</p>

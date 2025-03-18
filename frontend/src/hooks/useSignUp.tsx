@@ -10,16 +10,19 @@ const useSignUp = () => {
 		setIsLoading(true);
 		setError("");
 
-		const response = await fetch("/api/user/signup", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ username, password }),
-		});
+		const response = await fetch(
+			`${import.meta.env.VITE_BACKEND_URL}/api/user/signup/`,
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ username, password }),
+			}
+		);
 
 		const json = await response.json();
 
 		if (response.ok) {
-      console.log(json);
+			console.log(json);
 
 			localStorage.setItem("user", JSON.stringify(json));
 
