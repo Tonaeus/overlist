@@ -2,7 +2,7 @@ import type { DirectoriesState, DirectoriesAction } from "../types/Directory";
 
 import { createContext, Dispatch, useReducer } from "react";
 
-import directoriesReducer from "./directoriesReducer";
+import directoriesReducer from "../reducers/directoriesReducer";
 
 type DirectoriesContextType = {
 	state: DirectoriesState;

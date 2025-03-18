@@ -2,7 +2,7 @@ import type { ListColumnsState, ListColumnsAction } from "../types/ListColumn";
 
 import { createContext, Dispatch, useReducer } from "react";
 
-import listColumnsReducer from "./listColumnsReducer";
+import listColumnsReducer from "../reducers/listColumnsReducer";
 
 type ListColumnsContextType = {
 	state: ListColumnsState;
