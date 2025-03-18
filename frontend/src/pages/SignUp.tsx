@@ -32,7 +32,7 @@ const SignUp = () => {
 						className="h-9 px-[18px] py-1.5 rounded-full border border-line focus:outline-none mb-3"
 					/>
 					<label htmlFor="password">Password</label>
-					<div className="flex flex-row px-[18px] w-full h-9 rounded-full border border-line mb-9">
+					<div className="flex flex-row px-[18px] w-full h-9 rounded-full border border-line mb-[18px]">
 						<input
 							id="password"
 							type={isPasswordVisible ? "text" : "password"}
@@ -47,15 +47,15 @@ const SignUp = () => {
 							{isPasswordVisible ? <VisibilityOff /> : <Visibility />}
 						</button>
 					</div>
+					{error && <div className="error whitespace-pre-wrap">{error}</div>}
 					<button
 						type="button"
-						className="button mb-3"
+						className="button mt-[18px] mb-3"
 						onClick={handleSubmit}
 						disabled={isLoading}
 					>
 						Sign Up
 					</button>
-					{error && <div>{error}</div>}
 					<p className="text-center">
 						Already have an account?{" "}
 						<Link to="/login/" className="text-blue-700 hover:underline">

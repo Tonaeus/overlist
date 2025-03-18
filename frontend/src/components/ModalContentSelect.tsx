@@ -62,13 +62,7 @@ const ModalContentSelect = ({
 				</div>
 			)}
 			{error && (
-				<div
-					className={`${
-						isOpen ? "opacity-0" : ""
-					} w-full min-h-9 border border-red-500 rounded p-1.5 bg-red-100 text-red-500 break-words whitespace-normal`}
-				>
-					{error}
-				</div>
+				<div className={`${isOpen ? "opacity-0" : ""} error`}>{error}</div>
 			)}
 		</div>
 	);

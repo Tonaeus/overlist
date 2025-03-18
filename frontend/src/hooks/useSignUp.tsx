@@ -22,8 +22,6 @@ const useSignUp = () => {
 		const json = await response.json();
 
 		if (response.ok) {
-			console.log(json);
-
 			localStorage.setItem("user", JSON.stringify(json));
 
 			dispatch({ type: "LOGIN", payload: json });

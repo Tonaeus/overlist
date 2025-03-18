@@ -57,31 +57,21 @@ userSchema.static('signup', async function signup(username: string, password: st
 	}
 
 	if (!validator.isStrongPassword(password, {
-			minLength: 8,
-			minLowercase: 1,
-			minUppercase: 1,
-			minNumbers: 1,
-			minSymbols: 1
+		minLength: 8,
+		minLowercase: 1,
+		minUppercase: 1,
+		minNumbers: 1,
+		minSymbols: 1
 	})) {
-			let errorMessage = 'Password must include:';
-	
-			if (password.length < 8) {
-					errorMessage += '\n • 8+ characters';
-			}
-			if (!/[a-z]/.test(password)) {
-					errorMessage += '\n • 1 lowercase letter';
-			}
-			if (!/[A-Z]/.test(password)) {
-					errorMessage += '\n • 1 uppercase letter';
-			}
-			if (!/[0-9]/.test(password)) {
-					errorMessage += '\n • 1 number';
-			}
-			if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-					errorMessage += '\n • 1 symbol';
-			}
-	
-			throw new Error(errorMessage);
+		let errorMessage = 'Password must include:';
+
+		errorMessage += '\n • At least 8 characters';
+		errorMessage += '\n • At least 1 lowercase letter';
+		errorMessage += '\n • At least 1 uppercase letter';
+		errorMessage += '\n • At least 1 number';
+		errorMessage += '\n • At least 1 symbol';
+		
+		throw new Error(errorMessage);
 	};
 
 	const exists = await this.findOne({ username });

@@ -6,7 +6,7 @@
 	body {
 		@apply text-text;
 	}
-    
+
 	input {
 		@apply bg-inherit;
 	}
@@ -17,11 +17,11 @@
 
 	.button {
 		@apply h-9 flex justify-center items-center bg-blue-700 rounded-full text-white;
-	
+
 		&:disabled {
 			@apply opacity-50;
 		}
-	
+
 		&:not(:disabled):hover {
 			@apply hover:bg-blue-900 transition-all duration-300 ease-in-out;
 		}
@@ -29,5 +29,9 @@
 
 	.button-cancel {
 		@apply h-9 flex justify-center items-center rounded-full border border-line hover:bg-section transition-all duration-300 ease-in-out;
+	}
+
+	.error {
+		@apply w-full min-h-9 border border-red-500 rounded p-1.5 bg-red-100 text-red-500 break-words whitespace-normal;
 	}
 }
