@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import useEditingContext from "../hooks/useEditingContext";
+import useAuthContext from "../hooks/useAuthContext";
 
 import { Edit } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
@@ -10,6 +11,10 @@ const ListTableName = () => {
 	const { id } = useParams();
 
 	const { isEditing: isEditingTable } = useEditingContext();
+
+	const {
+		state: { user },
+	} = useAuthContext();
 
 	const [label, setLabel] = useState<string>("");
 
@@ -21,7 +26,12 @@ const ListTableName = () => {
 	useEffect(() => {
 		const fetchList = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/lists/${id}`
+				`${import.meta.env.VITE_BACKEND_URL}/api/lists/${id}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
 			);
 			const json = await response.json();
 
@@ -32,8 +42,10 @@ const ListTableName = () => {
 			}
 		};
 
-		fetchList();
-	}, [id]);
+		if (user) {
+			fetchList();
+		}
+	}, [id, user]);
 
 	const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
@@ -49,6 +61,7 @@ const ListTableName = () => {
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${user.token}`,
 				},
 				body: JSON.stringify({ label: tempLabel }),
 			}

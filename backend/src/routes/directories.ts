@@ -5,8 +5,11 @@ import {
   updateDirectory,
   deleteDirectory,
 } from "../controllers/directoryController.js";
+import requireAuth from "../middlewares/requireAuth.js";
 
 const router = express.Router();
+
+router.use(requireAuth);
 
 router.get('/', getDirectories);
 

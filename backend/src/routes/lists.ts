@@ -8,8 +8,11 @@ import {
   deleteLists,
   copyLists,
 } from "../controllers/listController.js";
+import requireAuth from "../middlewares/requireAuth.js";
 
 const router = express.Router();
+
+router.use(requireAuth);
 
 router.get('/:id', getList);
 

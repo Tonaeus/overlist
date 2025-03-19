@@ -12,6 +12,7 @@ import useModal from "../hooks/useModal";
 import Modal from "./Modal";
 import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
+import useAuthContext from "../hooks/useAuthContext";
 
 const HomeSideBar = () => {
 	const { id } = useParams();
@@ -20,11 +21,20 @@ const HomeSideBar = () => {
 		state: { directories },
 		dispatch,
 	} = useDirectoriesContext();
+	
+	const {
+		state: { user },
+	} = useAuthContext();
 
 	useEffect(() => {
 		const fetchDirectories = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/directories/`
+				`${import.meta.env.VITE_BACKEND_URL}/api/directories/`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
 			);
 			const json = await response.json();
 
@@ -33,8 +43,10 @@ const HomeSideBar = () => {
 			}
 		};
 
-		fetchDirectories();
-	}, [dispatch]);
+		if (user) {
+			fetchDirectories();
+		}
+	}, [dispatch, user]);
 
 	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
 		useModal();
@@ -59,6 +71,7 @@ const HomeSideBar = () => {
 						body: JSON.stringify({ label: getModalValue() }),
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 					}
 				);
@@ -107,6 +120,7 @@ const HomeSideBar = () => {
 						body: JSON.stringify({ label: getModalValue() }),
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 					}
 				);
@@ -151,6 +165,9 @@ const HomeSideBar = () => {
 					`${import.meta.env.VITE_BACKEND_URL}/api/directories/${directory.id}`,
 					{
 						method: "DELETE",
+						headers: {
+							Authorization: `Bearer ${user.token}`,
+						},
 					}
 				);
 

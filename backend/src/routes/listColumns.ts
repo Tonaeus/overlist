@@ -5,8 +5,11 @@ import {
   updateListColumn,
   deleteListColumn
 } from "../controllers/listColumnController.js";
+import requireAuth from "../middlewares/requireAuth.js";
 
 const router = express.Router();
+
+router.use(requireAuth);
 
 router.get('/:list_id', getListColumns);
 

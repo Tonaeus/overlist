@@ -7,8 +7,11 @@ import {
   copyListRows,
   resetListRows
 } from "../controllers/listRowController.js";
+import requireAuth from "../middlewares/requireAuth.js";
 
 const router = express.Router();
+
+router.use(requireAuth);
 
 router.get('/:list_id', getListRows);
 

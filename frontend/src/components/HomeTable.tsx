@@ -13,8 +13,14 @@ import { formatToLocalDate } from "../utils/dateUtils";
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
 import useHomeTableComponent from "../hooks/useHomeTableComponent";
 
+import useAuthContext from "../hooks/useAuthContext";
+
 const HomeTable = () => {
 	const { id } = useParams();
+
+	const {
+		state: { user },
+	} = useAuthContext();
 
 	const [columns] = useState<HomeTableColumn[]>([
 		{
@@ -50,8 +56,11 @@ const HomeTable = () => {
 	useEffect(() => {
 		const fetchLists = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/lists/`
-			);
+				`${import.meta.env.VITE_BACKEND_URL}/api/lists/`, {
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				});
 			const json = await response.json();
 
 			if (response.ok) {
@@ -65,8 +74,10 @@ const HomeTable = () => {
 			}
 		};
 
-		fetchLists();
-	}, [directories]);
+		if (user) {
+			fetchLists();
+		}
+	}, [directories, user]);
 
 	useEffect(() => {
 		select.fns.onRemoveAll();

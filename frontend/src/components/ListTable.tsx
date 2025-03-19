@@ -16,6 +16,8 @@ import useEditingContext from "../hooks/useEditingContext";
 import BlockerComponent from "./BlockerComponent";
 import { areArraysEqual } from "../utils/compUtils";
 
+import useAuthContext from "../hooks/useAuthContext";
+
 const ListTable = () => {
 	const { id } = useParams();
 
@@ -24,6 +26,10 @@ const ListTable = () => {
 	const {
 		state: { listColumns },
 	} = useListColumnsContext();
+
+	const {
+		state: { user },
+	} = useAuthContext();
 
 	const [columns, setColumns] = useState<ListTableColumn[]>([]);
 	const [rows, setRows] = useState<ListTableRow[]>([]);
@@ -63,7 +69,12 @@ const ListTable = () => {
 	useEffect(() => {
 		const fetchListRows = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`
+				`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
 			);
 			const json = await response.json();
 
@@ -73,10 +84,10 @@ const ListTable = () => {
 			}
 		};
 
-		if (columns.length > 0) {
+		if (user && columns.length > 0) {
 			fetchListRows();
 		}
-	}, [id, columns]);
+	}, [id, columns, user]);
 
 	const { data, theme, select } = useListTableComponent({
 		rows,

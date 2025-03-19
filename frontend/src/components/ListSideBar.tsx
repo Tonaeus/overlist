@@ -14,10 +14,16 @@ import Modal from "./Modal";
 import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
 
+import useAuthContext from "../hooks/useAuthContext";
+
 const ListSideBar = () => {
 	const { id } = useParams();
 
 	const { isEditing } = useEditingContext();
+
+	const {
+		state: { user },
+	} = useAuthContext();
 
 	const [error, setError] = useState<boolean>(false);
 
@@ -29,7 +35,12 @@ const ListSideBar = () => {
 	useEffect(() => {
 		const fetchListColumns = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`
+				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
 			);
 			const json = await response.json();
 
@@ -40,12 +51,14 @@ const ListSideBar = () => {
 			}
 		};
 
-		fetchListColumns();
+		if (user) {
+			fetchListColumns();
+		}
 
 		return () => {
 			dispatch({ type: "SET_LIST_COLUMNS", payload: [] });
 		};
-	}, [id, dispatch]);
+	}, [id, dispatch, user]);
 
 	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
 		useModal();
@@ -70,6 +83,7 @@ const ListSideBar = () => {
 						body: JSON.stringify({ column_label: getModalValue() }),
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 					}
 				);
@@ -121,6 +135,7 @@ const ListSideBar = () => {
 						}),
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 					}
 				);
@@ -170,6 +185,7 @@ const ListSideBar = () => {
 						}),
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 					}
 				);

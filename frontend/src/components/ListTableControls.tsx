@@ -18,7 +18,9 @@ import { Tooltip } from "react-tooltip";
 import useModal from "../hooks/useModal";
 import Modal from "./Modal";
 import ModalContentText from "./ModalContentText";
+
 import useEditingContext from "../hooks/useEditingContext";
+import useAuthContext from "../hooks/useAuthContext";
 
 type ListTableControlsProps = {
 	columns: ListTableColumn[];
@@ -37,6 +39,10 @@ const ListTableControls = ({
 
 	const { isEditing, startEditing, stopEditing } = useEditingContext();
 
+	const {
+		state: { user },
+	} = useAuthContext();
+
 	const { modalProps, showModal, hideModal } = useModal();
 
 	const handleAdd = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,6 +52,9 @@ const ListTableControls = ({
 			`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
 			{
 				method: "POST",
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
 			}
 		);
 
@@ -87,6 +96,7 @@ const ListTableControls = ({
 						method: "DELETE",
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 						body: JSON.stringify({ ids: select.state.ids }),
 					}
@@ -141,6 +151,7 @@ const ListTableControls = ({
 						method: "PATCH",
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 						body: JSON.stringify({ ids: select.state.ids }),
 					}
@@ -193,6 +204,7 @@ const ListTableControls = ({
 						method: "PATCH",
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 						body: JSON.stringify({ ids: select.state.ids }),
 					}
@@ -242,6 +254,7 @@ const ListTableControls = ({
 				method: "PATCH",
 				headers: {
 					"Content-Type": "application/json",
+					Authorization: `Bearer ${user.token}`,
 				},
 				body: JSON.stringify({ rows }),
 			}

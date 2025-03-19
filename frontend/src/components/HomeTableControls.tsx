@@ -25,6 +25,8 @@ import { formatToLocalDate } from "../utils/dateUtils";
 import useDirectoriesContext from "../hooks/useDirectoriesContext";
 import useListTableDownload from "../libs/useListTableDownload";
 
+import useAuthContext from "../hooks/useAuthContext";
+
 type HomeTableControlsProps = {
 	rows: HomeTableRow[];
 	setRows: Dispatch<SetStateAction<HomeTableRow[]>>;
@@ -45,6 +47,10 @@ const HomeTableControls = ({
 	const {
 		state: { directories },
 	} = useDirectoriesContext();
+
+	const {
+		state: { user },
+	} = useAuthContext();
 
 	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
 		useModal();
@@ -69,6 +75,7 @@ const HomeTableControls = ({
 						body: JSON.stringify({ label: getModalValue() }),
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 					}
 				);
@@ -136,6 +143,7 @@ const HomeTableControls = ({
 						method: "DELETE",
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 						body: JSON.stringify({ ids: select.state.ids }),
 					}
@@ -192,6 +200,7 @@ const HomeTableControls = ({
 						method: "PATCH",
 						headers: {
 							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 						body: JSON.stringify({ ids: select.state.ids }),
 					}
@@ -249,6 +258,7 @@ const HomeTableControls = ({
 						method: "PATCH",
 						headers: {
 							"Content-type": "application/json",
+							Authorization: `Bearer ${user.token}`,
 						},
 						body: JSON.stringify({
 							ids: select.state.ids,
@@ -312,12 +322,22 @@ const HomeTableControls = ({
 			const label = rows.find((row: HomeTableRow) => row.id === id)?.label;
 
 			const listColumnsResponse = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`
+				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
 			);
 			const listColumns = await listColumnsResponse.json();
 
 			const listRowsResponse = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`
+				`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
 			);
 			const listRows = await listRowsResponse.json();
 
