@@ -213,14 +213,16 @@ const ListSideBar = () => {
 	return (
 		<>
 			<div className="flex flex-col h-full">
-				<SideBarButton
-					label="Add Column"
-					onClick={(e) => {
-						handleAdd(e);
-					}}
-					disabled={isEditing || error}
-				/>
-				<div className="flex-1 overflow-y-auto">
+				<div className="flex-1">
+					<SideBarButton
+						label="Add Column"
+						onClick={(e) => {
+							handleAdd(e);
+						}}
+						disabled={isEditing || error}
+					/>
+				</div>
+				<div className="flex-1 pb-6">
 					{listColumns.map((column: ListColumn) => (
 						<SideBarBlock
 							key={column.id}

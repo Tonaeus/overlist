@@ -21,7 +21,7 @@ const HomeSideBar = () => {
 		state: { directories },
 		dispatch,
 	} = useDirectoriesContext();
-	
+
 	const {
 		state: { user },
 	} = useAuthContext();
@@ -194,13 +194,15 @@ const HomeSideBar = () => {
 	return (
 		<>
 			<div className="flex flex-col h-full">
-				<SideBarButton
-					label="Add Directory"
-					onClick={(e) => {
-						handleAdd(e);
-					}}
-				/>
-				<div className="flex-1 overflow-y-auto">
+				<div className="flex-1">
+					<SideBarButton
+						label="Add Directory"
+						onClick={(e) => {
+							handleAdd(e);
+						}}
+					/>
+				</div>
+				<div className="flex-1 pb-6">
 					{directories.map((directory: Directory) => (
 						<SideBarBlock
 							key={directory.id}

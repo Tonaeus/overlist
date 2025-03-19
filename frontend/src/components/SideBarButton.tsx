@@ -11,7 +11,7 @@ const SideBarButton = ({ label, onClick, disabled }: SideBarButtonProps) => {
 
 	return (
 		<button
-			className={`button w-[calc(100vw-48px)] lg:w-[204px] my-6 whitespace-nowrap transition-all duration-150 ${
+			className={`button w-[calc(100vw-48px)] lg:w-52 my-6 whitespace-nowrap transition-all duration-150 ${
 				!isSideBarVisible ? "text-transparent" : ""
 			}`}
 			onClick={onClick}

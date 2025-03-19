@@ -16,10 +16,10 @@ const TableAndSideBar = ({ sidebar, table }: TableAndSideBarProps) => {
 			<div className="flex-1">
 				<div className="flex flex-row overflow-hidden h-[calc(100vh-3.5rem)]">
 					<div
-						className={`overflow-hidden transition-all duration-300
+						className={`overflow-hidden transition-all duration-300 overflow-y-auto
 		                        ${
 															isSideBarVisible
-																? "w-full lg:w-64 pl-6 pb-6 lg:pr-1"
+																? "w-full lg:w-64 pl-6 pb-6 lg:mr-1"
 																: "w-0"
 														}`}
 					>
