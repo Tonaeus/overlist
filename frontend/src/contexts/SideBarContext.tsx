@@ -38,6 +38,18 @@ const SideBarContextProvider = ({
 	}, []);
 
 	useEffect(() => {
+		const checkScreenSize = () => {
+			if (window.innerWidth >= 1024) {
+				setIsSideBarVisible(true);
+			} else {
+				setIsSideBarVisible(false);
+			}
+		};
+
+		checkScreenSize();
+	}, []);
+
+	useEffect(() => {
 		const newPathname = location.pathname;
 
 		const isSwitchingBetweenPages =
