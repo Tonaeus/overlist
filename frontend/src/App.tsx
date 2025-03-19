@@ -2,6 +2,7 @@ import {
 	createBrowserRouter,
 	RouterProvider,
 	Navigate,
+	Outlet,
 } from "react-router-dom";
 
 import SignUp from "./pages/SignUp";
@@ -9,9 +10,21 @@ import LogIn from "./pages/LogIn";
 import Home from "./pages/Home";
 import List from "./pages/List";
 
+import { AuthContextProvider } from "./contexts/AuthContext";
+import { SideBarContextProvider } from "./contexts/SideBarContext";
+
+const Providers = () => (
+	<AuthContextProvider>
+		<SideBarContextProvider>
+			<Outlet />
+		</SideBarContextProvider>
+	</AuthContextProvider>
+);
+
 const router = createBrowserRouter([
 	{
 		path: "/",
+		element: <Providers />, 
 		children: [
 			{ index: true, element: <Navigate to="/directory/" replace /> },
 			{ path: "/signup/", element: <SignUp /> },

@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 type SideBarContextType = {
 	isSideBarVisible: boolean;
@@ -17,6 +18,40 @@ const SideBarContextProvider = ({
 	const toggleSideBar = () => {
 		setIsSideBarVisible((prevState: boolean) => !prevState);
 	};
+
+	const [isScreenLarge, setIsScreenLarge] = useState<boolean>(false);
+	const location = useLocation();
+	const prevPathname = useRef<string>(location.pathname);
+
+	useEffect(() => {
+		const checkScreenSize = () => {
+			setIsScreenLarge(window.innerWidth >= 1024);
+		};
+
+		checkScreenSize();
+
+		window.addEventListener("resize", checkScreenSize);
+
+		return () => {
+			window.removeEventListener("resize", checkScreenSize);
+		};
+	}, []);
+
+	useEffect(() => {
+		const newPathname = location.pathname;
+
+		const isSwitchingBetweenPages =
+			(prevPathname.current.startsWith("/directory") &&
+				newPathname.startsWith("/list")) ||
+			(prevPathname.current.startsWith("/list") &&
+				newPathname.startsWith("/directory"));
+
+		if (isSwitchingBetweenPages) {
+			setIsSideBarVisible(isScreenLarge);
+		}
+
+		prevPathname.current = newPathname;
+	}, [location.pathname, isScreenLarge]);
 
 	return (
 		<SideBarContext.Provider value={{ isSideBarVisible, toggleSideBar }}>
