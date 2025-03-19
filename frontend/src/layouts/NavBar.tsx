@@ -28,7 +28,7 @@ const NavBar = () => {
 					Overlist
 				</Link>
 			</div>
-			<div className="flex-1 pr-10 flex justify-end items-center">
+			<div className="flex-1 pr-6 flex justify-end items-center">
 				<button type="button" className="button-nav" onClick={handleLogOut}>
 					<Logout fontSize="medium" />
 				</button>

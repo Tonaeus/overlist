@@ -19,7 +19,7 @@ const TableAndSideBar = ({ sidebar, table }: TableAndSideBarProps) => {
 						className={`overflow-hidden transition-all duration-300
 		                        ${
 															isSideBarVisible
-																? "w-full lg:w-64 px-6 pb-6"
+																? "w-full lg:w-64 pl-6 pb-6 lg:pr-1"
 																: "w-0"
 														}`}
 					>

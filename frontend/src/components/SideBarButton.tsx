@@ -7,10 +7,16 @@ type SideBarButtonProps = {
 };
 
 const SideBarButton = ({ label, onClick, disabled }: SideBarButtonProps) => {
-	const {isSideBarVisible} = useSideBarContext();
+	const { isSideBarVisible } = useSideBarContext();
 
 	return (
-		<button className={`button w-full my-6 whitespace-nowrap transition-all duration-150 ${!isSideBarVisible ? 'text-transparent' : ""}`} onClick={onClick} disabled={disabled}>
+		<button
+			className={`button w-[calc(100vw-48px)] lg:w-[204px] my-6 whitespace-nowrap transition-all duration-150 ${
+				!isSideBarVisible ? "text-transparent" : ""
+			}`}
+			onClick={onClick}
+			disabled={disabled}
+		>
 			{label}
 		</button>
 	);

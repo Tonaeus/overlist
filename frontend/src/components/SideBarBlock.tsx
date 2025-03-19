@@ -70,7 +70,7 @@ const SideBarBlock = ({
 	return to ? (
 		<Link
 			to={to}
-			className={`h-9 flex justify-start items-center px-3 rounded-full ${
+			className={`h-9 w-[calc(100vw-48px)] lg:w-[204px] flex justify-start items-center px-3 rounded-full ${
 				object.id === id ? "bg-selected text-blue-700" : "hover:bg-hovered"
 			} group`}
 			onMouseEnter={handleMouseEnter}
@@ -81,7 +81,7 @@ const SideBarBlock = ({
 		</Link>
 	) : (
 		<div
-			className={`h-9 flex justify-start items-center px-3 rounded-full hover:bg-hovered group`}
+			className={`h-9 w-[calc(100vw-48px)] lg:w-[204px] flex justify-start items-center px-3 rounded-full hover:bg-hovered group`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 		>
