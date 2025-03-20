@@ -56,6 +56,10 @@ const SideBarContextProvider = ({
 			(prevPathname.current.startsWith("/directory") &&
 				newPathname.startsWith("/list")) ||
 			(prevPathname.current.startsWith("/list") &&
+				newPathname.startsWith("/directory")) || 
+			(prevPathname.current.startsWith("/signup") &&
+				newPathname.startsWith("/directory")) ||
+			(prevPathname.current.startsWith("/login") &&
 				newPathname.startsWith("/directory"));
 
 		if (isSwitchingBetweenPages) {
