@@ -1,8 +1,11 @@
 import type { AuthRequest } from '../types/Auth.js';
 import type { Response } from "express";
 import mongoose from "mongoose";
+
+import List from "../models/listModel.js";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
+
 import { extractColumns } from "../utils/listColumnUtils.js";
 
 const getListColumns = async (req: AuthRequest, res: Response) => {
@@ -88,6 +91,14 @@ const createListColumn = async (req: AuthRequest, res: Response) => {
       listBody.save();
     }
 
+    const list = await List.findById(list_id);
+
+    if (!list) {
+      throw new Error();
+    }
+
+    list.update();
+
     res.status(200).json(listColumns);
     return;
   }
@@ -141,6 +152,14 @@ const updateListColumn = async (req: AuthRequest, res: Response) => {
       throw new Error();
     }
 
+    const list = await List.findById(list_id);
+
+    if (!list) {
+      throw new Error();
+    }
+
+    list.update();
+
     const listColumns = extractColumns(listHeader);
 
     res.status(200).json(listColumns);
@@ -193,6 +212,14 @@ const deleteListColumn = async (req: AuthRequest, res: Response) => {
       );
       await listBody.save();
     }
+
+    const list = await List.findById(list_id);
+
+    if (!list) {
+      throw new Error();
+    }
+
+    list.update()
 
     res.status(200).json(listColumns);
     return;

@@ -2,6 +2,7 @@ import type { AuthRequest } from '../types/Auth.js';
 import type { Response } from "express";
 import mongoose from "mongoose";
 
+import List from "../models/listModel.js";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
 
@@ -68,6 +69,14 @@ const createListRow = async (req: AuthRequest, res: Response) => {
       throw new Error();
     }
 
+    const list = await List.findById(list_id);
+
+    if (!list) {
+      throw new Error();
+    }
+
+    list.update();
+
     const listRows = extractRows(listBody);
 
     res.status(200).json(formatRow(listRows[listRows.length - 1]));
@@ -103,6 +112,14 @@ const updateListRows = async (req: AuthRequest, res: Response) => {
 
     listBody.rows = processRows(rows);
     await listBody.save();
+
+    const list = await List.findById(list_id);
+
+    if (!list) {
+      throw new Error();
+    }
+
+    list.update();
 
     res.status(200).json({});
     return;
@@ -145,6 +162,14 @@ const deleteListRows = async (req: AuthRequest, res: Response) => {
 
     listBody.rows = rows.filter(row => !ids.includes(row._id?.toString()));
     await listBody.save();
+
+    const list = await List.findById(list_id);
+
+    if (!list) {
+      throw new Error();
+    }
+
+    list.update();
 
     res.status(200).json({});
     return;
@@ -194,6 +219,14 @@ const copyListRows = async (req: AuthRequest, res: Response) => {
     listBody.rows = [...listBody.rows, ...copiedRows];
     await listBody.save();
 
+    const list = await List.findById(list_id);
+
+    if (!list) {
+      throw new Error();
+    }
+
+    list.update();
+
     res.status(200).json(copiedRows.map(formatRow));
     return;
   }
@@ -239,6 +272,14 @@ const resetListRows = async (req: AuthRequest, res: Response) => {
         : row
     );
     await listBody.save();
+
+    const list = await List.findById(list_id);
+
+    if (!list) {
+      throw new Error();
+    }
+
+    list.update();
 
     res.status(200).json({});
     return;

@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Model, Schema, model } from "mongoose";
 
 type IList = {
   label: string;
@@ -8,21 +8,32 @@ type IList = {
   uid: string;
 }
 
-const listSchema = new Schema<IList>({
+type IListMethods = {
+  update(): void;
+}
+
+type ListModel = Model<IList, {}, IListMethods>;
+
+const listSchema = new Schema<IList, ListModel, IListMethods>({
   label: {
     type: String,
     required: true,
   },
   directory_id: {
     type: String,
-    default: null  
+    default: null
   },
   uid: {
     type: String,
     required: true,
   }
-}, {timestamps: true} )
+}, { timestamps: true })
 
-const List = model<IList>("List", listSchema);
+listSchema.method('update', function update() {
+  this.updatedAt = new Date();
+  return this.save();
+});
+
+const List = model<IList, ListModel>("List", listSchema);
 
 export default List;
