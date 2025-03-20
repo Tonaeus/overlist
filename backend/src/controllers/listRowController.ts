@@ -1,4 +1,5 @@
-import type { Request, Response } from "express";
+import type { AuthRequest } from '../types/Auth.js';
+import type { Response } from "express";
 import mongoose from "mongoose";
 
 import ListHeader from "../models/listHeaderModel.js";
@@ -7,7 +8,7 @@ import ListBody from "../models/listBodyModel.js";
 import { formatRow, isValidRow, extractRows, processRows } from "../utils/listRowUtils.js";
 import { extractColumns } from "../utils/listColumnUtils.js";
 
-const getListRows = async (req: Request, res: Response) => {
+const getListRows = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -16,7 +17,8 @@ const getListRows = async (req: Request, res: Response) => {
   }
 
   try {
-    const listBody = await ListBody.findOne({ list_id: list_id });
+    const uid = req.user?.id;
+    const listBody = await ListBody.findOne({ list_id: list_id, uid});
     const listRows = extractRows(listBody);
 
     res.status(200).json(listRows);
@@ -28,7 +30,7 @@ const getListRows = async (req: Request, res: Response) => {
   }
 };
 
-const createListRow = async (req: Request, res: Response) => {
+const createListRow = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -37,7 +39,8 @@ const createListRow = async (req: Request, res: Response) => {
   }
 
   try {
-    const listHeader = await ListHeader.findOne({ list_id: list_id });
+    const uid = req.user?.id;
+    const listHeader = await ListHeader.findOne({ list_id: list_id, uid });
     const listColumns = extractColumns(listHeader);
 
     if (listColumns.length === 0) {
@@ -50,7 +53,7 @@ const createListRow = async (req: Request, res: Response) => {
     }, {});
 
     const listBody = await ListBody.findOneAndUpdate(
-      { list_id: list_id },
+      { list_id: list_id, uid },
       {
         $push: {
           rows: {
@@ -76,7 +79,7 @@ const createListRow = async (req: Request, res: Response) => {
   }
 };
 
-const updateListRows = async (req: Request, res: Response) => {
+const updateListRows = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -91,7 +94,8 @@ const updateListRows = async (req: Request, res: Response) => {
       throw Error();
     }
 
-    const listBody = await ListBody.findOne({ list_id: list_id });
+    const uid = req.user?.id;
+    const listBody = await ListBody.findOne({ list_id: list_id, uid });
 
     if (!listBody) {
       throw new Error();
@@ -109,7 +113,7 @@ const updateListRows = async (req: Request, res: Response) => {
   }
 };
 
-const deleteListRows = async (req: Request, res: Response) => {
+const deleteListRows = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -125,7 +129,8 @@ const deleteListRows = async (req: Request, res: Response) => {
   }
 
   try {
-    const listBody = await ListBody.findOne({ list_id: list_id });
+    const uid = req.user?.id;
+    const listBody = await ListBody.findOne({ list_id: list_id, uid });
 
     if (!listBody) {
       throw new Error();
@@ -150,7 +155,7 @@ const deleteListRows = async (req: Request, res: Response) => {
   }
 };
 
-const copyListRows = async (req: Request, res: Response) => {
+const copyListRows = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -166,7 +171,8 @@ const copyListRows = async (req: Request, res: Response) => {
   }
 
   try {
-    const listBody = await ListBody.findOne({ list_id: list_id });
+    const uid = req.user?.id;
+    const listBody = await ListBody.findOne({ list_id: list_id, uid });
 
     if (!listBody) {
       throw new Error();
@@ -197,7 +203,7 @@ const copyListRows = async (req: Request, res: Response) => {
   }
 };
 
-const resetListRows = async (req: Request, res: Response) => {
+const resetListRows = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -213,7 +219,8 @@ const resetListRows = async (req: Request, res: Response) => {
   }
 
   try {
-    const listBody = await ListBody.findOne({ list_id: list_id });
+    const uid = req.user?.id;
+    const listBody = await ListBody.findOne({ list_id: list_id, uid });
 
     if (!listBody) {
       throw new Error();

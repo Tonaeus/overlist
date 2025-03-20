@@ -1,10 +1,11 @@
 import { Schema, model } from "mongoose";
 
 type IList = {
-  label: string,
-  directory_id: string
-  createdAt: Date 
-  updatedAt: Date
+  label: string;
+  directory_id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  uid: string;
 }
 
 const listSchema = new Schema<IList>({
@@ -16,6 +17,10 @@ const listSchema = new Schema<IList>({
     type: String,
     default: null  
   },
+  uid: {
+    type: String,
+    required: true,
+  }
 }, {timestamps: true} )
 
 const List = model<IList>("List", listSchema);

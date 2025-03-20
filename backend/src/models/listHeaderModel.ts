@@ -1,12 +1,13 @@
 import { Schema, model } from "mongoose";
 
 type IColumn = {
-  label: string
+  label: string;
 }
 
 type IListHeader = {
   columns: IColumn[];
   list_id: string;
+  uid: string;
 }
 
 const columnSchema = new Schema<IColumn>({
@@ -22,6 +23,10 @@ const listHeaderSchema = new Schema<IListHeader>({
     default: []
   },
   list_id: {
+    type: String,
+    required: true,
+  },
+  uid: {
     type: String,
     required: true,
   }

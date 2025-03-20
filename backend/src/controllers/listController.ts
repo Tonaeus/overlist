@@ -1,11 +1,12 @@
-import type { Request, Response } from "express";
+import type { AuthRequest } from '../types/Auth.js';
+import type { Response } from "express";
 import mongoose, { Types } from "mongoose";
 import List from "../models/listModel.js";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
 import { formatList } from "../utils/listUtils.js";
 
-const getList = async (req: Request, res: Response) => {
+const getList = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
 
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
@@ -14,7 +15,8 @@ const getList = async (req: Request, res: Response) => {
   }
 
   try {
-    const list = await List.findById({ _id: id });
+    const uid = req.user?.id;
+    const list = await List.findById({ _id: id, uid });
 
     if (!list) {
       res.status(404).json({ error: "No such list." });
@@ -30,9 +32,10 @@ const getList = async (req: Request, res: Response) => {
   }
 };
 
-const getLists = async (req: Request, res: Response) => {
+const getLists = async (req: AuthRequest, res: Response) => {
   try {
-    const lists = await List.find({});
+    const uid = req.user?.id;
+    const lists = await List.find({ uid });
     const formattedLists = await Promise.all(lists.map(formatList));
 
     res.status(200).json(formattedLists);
@@ -44,7 +47,7 @@ const getLists = async (req: Request, res: Response) => {
   }
 };
 
-const createList = async (req: Request, res: Response) => {
+const createList = async (req: AuthRequest, res: Response) => {
   let { label } = req.body;
   label = label?.trim();
 
@@ -54,10 +57,11 @@ const createList = async (req: Request, res: Response) => {
   }
 
   try {
-    const newList = await List.create({ label });
+    const uid = req.user?.id;
+    const newList = await List.create({ label, uid });
 
-    await ListHeader.create({ list_id: newList._id });
-    await ListBody.create({ list_id: newList._id });
+    await ListHeader.create({ list_id: newList._id, uid });
+    await ListBody.create({ list_id: newList._id, uid });
 
     const formattedList = await formatList(newList);
 
@@ -70,7 +74,7 @@ const createList = async (req: Request, res: Response) => {
   }
 };
 
-const updateList = async (req: Request, res: Response) => {
+const updateList = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
 
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
@@ -87,9 +91,10 @@ const updateList = async (req: Request, res: Response) => {
   }
 
   try {
+    const uid = req.user?.id;
     const list = await List.findOneAndUpdate(
-      { _id: id },
-      { ...req.body },
+      { _id: id, uid },
+      { label },
       { new: true }
     );
 
@@ -107,7 +112,7 @@ const updateList = async (req: Request, res: Response) => {
   }
 };
 
-const updateLists = async (req: Request, res: Response) => {
+const updateLists = async (req: AuthRequest, res: Response) => {
   let { ids, directory_id } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
@@ -123,8 +128,10 @@ const updateLists = async (req: Request, res: Response) => {
   directory_id = directory_id === "null" ? null : directory_id;
 
   try {
+    const uid = req.user?.id;
     const lists = await List.find({
-      _id: { $in: ids }
+      _id: { $in: ids },
+      uid
     });
 
     if (!lists || ids.length !== lists.length) {
@@ -133,7 +140,7 @@ const updateLists = async (req: Request, res: Response) => {
     }
 
     const updateResult = await List.updateMany(
-      { _id: { $in: ids } },
+      { _id: { $in: ids }, uid },
       { $set: { directory_id } }
     );
 
@@ -141,7 +148,7 @@ const updateLists = async (req: Request, res: Response) => {
       throw new Error();
     }
 
-    const updatedLists = await List.find({ _id: { $in: ids } });
+    const updatedLists = await List.find({ _id: { $in: ids }, uid });
     const formattedLists = await Promise.all(updatedLists.map(formatList));
 
     res.status(200).json(formattedLists);
@@ -153,7 +160,7 @@ const updateLists = async (req: Request, res: Response) => {
   }
 };
 
-const deleteLists = async (req: Request, res: Response) => {
+const deleteLists = async (req: AuthRequest, res: Response) => {
   const { ids } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
@@ -162,8 +169,10 @@ const deleteLists = async (req: Request, res: Response) => {
   }
 
   try {
+    const uid = req.user?.id;
     const lists = await List.find({
-      _id: { $in: ids }
+      _id: { $in: ids },
+      uid
     });
 
     if (!lists || ids.length !== lists.length) {
@@ -171,9 +180,9 @@ const deleteLists = async (req: Request, res: Response) => {
       return;
     }
 
-    const deleteResult = await List.deleteMany({ _id: { $in: ids } });
-    const headerResult = await ListHeader.deleteMany({ list_id: { $in: ids } });
-    const bodyResult = await ListBody.deleteMany({ list_id: { $in: ids } });
+    const deleteResult = await List.deleteMany({ _id: { $in: ids }, uid });
+    const headerResult = await ListHeader.deleteMany({ list_id: { $in: ids }, uid });
+    const bodyResult = await ListBody.deleteMany({ list_id: { $in: ids }, uid });
 
     if (
       deleteResult.deletedCount !== ids.length ||
@@ -193,7 +202,7 @@ const deleteLists = async (req: Request, res: Response) => {
   }
 };
 
-const copyLists = async (req: Request, res: Response) => {
+const copyLists = async (req: AuthRequest, res: Response) => {
   const { ids } = req.body;
 
   if (!ids || !Array.isArray(ids) || ids.some((id) => !mongoose.Types.ObjectId.isValid(id))) {
@@ -202,8 +211,10 @@ const copyLists = async (req: Request, res: Response) => {
   }
 
   try {
+    const uid = req.user?.id;
     const lists = await List.find({
-      _id: { $in: ids }
+      _id: { $in: ids },
+      uid
     });
 
     if (!lists || lists.length !== ids.length) {
@@ -212,7 +223,8 @@ const copyLists = async (req: Request, res: Response) => {
     }
 
     const listHeaders = await ListHeader.find({
-      list_id: { $in: ids }
+      list_id: { $in: ids },
+      uid
     });
 
     if (!listHeaders || listHeaders.length !== ids.length) {
@@ -220,7 +232,8 @@ const copyLists = async (req: Request, res: Response) => {
     }
 
     const listBodies = await ListBody.find({
-      list_id: { $in: ids }
+      list_id: { $in: ids },
+      uid
     });
 
     if (!listBodies || listBodies.length !== ids.length) {

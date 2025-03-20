@@ -1,7 +1,8 @@
 import { Schema, model } from "mongoose";
 
 type IDirectory = {
-  label: string
+  label: string;
+  uid: string;
 }
 
 const directorySchema = new Schema<IDirectory>({
@@ -9,6 +10,10 @@ const directorySchema = new Schema<IDirectory>({
     type: String,
     required: true,
     unique: true
+  },
+  uid: {
+    type: String,
+    required: true,
   }
 }, { timestamps: true });
 

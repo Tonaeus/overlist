@@ -1,12 +1,14 @@
-import type { Request, Response } from "express";
+import type { AuthRequest } from '../types/Auth.js';
+import type { Response } from "express";
 import mongoose from "mongoose";
 import Directory from "../models/directoryModel.js";
 import List from "../models/listModel.js";
 import { formatDirectory } from "../utils/directoryUtils.js";
 
-const getDirectories = async (req: Request, res: Response) => {
+const getDirectories = async (req: AuthRequest, res: Response) => {
   try {
-    const directories = await Directory.find({}).sort({ label: 1 });
+    const uid = req.user?.id;
+    const directories = await Directory.find({ uid }).sort({ label: 1 });
     const formattedDirectories = directories.map(formatDirectory);
 
     res.status(200).json(formattedDirectories);
@@ -18,7 +20,7 @@ const getDirectories = async (req: Request, res: Response) => {
   }
 };
 
-const createDirectory = async (req: Request, res: Response) => {
+const createDirectory = async (req: AuthRequest, res: Response) => {
   let { label } = req.body;
   label = label?.trim();
 
@@ -33,8 +35,10 @@ const createDirectory = async (req: Request, res: Response) => {
   }
 
   try {
+    const uid = req.user?.id;
     const existingDirectory = await Directory.findOne({
       label: { $regex: `^${label}$` },
+      uid
     });
 
     if (existingDirectory) {
@@ -42,7 +46,7 @@ const createDirectory = async (req: Request, res: Response) => {
       return;
     }
 
-    const directory = await Directory.create({ label });
+    const directory = await Directory.create({ label, uid });
     const formattedDirectory = formatDirectory(directory);
 
     res.status(200).json(formattedDirectory);
@@ -54,7 +58,7 @@ const createDirectory = async (req: Request, res: Response) => {
   }
 };
 
-const updateDirectory = async (req: Request, res: Response) => {
+const updateDirectory = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
 
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
@@ -71,8 +75,10 @@ const updateDirectory = async (req: Request, res: Response) => {
   }
 
   try {
+    const uid = req.user?.id;
     const existingDirectory = await Directory.findOne({
       label: { $regex: `^${label}$` },
+      uid
     });
 
     if (existingDirectory) {
@@ -81,8 +87,8 @@ const updateDirectory = async (req: Request, res: Response) => {
     }
 
     const directory = await Directory.findOneAndUpdate(
-      { _id: id },
-      { ...req.body },
+      { _id: id, uid },
+      { label },
       { new: true }
     );
 
@@ -102,7 +108,7 @@ const updateDirectory = async (req: Request, res: Response) => {
   }
 };
 
-const deleteDirectory = async (req: Request, res: Response) => {
+const deleteDirectory = async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
 
   if (!id || !mongoose.Types.ObjectId.isValid(id)) {
@@ -111,17 +117,18 @@ const deleteDirectory = async (req: Request, res: Response) => {
   }
 
   try {
-    const directory = await Directory.findOneAndDelete({ _id: id });
+    const uid = req.user?.id;
+    const directory = await Directory.findOneAndDelete({ _id: id, uid });
 
     if (!directory) {
       res.status(404).json({ error: 'No such directory.' });
       return;
     }
 
-    const lists = await List.find({ directory_id: id });
+    const lists = await List.find({ directory_id: id, uid });
 
     const updateResult = await List.updateMany(
-      { directory_id: id }, 
+      { directory_id: id, uid },
       { $set: { directory_id: null } }
     );
 

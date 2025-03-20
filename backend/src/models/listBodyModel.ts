@@ -7,6 +7,7 @@ type IRow = {
 type IListBody =  {
   rows: IRow[];
   list_id: string;
+  uid: string;
 }
 
 const rowSchema = new Schema({}, { strict: false });
@@ -17,6 +18,10 @@ const listBodySchema = new Schema<IListBody>({
     default: []
   },
   list_id: {
+    type: String,
+    required: true,
+  },
+  uid: {
     type: String,
     required: true,
   }

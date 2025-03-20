@@ -1,10 +1,11 @@
-import type { Request, Response } from "express";
+import type { AuthRequest } from '../types/Auth.js';
+import type { Response } from "express";
 import mongoose from "mongoose";
 import ListHeader from "../models/listHeaderModel.js";
 import ListBody from "../models/listBodyModel.js";
 import { extractColumns } from "../utils/listColumnUtils.js";
 
-const getListColumns = async (req: Request, res: Response) => {
+const getListColumns = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -13,7 +14,8 @@ const getListColumns = async (req: Request, res: Response) => {
   }
 
   try {
-    const listHeader = await ListHeader.findOne({ list_id: list_id });
+    const uid = req.user?.id;
+    const listHeader = await ListHeader.findOne({ list_id: list_id, uid });
     const listColumns = extractColumns(listHeader);
 
     res.status(200).json(listColumns);
@@ -25,7 +27,7 @@ const getListColumns = async (req: Request, res: Response) => {
   }
 };
 
-const createListColumn = async (req: Request, res: Response) => {
+const createListColumn = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -42,9 +44,11 @@ const createListColumn = async (req: Request, res: Response) => {
   }
 
   try {
+    const uid = req.user?.id;
     const existingListColumn = await ListHeader.findOne({
       list_id: list_id,
-      columns: { $elemMatch: { label: { $regex: `^${column_label}$` } } }
+      columns: { $elemMatch: { label: { $regex: `^${column_label}$` } } },
+      uid
     });
 
     if (existingListColumn) {
@@ -53,7 +57,7 @@ const createListColumn = async (req: Request, res: Response) => {
     }
 
     const listHeader = await ListHeader.findOneAndUpdate(
-      { list_id: list_id },
+      { list_id: list_id, uid },
       {
         $push: {
           columns: {
@@ -71,7 +75,7 @@ const createListColumn = async (req: Request, res: Response) => {
     const listColumns = extractColumns(listHeader);
     const newColumnId = listColumns[listColumns.length - 1].id;
 
-    const listBody = await ListBody.findOne({ list_id: list_id });
+    const listBody = await ListBody.findOne({ list_id: list_id, uid });
 
     if (!listBody) {
       throw new Error();
@@ -93,7 +97,7 @@ const createListColumn = async (req: Request, res: Response) => {
   }
 };
 
-const updateListColumn = async (req: Request, res: Response) => {
+const updateListColumn = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -115,9 +119,11 @@ const updateListColumn = async (req: Request, res: Response) => {
   }
 
   try {
+    const uid = req.user?.id;
     const existingListColumn = await ListHeader.findOne({
       list_id: list_id,
-      columns: { $elemMatch: { label: { $regex: `^${column_label}$` } } }
+      columns: { $elemMatch: { label: { $regex: `^${column_label}$` } } },
+      uid
     });
 
     if (existingListColumn) {
@@ -126,7 +132,7 @@ const updateListColumn = async (req: Request, res: Response) => {
     }
 
     const listHeader = await ListHeader.findOneAndUpdate(
-      { list_id: list_id, "columns._id": column_id },
+      { list_id: list_id, "columns._id": column_id, uid },
       { $set: { "columns.$.label": column_label } },
       { new: true }
     );
@@ -146,7 +152,7 @@ const updateListColumn = async (req: Request, res: Response) => {
   }
 };
 
-const deleteListColumn = async (req: Request, res: Response) => {
+const deleteListColumn = async (req: AuthRequest, res: Response) => {
   const { list_id } = req.params;
 
   if (!list_id || !mongoose.Types.ObjectId.isValid(list_id)) {
@@ -162,8 +168,9 @@ const deleteListColumn = async (req: Request, res: Response) => {
   }
 
   try {
+    const uid = req.user?.id;
     const listHeader = await ListHeader.findOneAndUpdate(
-      { list_id: list_id, "columns._id": column_id },
+      { list_id: list_id, "columns._id": column_id, uid },
       { $pull: { columns: { _id: column_id } } },
       { new: true }
     );
@@ -174,7 +181,7 @@ const deleteListColumn = async (req: Request, res: Response) => {
 
     const listColumns = extractColumns(listHeader);
 
-    const listBody = await ListBody.findOne({ list_id: list_id });
+    const listBody = await ListBody.findOne({ list_id: list_id, uid });
 
     if (!listBody) {
       throw new Error();
