@@ -54,10 +54,6 @@ const ListSideBar = () => {
 		if (user) {
 			fetchListColumns();
 		}
-
-		return () => {
-			dispatch({ type: "SET_LIST_COLUMNS", payload: [] });
-		};
 	}, [id, dispatch, user]);
 
 	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =

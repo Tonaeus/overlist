@@ -246,8 +246,6 @@ const ListTableControls = ({
 			return;
 		}
 
-		stopEditing();
-
 		const response = await fetch(
 			`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
 			{
