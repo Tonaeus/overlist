@@ -213,7 +213,7 @@ const ListSideBar = () => {
 	return (
 		<>
 			<div className="flex flex-col h-full">
-				<div className="flex-1">
+				<div className="flex">
 					<SideBarButton
 						label="Add Column"
 						onClick={(e) => {
