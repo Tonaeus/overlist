@@ -23,7 +23,23 @@ services:
       - database
     networks:
       - overlist-network
+  frontend:
+    build:
+      context: ./frontend
+    container_name: overlist-frontend-container
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ./frontend/.env.production
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend
+    networks:
+      - overlist-network
+
 volumes:
   overlist-database-volume:
+
 networks:
   overlist-network:

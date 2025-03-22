@@ -3,7 +3,7 @@ FROM node:20-alpine AS build
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY ./package*.json ./
 
 RUN npm install
 
@@ -19,6 +19,10 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/dist /usr/src/app/dist
 COPY --from=build /usr/src/app/node_modules /usr/src/app/node_modules
 
-EXPOSE 3000
+# Need package.json to use the NPM scripts
+COPY --from=build /usr/src/app/package.json /usr/src/app/package.json 
 
-CMD ["node", "dist/server.js"]
+EXPOSE 4173
+
+# Need "--" and "--host" to connect from the host machine
+CMD ["npm", "run", "preview", "--", "--host"]
