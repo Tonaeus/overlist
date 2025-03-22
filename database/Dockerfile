@@ -1,5 +1,5 @@
 # Use MongoDB image
-FROM mongo:latest
+FROM mongo:6.0
 
 # Set environment variables
 ENV MONGO_INITDB_ROOT_USERNAME=root_username

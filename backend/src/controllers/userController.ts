@@ -3,10 +3,10 @@ import type { Types } from "mongoose";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
 
-import { SECRET } from "../configs/dotenvConfig.js";
+import { JWT_SECRET } from "../configs/dotenvConfig.js";
 
 const createToken = (id: Types.ObjectId) => {
-  return jwt.sign({ id }, SECRET, { expiresIn: "7d" })
+  return jwt.sign({ id }, JWT_SECRET, { expiresIn: "7d" })
 };
 
 // Login user

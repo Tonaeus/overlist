@@ -25,9 +25,8 @@
 	"contributors": [],
 	"scripts": {
 		"clean": "rm -rf dist",
-		"build": "cross-env NODE_ENV=production npm run clean && npx tsc",
-		"dev": "cross-env NODE_ENV=development nodemon --exec node --loader ts-node/esm src/server.ts",
-		"preview": "cross-env NODE_ENV=production npx http-server dist"
+		"build": "npm run clean && npx tsc",
+		"dev": "cross-env NODE_ENV=development nodemon --exec node --loader ts-node/esm src/server.ts"
 	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",

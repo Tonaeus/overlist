@@ -1,0 +1,29 @@
+services:
+  database:
+    build:
+      context: ./database
+    container_name: overlist-database-container
+    volumes:
+      - overlist-database-volume:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - overlist-network
+  backend:
+    build:
+      context: ./backend
+    container_name: overlist-backend-container
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - ./backend/.env.production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    networks:
+      - overlist-network
+volumes:
+  overlist-database-volume:
+networks:
+  overlist-network:

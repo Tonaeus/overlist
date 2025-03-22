@@ -2,7 +2,7 @@ import type { Response, NextFunction } from 'express';
 import type { AuthRequest } from '../types/Auth.js';
 import jwt, { type JwtPayload } from "jsonwebtoken";
 import User from '../models/userModel.js';
-import { SECRET } from '../configs/dotenvConfig.js';
+import { JWT_SECRET } from '../configs/dotenvConfig.js';
 
 const requireAuth = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
@@ -20,7 +20,7 @@ const requireAuth = async (req: AuthRequest, res: Response, next: NextFunction) 
   }
 
   try {
-    const decoded = jwt.verify(token, SECRET) as JwtPayload;
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
 
     if (!decoded || !decoded.id) {
       res.status(401).json({ error: "Token is invalid." });
