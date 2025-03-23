@@ -7,7 +7,8 @@ services:
     env_file:
       - ./backend/.env.production
     volumes:
-      - overlist-database-volume:/data/db
+      - overlist-database-data-volume:/data/db
+      - overlist-database-config-volume:/data/configdb
     ports:
       - "27017:27017"
   backend:
@@ -28,13 +29,13 @@ services:
         VITE_BACKEND_URL: http://localhost:3000
     image: overlist-frontend-image
     container_name: overlist-frontend-container
-    env_file:
-      - ./frontend/.env.production
     ports:
       - "4173:4173"
     depends_on:
       - backend
 
 volumes:
-  overlist-database-volume:
-    name: overlist-database-volume
+  overlist-database-data-volume:
+    name: overlist-database-data-volume
+  overlist-database-config-volume:
+    name: overlist-database-config-volume

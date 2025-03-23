@@ -1,0 +1,47 @@
+services:
+  database:
+    build:
+      context: ./database
+    image: overlist-database-image
+    container_name: overlist-database-container-dev
+    env_file:
+      - ./backend/.env.dev
+    volumes:
+      - overlist-database-data-volume-dev:/data/db
+      - overlist-database-config-volume-dev:/data/configdbb
+    ports:
+      - "27017:27017"
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    image: overlist-backend-image-dev
+    container_name: overlist-backend-container-dev
+    env_file:
+      - ./backend/.env.dev
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    image: overlist-frontend-image-dev
+    container_name: overlist-frontend-container-dev
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  overlist-database-data-volume-dev:
+    name: overlist-database-data-volume-dev
+  overlist-database-config-volume-dev:
+    name: overlist-database-config-volume-dev

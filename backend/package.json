@@ -26,7 +26,7 @@
 	"scripts": {
 		"clean": "rm -rf dist",
 		"build": "npm run clean && npx tsc",
-		"dev": "cross-env NODE_ENV=development nodemon --exec node --loader ts-node/esm src/server.ts"
+		"dev": "cross-env NODE_ENV=dev nodemon --exec node --loader ts-node/esm src/server.ts"
 	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",
