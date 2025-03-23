@@ -2,44 +2,39 @@ services:
   database:
     build:
       context: ./database
+    image: overlist-database-image
     container_name: overlist-database-container
+    env_file:
+      - ./backend/.env.production
     volumes:
       - overlist-database-volume:/data/db
     ports:
       - "27017:27017"
-    networks:
-      - overlist-network
   backend:
     build:
       context: ./backend
+    image: overlist-backend-image
     container_name: overlist-backend-container
-    environment:
-      - NODE_ENV=production
     env_file:
       - ./backend/.env.production
     ports:
       - "3000:3000"
     depends_on:
       - database
-    networks:
-      - overlist-network
   frontend:
     build:
       context: ./frontend
+      args:
+        VITE_BACKEND_URL: http://localhost:3000
+    image: overlist-frontend-image
     container_name: overlist-frontend-container
-    environment:
-      - NODE_ENV=production
     env_file:
       - ./frontend/.env.production
     ports:
       - "4173:4173"
     depends_on:
       - backend
-    networks:
-      - overlist-network
 
 volumes:
   overlist-database-volume:
-
-networks:
-  overlist-network:
+    name: overlist-database-volume
