@@ -16,6 +16,8 @@ import ModalContentText from "./ModalContentText";
 
 import useAuthContext from "../hooks/useAuthContext";
 
+import { BACKEND_URL } from "../configs/dotenvConfig";
+
 const ListSideBar = () => {
 	const { id } = useParams();
 
@@ -35,7 +37,7 @@ const ListSideBar = () => {
 	useEffect(() => {
 		const fetchListColumns = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
+				`${BACKEND_URL}/api/list-columns/${id}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -73,7 +75,7 @@ const ListSideBar = () => {
 			action: "Add",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
+					`${BACKEND_URL}/api/list-columns/${id}`,
 					{
 						method: "POST",
 						body: JSON.stringify({ column_label: getModalValue() }),
@@ -122,7 +124,7 @@ const ListSideBar = () => {
 			action: "Edit",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
+					`${BACKEND_URL}/api/list-columns/${id}`,
 					{
 						method: "PATCH",
 						body: JSON.stringify({
@@ -173,7 +175,7 @@ const ListSideBar = () => {
 			action: "Delete",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
+					`${BACKEND_URL}/api/list-columns/${id}`,
 					{
 						method: "DELETE",
 						body: JSON.stringify({

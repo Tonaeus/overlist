@@ -15,6 +15,8 @@ import useHomeTableComponent from "../hooks/useHomeTableComponent";
 
 import useAuthContext from "../hooks/useAuthContext";
 
+import { BACKEND_URL } from "../configs/dotenvConfig";
+
 const HomeTable = () => {
 	const { id } = useParams();
 
@@ -56,7 +58,7 @@ const HomeTable = () => {
 	useEffect(() => {
 		const fetchLists = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/lists/`, {
+				`${BACKEND_URL}/api/lists/`, {
 					headers: {
 						Authorization: `Bearer ${user.token}`,
 					},

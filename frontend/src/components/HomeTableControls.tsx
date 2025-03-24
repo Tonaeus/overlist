@@ -27,6 +27,8 @@ import useListTableDownload from "../libs/useListTableDownload";
 
 import useAuthContext from "../hooks/useAuthContext";
 
+import { BACKEND_URL } from "../configs/dotenvConfig";
+
 type HomeTableControlsProps = {
 	rows: HomeTableRow[];
 	setRows: Dispatch<SetStateAction<HomeTableRow[]>>;
@@ -69,7 +71,7 @@ const HomeTableControls = ({
 			action: "Add",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/lists/`,
+					`${BACKEND_URL}/api/lists/`,
 					{
 						method: "POST",
 						body: JSON.stringify({ label: getModalValue() }),
@@ -138,7 +140,7 @@ const HomeTableControls = ({
 			action: "Delete",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/lists/`,
+					`${BACKEND_URL}/api/lists/`,
 					{
 						method: "DELETE",
 						headers: {
@@ -195,7 +197,7 @@ const HomeTableControls = ({
 			action: "Copy",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/lists/copy/`,
+					`${BACKEND_URL}/api/lists/copy/`,
 					{
 						method: "PATCH",
 						headers: {
@@ -253,7 +255,7 @@ const HomeTableControls = ({
 			action: "Move",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/lists/`,
+					`${BACKEND_URL}/api/lists/`,
 					{
 						method: "PATCH",
 						headers: {
@@ -322,7 +324,7 @@ const HomeTableControls = ({
 			const label = rows.find((row: HomeTableRow) => row.id === id)?.label;
 
 			const listColumnsResponse = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-columns/${id}`,
+				`${BACKEND_URL}/api/list-columns/${id}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -332,7 +334,7 @@ const HomeTableControls = ({
 			const listColumns = await listColumnsResponse.json();
 
 			const listRowsResponse = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+				`${BACKEND_URL}/api/list-rows/${id}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,

@@ -18,6 +18,8 @@ import { areArraysEqual } from "../utils/compUtils";
 
 import useAuthContext from "../hooks/useAuthContext";
 
+import { BACKEND_URL } from "../configs/dotenvConfig";
+
 const ListTable = () => {
 	const { id } = useParams();
 
@@ -69,7 +71,7 @@ const ListTable = () => {
 	useEffect(() => {
 		const fetchListRows = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+				`${BACKEND_URL}/api/list-rows/${id}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,

@@ -7,6 +7,8 @@ import useAuthContext from "../hooks/useAuthContext";
 import { Edit } from "@mui/icons-material";
 import { Tooltip } from "react-tooltip";
 
+import { BACKEND_URL } from "../configs/dotenvConfig";
+
 const ListTableName = () => {
 	const { id } = useParams();
 
@@ -26,7 +28,7 @@ const ListTableName = () => {
 	useEffect(() => {
 		const fetchList = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/lists/${id}`,
+				`${BACKEND_URL}/api/lists/${id}`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -56,7 +58,7 @@ const ListTableName = () => {
 
 	const handleSave = async () => {
 		const response = await fetch(
-			`${import.meta.env.VITE_BACKEND_URL}/api/lists/${id}`,
+			`${BACKEND_URL}/api/lists/${id}`,
 			{
 				method: "PATCH",
 				headers: {

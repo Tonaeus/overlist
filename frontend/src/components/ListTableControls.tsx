@@ -22,6 +22,8 @@ import ModalContentText from "./ModalContentText";
 import useEditingContext from "../hooks/useEditingContext";
 import useAuthContext from "../hooks/useAuthContext";
 
+import { BACKEND_URL } from "../configs/dotenvConfig";
+
 type ListTableControlsProps = {
 	columns: ListTableColumn[];
 	rows: ListTableRow[];
@@ -49,7 +51,7 @@ const ListTableControls = ({
 		e.preventDefault();
 
 		const response = await fetch(
-			`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+			`${BACKEND_URL}/api/list-rows/${id}`,
 			{
 				method: "POST",
 				headers: {
@@ -91,7 +93,7 @@ const ListTableControls = ({
 			action: "Delete",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+					`${BACKEND_URL}/api/list-rows/${id}`,
 					{
 						method: "DELETE",
 						headers: {
@@ -146,7 +148,7 @@ const ListTableControls = ({
 			action: "Copy",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/copy/${id}`,
+					`${BACKEND_URL}/api/list-rows/copy/${id}`,
 					{
 						method: "PATCH",
 						headers: {
@@ -199,7 +201,7 @@ const ListTableControls = ({
 			action: "Reset",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/reset/${id}`,
+					`${BACKEND_URL}/api/list-rows/reset/${id}`,
 					{
 						method: "PATCH",
 						headers: {
@@ -247,7 +249,7 @@ const ListTableControls = ({
 		}
 
 		const response = await fetch(
-			`${import.meta.env.VITE_BACKEND_URL}/api/list-rows/${id}`,
+			`${BACKEND_URL}/api/list-rows/${id}`,
 			{
 				method: "PATCH",
 				headers: {

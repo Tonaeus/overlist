@@ -14,6 +14,8 @@ import ModalContentInput from "./ModalContentInput";
 import ModalContentText from "./ModalContentText";
 import useAuthContext from "../hooks/useAuthContext";
 
+import { BACKEND_URL } from "../configs/dotenvConfig";
+
 const HomeSideBar = () => {
 	const { id } = useParams();
 
@@ -29,7 +31,7 @@ const HomeSideBar = () => {
 	useEffect(() => {
 		const fetchDirectories = async () => {
 			const response = await fetch(
-				`${import.meta.env.VITE_BACKEND_URL}/api/directories/`,
+				`${BACKEND_URL}/api/directories/`,
 				{
 					headers: {
 						Authorization: `Bearer ${user.token}`,
@@ -65,7 +67,7 @@ const HomeSideBar = () => {
 			action: "Add",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/directories/`,
+					`${BACKEND_URL}/api/directories/`,
 					{
 						method: "POST",
 						body: JSON.stringify({ label: getModalValue() }),
@@ -114,7 +116,7 @@ const HomeSideBar = () => {
 			action: "Edit",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/directories/${directory.id}`,
+					`${BACKEND_URL}/api/directories/${directory.id}`,
 					{
 						method: "PATCH",
 						body: JSON.stringify({ label: getModalValue() }),
@@ -162,7 +164,7 @@ const HomeSideBar = () => {
 			action: "Delete",
 			onAction: async () => {
 				const response = await fetch(
-					`${import.meta.env.VITE_BACKEND_URL}/api/directories/${directory.id}`,
+					`${BACKEND_URL}/api/directories/${directory.id}`,
 					{
 						method: "DELETE",
 						headers: {

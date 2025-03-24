@@ -1,5 +1,6 @@
 import { useState } from "react";
 import useAuthContext from "./useAuthContext";
+import { BACKEND_URL } from "../configs/dotenvConfig";
 
 const useSignUp = () => {
 	const [error, setError] = useState<string>("");
@@ -11,7 +12,7 @@ const useSignUp = () => {
 		setError("");
 
 		const response = await fetch(
-			`${import.meta.env.VITE_BACKEND_URL}/api/user/signup/`,
+			`${BACKEND_URL}/api/user/signup/`,
 			{
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
