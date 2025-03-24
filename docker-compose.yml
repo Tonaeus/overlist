@@ -1,14 +1,12 @@
 services:
   database:
-    build:
-      context: ./database
-    image: overlist-database-image
+    image: mongo:6.0
     container_name: overlist-database-container
     env_file:
-      - ./backend/.env.production
+      - ./database/.env.test
     volumes:
-      - overlist-database-data-volume:/data/db
-      - overlist-database-config-volume:/data/configdb
+      - overlist-database-data-db-volume:/data/db
+      - overlist-database-data-configdb-volume:/data/configdb
     ports:
       - "27017:27017"
   backend:
@@ -17,7 +15,7 @@ services:
     image: overlist-backend-image
     container_name: overlist-backend-container
     env_file:
-      - ./backend/.env.production
+      - ./backend/.env.test
     ports:
       - "3000:3000"
     depends_on:
@@ -35,7 +33,7 @@ services:
       - backend
 
 volumes:
-  overlist-database-data-volume:
-    name: overlist-database-data-volume
-  overlist-database-config-volume:
-    name: overlist-database-config-volume
+  overlist-database-data-db-volume:
+    name: overlist-database-data-db-volume
+  overlist-database-data-configdb-volume:
+    name: overlist-database-data-configdb-volume
