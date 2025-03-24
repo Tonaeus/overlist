@@ -9,7 +9,6 @@ const directorySchema = new Schema<IDirectory>({
   label: {
     type: String,
     required: true,
-    unique: true
   },
   uid: {
     type: String,
