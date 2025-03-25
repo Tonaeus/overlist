@@ -1,30 +1,14 @@
 # Overlist
 
-## Description
-
 Overlist is a web application that allows users to create and organize lists.
 
 ## Technology
 
-**Database**  
-- MongoDB
-
-**Backend**
-- Node
-- Express
-- Typescript
-
-Frontend 
-- Vite
-- React
-- Typescript
-- Tailwind
-
-DevOps
-- Docker
-- Docker Compose
-
-<!-- Deployment -->
+**Database**: MongoDB  
+**Backend**: Node, Express, Typescript  
+**Frontend**: Vite, React, Typescript, Tailwind  
+**DevOps**: Docker, Docker Compose
+<!-- **Deployment**: -->
 
 ## Quick Start
 
@@ -43,7 +27,10 @@ DevOps
     docker compose up --build
     ```
 
-Access the application at [http://localhost:4173](http://localhost:4173).
+## Access
+
+Once the application is running, you can access it at [http://localhost:4173](http://localhost:4173).
+
 
 ## Usage 
 
