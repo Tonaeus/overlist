@@ -105,11 +105,11 @@ const ListTable = () => {
 		rows,
 		tableStyles: {
 			Table: `
-				min-width: calc(38px + 125px * ${columns.length > 0 ? columns.length : 1});
+				min-width: calc(38px + 125px * ${columns.length});
 			`,
 			BaseCell: `
 				&:nth-of-type(1) {
-					width: 38px;
+					width: ${rows.length > 0 ? "38px" : "100%"};
         }
 				&:not(:nth-of-type(1)) {
 					width: 1fr;
@@ -123,10 +123,10 @@ const ListTable = () => {
 			`,
 			HeaderCell: `
 				&.header-cell:hover {
-					background-color: #F4F5F6;
+					${rows.length > 0 ? "background-color: #F4F5F6" : ""};
 				}
 				&:nth-of-type(1) {
-					width: 38px;
+					width: ${rows.length > 0 ? "38px" : "100%"};
 				}
 			`,
 			Row: `
@@ -148,7 +148,7 @@ const ListTable = () => {
 				&.cell:hover {
 				}
 				&:nth-of-type(1) {
-					width: 38px;
+					width: ${rows.length > 0 ? "38px" : "100%"};
 				}
 			`,
 		},
@@ -168,7 +168,7 @@ const ListTable = () => {
 				</div>
 
 				<ListTableComponent
-					columns={columns.length > 0 ? columns : [{}]}
+					columns={columns}
 					data={data}
 					theme={theme}
 					select={select}

@@ -106,7 +106,7 @@ const HomeTable = () => {
 			`,
 				HeaderCell: `
 				&.header-cell:hover {
-					background-color: #F4F5F6;
+					${rows.length > 0 ? "background-color: #F4F5F6" : ""};
 				}
 				&:nth-of-type(1) {
 					width: 38px;

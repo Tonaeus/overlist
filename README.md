@@ -39,4 +39,4 @@ Once the application is running, you can access it at [http://localhost:4173](ht
 
 ## Contact
 
-For questions or issues, open an issue on GitHub or contact me at [tonytran.tt890@gmail.com](mailto:tonytran.tt890@gmail.com).
+For questions or issues, please open an issue on GitHub or contact me at [tonytran.tt890@gmail.com](mailto:tonytran.tt890@gmail.com).
