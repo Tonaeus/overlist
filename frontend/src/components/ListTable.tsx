@@ -18,6 +18,8 @@ import { areArraysEqual } from "../utils/compUtils";
 
 import useAuthContext from "../hooks/useAuthContext";
 
+import { nanoid } from "nanoid";
+
 import { BACKEND_URL } from "../configs/dotenvConfig";
 
 const ListTable = () => {
@@ -61,23 +63,31 @@ const ListTable = () => {
 				) : (
 					<p className="truncate">{item[column.id]}</p>
 				),
+			hide: false,
 		});
 
 		if (listColumns) {
-			setColumns(listColumns.map(createColumn));
+			const newColumns = [
+				...listColumns.map(createColumn),
+				...Array(Math.max(0, columns.length - listColumns.length)).fill({
+					id: nanoid(),
+					label: "",
+					renderCell: () => <span></span>,
+					hide: true,
+				}),
+			];
+
+			setColumns(newColumns);
 		}
 	}, [listColumns]);
 
 	useEffect(() => {
 		const fetchListRows = async () => {
-			const response = await fetch(
-				`${BACKEND_URL}/api/list-rows/${id}`,
-				{
-					headers: {
-						Authorization: `Bearer ${user.token}`,
-					},
-				}
-			);
+			const response = await fetch(`${BACKEND_URL}/api/list-rows/${id}`, {
+				headers: {
+					Authorization: `Bearer ${user.token}`,
+				},
+			});
 			const json = await response.json();
 
 			if (response.ok) {
