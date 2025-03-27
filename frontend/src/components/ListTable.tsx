@@ -109,7 +109,7 @@ const ListTable = () => {
 			`,
 			BaseCell: `
 				&:nth-of-type(1) {
-					width: ${rows.length > 0 ? "38px" : "100%"};
+					width: 38px;
         }
 				&:not(:nth-of-type(1)) {
 					width: 1fr;
@@ -126,7 +126,7 @@ const ListTable = () => {
 					${rows.length > 0 ? "background-color: #F4F5F6" : ""};
 				}
 				&:nth-of-type(1) {
-					width: ${rows.length > 0 ? "38px" : "100%"};
+					width: 38px;
 				}
 			`,
 			Row: `
@@ -148,7 +148,7 @@ const ListTable = () => {
 				&.cell:hover {
 				}
 				&:nth-of-type(1) {
-					width: ${rows.length > 0 ? "38px" : "100%"};
+					width: 38px;
 				}
 			`,
 		},

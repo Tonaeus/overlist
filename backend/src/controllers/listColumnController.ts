@@ -206,6 +206,11 @@ const deleteListColumn = async (req: AuthRequest, res: Response) => {
       throw new Error();
     }
 
+    if (listColumns.length === 0) {
+      listBody.rows = [];
+      await listBody.save();
+    }
+    
     if (listBody.rows.length > 0) {
       listBody.rows = listBody.rows.map(
         row => ({ ...row, [column_id]: undefined })
@@ -219,7 +224,7 @@ const deleteListColumn = async (req: AuthRequest, res: Response) => {
       throw new Error();
     }
 
-    list.update()
+    list.update();
 
     res.status(200).json(listColumns);
     return;

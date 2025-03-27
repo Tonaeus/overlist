@@ -265,6 +265,8 @@ const ListTableControls = ({
 		}
 	};
 
+	const columnCount = columns.filter((col: any) => col.label !== "").length;
+
 	return (
 		<>
 			<div className="w-full sm:w-1/2 flex flex-row justify-end">
@@ -273,7 +275,7 @@ const ListTableControls = ({
 					onClick={(e) => {
 						handleAdd(e);
 					}}
-					disabled={columns.length === 0 || isEditing}
+					disabled={columnCount === 0 || isEditing}
 				>
 					<Add />
 				</button>

@@ -36,15 +36,37 @@ const ListTableComponent = ({
 		});
 	}, [isEditing]);
 
+	const columnCount = columns.filter((col: any) => col.label !== "").length;
+
 	return (
-		<div className="bg-white p-1.5 rounded accent-blue-700 border border-line">
-			<div className="overflow-x-auto">
+		<div
+			className={`bg-white rounded accent-blue-700 border border-line ${
+				columnCount > 0 ? "p-1.5" : "relative py-1.5"
+			}`}
+		>
+			{columnCount > 0 ? null : (
+				<div className="flex flex-col w-full absolute z-10 px-1">
+					<div className="flex flex-col">
+						<div className="h-9 w-[38px] flex justify-center items-center">
+							<input
+								type="checkbox"
+								checked={false}
+								className="cursor-pointer"
+							></input>
+						</div>
+						<div style={{ height: "1px", backgroundColor: "#DDE2EB" }}></div>
+					</div>
+					<div className="h-9"></div>
+				</div>
+			)}
+			<div className={`overflow-x-auto`}>
 				<Table
 					data={data}
 					theme={theme}
 					select={select}
+					layout={{ custom: true }}
 					className="table"
-					style={{ overflow: "hidden" }}
+					style={{ visibility: columnCount > 0 ? "visible" : "hidden" }}
 				>
 					{(tableList: any) => (
 						<>
@@ -67,11 +89,7 @@ const ListTableComponent = ({
 									<Row item={row} key={index} className="row">
 										<CellSelect item={row} />
 										{columns.map((column: any, index: number) => (
-											<Cell
-												key={index}
-												className="cell"
-												hide={column.hide}
-											>
+											<Cell key={index} className="cell" hide={column.hide}>
 												{column.renderCell(row, isEditing)}
 											</Cell>
 										))}
