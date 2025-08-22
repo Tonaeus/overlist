@@ -2,40 +2,16 @@
 
 Overlist is a web application that allows users to create and organize lists.
 
-## Technology
+## Website
+
+Visit the website at [https://overlist.tonytran.dev](https://overlist.tonytran.dev).
+
+## Technologies
 
 **Database**: MongoDB  
 **Backend**: Node, Express, Typescript  
-**Frontend**: Vite, React, Typescript, Tailwind  
-**DevOps**: Docker, Docker Compose
-
-<!-- **Deployment**: -->
-
-## Quick Start
-
-1. Copy the repository:
-
-   ```bash
-   git clone https://github.com/Tonaeus/Overlist.git
-   ```
-
-2. Change the directory:
-
-   ```bash
-   cd Overlist
-   ```
-
-3. Build and run the application:
-
-   ```bash
-   docker compose up --build
-   ```
-
-## Access
-
-Once the application is running, you can access it at [http://localhost:4173](http://localhost:4173).
-
-## Usage
+**Frontend**: Vite, React, Typescript, Tailwind CSS
+**Tools**: Docker, Docker Compose
 
 ## Contact
 
