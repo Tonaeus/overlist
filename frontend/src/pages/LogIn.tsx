@@ -18,6 +18,7 @@ const Login = () => {
 			isLoading={isLoading}
 			error={error}
 			setUsername={setUsername}
+			password={password}
 			setPassword={setPassword}
 			buttonText="Log In"
 			accountText="Don't have an account?"

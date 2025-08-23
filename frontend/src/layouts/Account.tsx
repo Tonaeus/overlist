@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-interface UserAndPassProps {
+type UserAndPassProps = {
 	onSubmit: () => Promise<void>;
 	title: string;
 	isLoading: boolean;
 	error: string | null;
 	setUsername: (username: string) => void;
+	password: string;
 	setPassword: (password: string) => void;
 	buttonText: string;
 	accountText: string;
@@ -21,6 +22,7 @@ const Account = ({
 	isLoading,
 	error,
 	setUsername,
+	password,
 	setPassword,
 	buttonText,
 	accountText,
@@ -67,6 +69,7 @@ const Account = ({
 					<input
 						id="password"
 						type="password"
+						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						className="flex [@media(min-width:350px)]:hidden h-9 px-[18px] py-1.5 rounded-full border border-line focus:outline-none mb-[18px]"
 						disabled={isLoading}
@@ -75,6 +78,7 @@ const Account = ({
 						<input
 							id="password"
 							type={isPasswordVisible && !isLoading ? "text" : "password"}
+							value={password}
 							onChange={(e) => setPassword(e.target.value)}
 							className={`flex-1 py-1.5 ${
 								isLoading ? "" : "pr-3"
