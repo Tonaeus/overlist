@@ -14,10 +14,22 @@
    cd Overlist
    ```
 
-3. Build and run the application:
+3. Rebuild and run the containers:
 
    ```bash
-   docker compose up --build
+   docker-compose -f docker-compose.dev.yml up -d --build
+   ```
+
+4. Find the ports of the containers:
+
+   ```bash
+   docker-compose -f docker-compose.dev.yml ps
+   ```
+
+5. Stop and remove the containers:
+
+   ```bash
+   docker-compose -f docker-compose.dev.yml down
    ```
 
 ## Access
