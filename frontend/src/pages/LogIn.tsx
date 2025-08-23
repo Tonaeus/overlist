@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useLogIn from "../hooks/useLogIn";
-import UserAndPass from "../layouts/UserAndPass";
+import Account from "../layouts/Account";
 
 const Login = () => {
 	const { logIn, isLoading, error } = useLogIn();
@@ -12,7 +12,7 @@ const Login = () => {
 	};
 
 	return (
-		<UserAndPass
+		<Account
 			onSubmit={handleLogin}
 			title="Log In to Overlist"
 			isLoading={isLoading}

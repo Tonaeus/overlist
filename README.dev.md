@@ -34,4 +34,4 @@
 
 ## Access
 
-Once the application is running, you can access it at [http://localhost:4173](http://localhost:4173).
+Once the containers are running, you can access them at [http://localhost:4173](http://localhost:4173).

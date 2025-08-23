@@ -15,7 +15,7 @@ interface UserAndPassProps {
 	linkTo: string;
 }
 
-const UserAndPass = ({
+const Account = ({
 	onSubmit,
 	title,
 	isLoading,
@@ -51,9 +51,9 @@ const UserAndPass = ({
 	};
 
 	return (
-		<div className="flex flex-col h-screen items-center">
-			<div className="flex flex-col h-full justify-center items-center">
-				<form className="flex flex-col w-80" onSubmit={handleSubmit}>
+		<div className="flex flex-col h-screen items-center px-6">
+			<div className="flex flex-col h-full w-full max-w-xs justify-center items-center">
+				<form className="flex flex-col w-full" onSubmit={handleSubmit}>
 					<h1 className="text-center text-2xl font-bold mb-6">{title}</h1>
 					<label htmlFor="username">Username</label>
 					<input
@@ -64,7 +64,14 @@ const UserAndPass = ({
 						disabled={isLoading}
 					/>
 					<label htmlFor="password">Password</label>
-					<div className="flex flex-row px-[18px] w-full h-9 rounded-full border border-line mb-[18px]">
+					<input
+						id="password"
+						type="password"
+						onChange={(e) => setPassword(e.target.value)}
+						className="flex [@media(min-width:350px)]:hidden h-9 px-[18px] py-1.5 rounded-full border border-line focus:outline-none mb-[18px]"
+						disabled={isLoading}
+					/>
+					<div className="hidden [@media(min-width:350px)]:flex flex-row px-[18px] w-full h-9 rounded-full border border-line mb-[18px]">
 						<input
 							id="password"
 							type={isPasswordVisible && !isLoading ? "text" : "password"}
@@ -105,4 +112,4 @@ const UserAndPass = ({
 	);
 };
 
-export default UserAndPass;
+export default Account;
