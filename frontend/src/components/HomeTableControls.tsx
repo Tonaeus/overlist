@@ -412,7 +412,10 @@ const HomeTableControls = ({
 				<button
 					className="down-button button max-sm:flex-1 sm:aspect-[1/1] ml-1.5"
 					onClick={(e) => {
+						const btn = e.currentTarget;
+						btn.disabled = true;
 						handleExport(e);
+						setTimeout(() => { btn.disabled = false }, 1000);
 					}}
 					disabled={select.state.ids.length === 0}
 				>
