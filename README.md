@@ -11,7 +11,8 @@ Visit the website at [https://overlist.tonytran.dev](https://overlist.tonytran.d
 **Database**: MongoDB  
 **Backend**: Node, Express, Typescript  
 **Frontend**: Vite, React, Typescript, Tailwind CSS
-**Tools**: Docker, Docker Compose
+**Deployment**: DigitalOcean, PM2, Nginx, Atlas, Netlify  
+**Tools**: Docker
 
 ## Contact
 

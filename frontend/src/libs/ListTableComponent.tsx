@@ -1,6 +1,6 @@
 import type { TableComponentProps } from "../types/TableComponent";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useEditingContext from "../hooks/useEditingContext";
 
 import {
@@ -17,6 +17,8 @@ import {
 	HeaderCellSelect,
 	CellSelect,
 } from "@table-library/react-table-library/select";
+
+import useSideBarContext from "../hooks/useSideBarContext";
 
 const ListTableComponent = ({
 	columns,
@@ -37,6 +39,21 @@ const ListTableComponent = ({
 	}, [isEditing]);
 
 	const columnCount = columns.filter((col: any) => col.label !== "").length;
+
+	const { isSideBarVisible } = useSideBarContext();
+	const [overflowClass, setOverflowClass] = useState("overflow-x-hidden");
+
+	useEffect(() => {
+		if (isSideBarVisible) {
+			setOverflowClass("overflow-x-auto max-lg:overflow-x-hidden");
+		} 
+		else {
+			const timer = setTimeout(() => {
+				setOverflowClass("overflow-x-auto");
+			}, 300);
+			return () => clearTimeout(timer);
+		}
+	}, [isSideBarVisible]);
 
 	return (
 		<div
@@ -59,7 +76,7 @@ const ListTableComponent = ({
 					<div className="h-9"></div>
 				</div>
 			)}
-			<div className={`overflow-x-auto`}>
+			<div className={overflowClass}>
 				<Table
 					data={data}
 					theme={theme}

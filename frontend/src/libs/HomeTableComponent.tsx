@@ -18,6 +18,9 @@ import {
 	HeaderCellSort
 } from "@table-library/react-table-library/sort";
 
+import useSideBarContext from "../hooks/useSideBarContext";
+import { useEffect, useState } from "react";
+
 const HomeTableComponent = ({
 	columns,
 	data,
@@ -25,9 +28,24 @@ const HomeTableComponent = ({
 	select,
 	sort,
 }: TableComponentProps) => {
+	const { isSideBarVisible } = useSideBarContext();
+	const [overflowClass, setOverflowClass] = useState("overflow-x-hidden");
+
+	useEffect(() => {
+		if (isSideBarVisible) {
+			setOverflowClass("overflow-x-auto max-lg:overflow-x-hidden");
+		} 
+		else {
+			const timer = setTimeout(() => {
+				setOverflowClass("overflow-x-auto");
+			}, 300);
+			return () => clearTimeout(timer);
+		}
+	}, [isSideBarVisible]);
+
 	return (
 		<div className="bg-white p-1.5 rounded accent-blue-700 border border-line">
-			<div className="overflow-x-auto">
+			<div className={overflowClass}>
 				<Table
 					data={data}
 					theme={theme}
