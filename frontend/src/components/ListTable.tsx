@@ -20,6 +20,9 @@ import useAuthContext from "../hooks/useAuthContext";
 
 import { nanoid } from "nanoid";
 
+import { Tooltip } from "react-tooltip";
+import { MoreHoriz, Edit } from "@mui/icons-material";
+
 import { BACKEND_URL } from "../configs/dotenvConfig";
 
 const ListTable = () => {
@@ -154,17 +157,31 @@ const ListTable = () => {
 		},
 	});
 
+	const [showName, setShowName] = useState(true);
+
 	return (
 		<>
 			<div className="flex flex-col">
-				<div className="flex justify-between mb-6 flex-col-reverse h-[84px] sm:flex-row sm:h-9">
-					<ListTableName />
-					<ListTableControls
-						columns={columns}
-						rows={rows}
-						setRows={setRows}
-						select={select}
-					/>
+				<div className="flex justify-between h-9 mb-6">
+					<div className="flex sm:hidden w-full">
+						{showName && <ListTableName />}
+						{!showName && <ListTableControls columns={columns} rows={rows} setRows={setRows} select={select} />}
+					</div>
+
+					<div className="hidden sm:flex sm:justify-between w-full">
+						<ListTableName />
+						<ListTableControls columns={columns} rows={rows} setRows={setRows} select={select} />
+					</div>
+
+					<button
+						className="tool-button button aspect-[1/1] ml-3 sm:hidden"
+						onClick={() => setShowName(!showName)}
+					>
+						{showName ? <MoreHoriz /> : <Edit />}
+					</button>
+					<Tooltip anchorSelect=".tool-button" place="top" className="z-10">
+						{showName ? "Options" : "Name"}
+					</Tooltip>
 				</div>
 
 				<ListTableComponent
