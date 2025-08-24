@@ -15,6 +15,9 @@ import useHomeTableComponent from "../hooks/useHomeTableComponent";
 
 import useAuthContext from "../hooks/useAuthContext";
 
+import { Tooltip } from "react-tooltip";
+import { MoreHoriz, Search } from "@mui/icons-material";
+
 import { BACKEND_URL } from "../configs/dotenvConfig";
 
 const HomeTable = () => {
@@ -137,11 +140,30 @@ const HomeTable = () => {
 			},
 		});
 
+	const [showSearch, setShowSearch] = useState(true);
+
 	return (
 		<div className="flex flex-col">
-			<div className="flex justify-between mb-6 flex-col-reverse h-[84px] sm:flex-row sm:h-9">
-				<HomeTableSearchBar search={search} setSearch={setSearch} />
-				<HomeTableControls rows={rows} setRows={setRows} select={select} />
+			<div className="flex justify-between h-9 mb-6">
+				<div className="flex sm:hidden w-full">
+					{showSearch && <HomeTableSearchBar search={search} setSearch={setSearch} />}
+					{!showSearch && <HomeTableControls rows={rows} setRows={setRows} select={select} />}
+				</div>
+
+				<div className="hidden sm:flex sm:justify-between w-full">
+					<HomeTableSearchBar search={search} setSearch={setSearch} />
+					<HomeTableControls rows={rows} setRows={setRows} select={select} />
+				</div>
+
+				<button
+					className="tool-button button aspect-[1/1] ml-3 sm:hidden"
+					onClick={() => setShowSearch(!showSearch)}
+				>
+					{showSearch ? <MoreHoriz /> : <Search />}
+				</button>
+				<Tooltip anchorSelect=".tool-button" place="top" className="z-10">
+					{showSearch ? "Options" : "Search"}
+				</Tooltip>
 			</div>
 
 			<HomeTableComponent
