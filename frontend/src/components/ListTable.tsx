@@ -162,7 +162,7 @@ const ListTable = () => {
 	return (
 		<>
 			<div className="flex flex-col">
-				<div className="flex justify-between h-9 mb-6">
+				<div className="flex justify-between h-9 mb-6 overflow-hidden">
 					<div className="flex sm:hidden w-full">
 						{showName && <ListTableName />}
 						{!showName && <ListTableControls columns={columns} rows={rows} setRows={setRows} select={select} />}
