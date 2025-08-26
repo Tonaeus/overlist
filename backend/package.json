@@ -27,7 +27,7 @@
 		"clean": "rm -rf dist",
 		"build": "npm run clean && npx tsc",
 		"dev": "cross-env NODE_ENV=dev nodemon --exec node --loader ts-node/esm src/server.ts",
-		"start": "npm run build && cross-env NODE_ENV=prod node dist/server.js"
+		"start": "cross-env NODE_ENV=prod node dist/server.js"
 	},
 	"dependencies": {
 		"bcrypt": "^5.1.1",
