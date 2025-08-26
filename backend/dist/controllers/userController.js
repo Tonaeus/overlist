@@ -1,0 +1,48 @@
+import jwt from "jsonwebtoken";
+import User from "../models/userModel.js";
+import { JWT_SECRET } from "../configs/dotenvConfig.js";
+const createToken = (id) => {
+    return jwt.sign({ id }, JWT_SECRET, { expiresIn: "7d" });
+};
+// Login user
+const loginUser = async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.login(username, password);
+        const token = createToken(user._id);
+        res.status(200).json({ username, token });
+        return;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+            return;
+        }
+        else {
+            res.status(500).json({ error: "Unknown error." });
+            return;
+        }
+    }
+};
+// Signup user
+const signupUser = async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.signup(username, password);
+        const token = createToken(user._id);
+        res.status(200).json({ username, token });
+        return;
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message });
+            return;
+        }
+        else {
+            res.status(500).json({ error: "Unknown error." });
+            return;
+        }
+    }
+};
+export { loginUser, signupUser };
+//# sourceMappingURL=userController.js.map
