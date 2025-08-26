@@ -1,0 +1,49 @@
+services:
+  database:
+    image: mongo:6.0
+    container_name: overlist-database-container-dev
+    env_file:
+      - ./database/.env.dev
+    volumes:
+      - overlist-database-data-db-volume-dev:/data/db
+      - overlist-database-data-configdb-volume-dev:/data/configdb
+    ports:
+      - "27017:27017"
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    image: overlist-backend-image-dev
+    container_name: overlist-backend-container-dev
+    env_file:
+      - ./backend/.env.dev
+    volumes:
+      - ./backend:/usr/src/app
+      - overlist-backend-node-modules-volume-dev:/usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    image: overlist-frontend-image-dev
+    container_name: overlist-frontend-container-dev
+    volumes:
+      - ./frontend:/usr/src/app
+      - overlist-frontend-node-modules-volume-dev:/usr/src/app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  overlist-database-data-db-volume-dev:
+    name: overlist-database-data-db-volume-dev
+  overlist-database-data-configdb-volume-dev:
+    name: overlist-database-data-configdb-volume-dev
+  overlist-backend-node-modules-volume-dev:
+    name: overlist-backend-node-modules-volume-dev
+  overlist-frontend-node-modules-volume-dev:
+    name: overlist-frontend-node-modules-volume-dev

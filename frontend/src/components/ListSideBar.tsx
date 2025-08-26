@@ -1,0 +1,241 @@
+import type { ListColumn } from "../types/ListColumn";
+
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+
+import useListColumnsContext from "../hooks/useListColumnsContext";
+import useEditingContext from "../hooks/useEditingContext";
+
+import SideBarButton from "./SideBarButton";
+import SideBarBlock from "./SideBarBlock";
+
+import useModal from "../hooks/useModal";
+import Modal from "./Modal";
+import ModalContentInput from "./ModalContentInput";
+import ModalContentText from "./ModalContentText";
+
+import useAuthContext from "../hooks/useAuthContext";
+
+import { BACKEND_URL } from "../configs/dotenvConfig";
+
+const ListSideBar = () => {
+	const { id } = useParams();
+
+	const { isEditing } = useEditingContext();
+
+	const {
+		state: { user },
+	} = useAuthContext();
+
+	const [error, setError] = useState<boolean>(false);
+
+	const {
+		state: { listColumns },
+		dispatch,
+	} = useListColumnsContext();
+
+	useEffect(() => {
+		const fetchListColumns = async () => {
+			const response = await fetch(
+				`${BACKEND_URL}/api/list-columns/${id}`,
+				{
+					headers: {
+						Authorization: `Bearer ${user.token}`,
+					},
+				}
+			);
+			const json = await response.json();
+
+			if (response.ok) {
+				dispatch({ type: "SET_LIST_COLUMNS", payload: json });
+			} else {
+				setError(true);
+			}
+		};
+
+		if (user) {
+			fetchListColumns();
+		}
+	}, [id, dispatch, user]);
+
+	const { modalProps, showModal, hideModal, getModalValue, setModalValue } =
+		useModal();
+
+	const handleAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+
+		showModal({
+			title: "Add Column",
+			content: (
+				<ModalContentInput
+					placeholder="Enter column label"
+					onChange={(e) => setModalValue(e.target.value)}
+				/>
+			),
+			action: "Add",
+			onAction: async () => {
+				const response = await fetch(
+					`${BACKEND_URL}/api/list-columns/${id}`,
+					{
+						method: "POST",
+						body: JSON.stringify({ column_label: getModalValue() }),
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					dispatch({ type: "SET_LIST_COLUMNS", payload: json });
+					hideModal();
+				} else {
+					showModal({
+						content: (
+							<ModalContentInput
+								placeholder="Enter column label"
+								error={json.error}
+								onChange={(e) => setModalValue(e.target.value)}
+							/>
+						),
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
+	};
+
+	const handleEdit = (
+		e: React.MouseEvent<HTMLButtonElement>,
+		listColumn: ListColumn
+	) => {
+		e.preventDefault();
+
+		showModal({
+			title: "Edit Column",
+			content: (
+				<ModalContentInput
+					placeholder="Enter column label"
+					onChange={(e) => setModalValue(e.target.value)}
+				/>
+			),
+			action: "Edit",
+			onAction: async () => {
+				const response = await fetch(
+					`${BACKEND_URL}/api/list-columns/${id}`,
+					{
+						method: "PATCH",
+						body: JSON.stringify({
+							column_id: listColumn.id,
+							column_label: getModalValue(),
+						}),
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					dispatch({ type: "SET_LIST_COLUMNS", payload: json });
+					hideModal();
+				} else {
+					showModal({
+						content: (
+							<ModalContentInput
+								placeholder="Enter column label"
+								error={json.error}
+								onChange={(e) => setModalValue(e.target.value)}
+							/>
+						),
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
+	};
+
+	const handleDelete = (
+		e: React.MouseEvent<HTMLButtonElement>,
+		listColumn: ListColumn
+	) => {
+		e.preventDefault();
+
+		showModal({
+			title: "Delete Column",
+			content: (
+				<ModalContentText
+					message={`Are you sure you want to delete the column "${listColumn.label}"?`}
+				/>
+			),
+			action: "Delete",
+			onAction: async () => {
+				const response = await fetch(
+					`${BACKEND_URL}/api/list-columns/${id}`,
+					{
+						method: "DELETE",
+						body: JSON.stringify({
+							column_id: listColumn.id,
+						}),
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+
+				const json = await response.json();
+
+				if (response.ok) {
+					dispatch({ type: "SET_LIST_COLUMNS", payload: json });
+					hideModal();
+				} else {
+					showModal({
+						content: (
+							<ModalContentText
+								message={`Are you sure you want to delete the column "${listColumn.label}"?`}
+								error={json.error}
+							/>
+						),
+					});
+				}
+			},
+			onCancel: () => hideModal(),
+		});
+	};
+
+	return (
+		<>
+			<div className="flex flex-col h-full">
+				<div className="flex">
+					<SideBarButton
+						label="Add Column"
+						onClick={(e) => {
+							handleAdd(e);
+						}}
+						disabled={isEditing || error}
+					/>
+				</div>
+				<div className="flex-1 pb-6">
+					{listColumns.map((column: ListColumn) => (
+						<SideBarBlock
+							key={column.id}
+							object={column}
+							handleEdit={handleEdit}
+							handleDelete={handleDelete}
+							disabled={isEditing}
+						/>
+					))}
+				</div>
+			</div>
+
+			<Modal {...modalProps} />
+		</>
+	);
+};
+
+export default ListSideBar;

@@ -1,0 +1,39 @@
+services:
+  database:
+    image: mongo:6.0
+    container_name: overlist-database-container
+    env_file:
+      - ./database/.env.test
+    volumes:
+      - overlist-database-data-db-volume:/data/db
+      - overlist-database-data-configdb-volume:/data/configdb
+    ports:
+      - "27017:27017"
+  backend:
+    build:
+      context: ./backend
+    image: overlist-backend-image
+    container_name: overlist-backend-container
+    env_file:
+      - ./backend/.env.test
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_BACKEND_URL: http://localhost:3000
+    image: overlist-frontend-image
+    container_name: overlist-frontend-container
+    ports:
+      - "4173:4173"
+    depends_on:
+      - backend
+
+volumes:
+  overlist-database-data-db-volume:
+    name: overlist-database-data-db-volume
+  overlist-database-data-configdb-volume:
+    name: overlist-database-data-configdb-volume
