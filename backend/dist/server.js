@@ -13,7 +13,8 @@ const app = express();
 app.use(express.json());
 app.use(cors({
     origin: FRONTEND_URL,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Authorization', 'Content-Type'],
 }));
 app.use((req, res, next) => {
     console.log(req.path, req.method);
